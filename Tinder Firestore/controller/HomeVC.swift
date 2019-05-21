@@ -8,7 +8,16 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class HomeVC: UIViewController {
+    
+//    var userArray = [
+//        UserModel(name: "hosam", imageName: "screen", job: "student", age: 24),
+//        UserModel(name: "zaki", imageName: "holiday", job: "techer", age: 28)
+// ]
+    var cardViewArray = [
+     UserModel(name: "hosam", imageName: "screen", job: "student", age: 24).toCardViewModel(),
+     UserModel(name: "zaki", imageName: "holiday", job: "techer", age: 28).toCardViewModel()
+    ]
     
     let topStackView = topNavigationStackView()
     let bottomStackView = HomeBottomControlsStackView()
@@ -24,10 +33,14 @@ class ViewController: UIViewController {
     }
     
     func setupDumyCard()  {
-        let cardView = CardView(frame: .zero)
-        cardDeskView.addSubview(cardView)
-        cardView.fillSuperview()
+        cardViewArray.forEach { (cardVM) in
+            let cardView = CardView(frame: .zero)
+            cardView.card = cardVM
+            cardDeskView.addSubview(cardView)
+            cardView.fillSuperview()
+        }
     }
+    
     func setupViews()  {
         view.backgroundColor = .white
         

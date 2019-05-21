@@ -7,8 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4E8A1A3F22940A22006FFC45 /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8A1A3E22940A22006FFC45 /* UserModel.swift */; };
+		4E8A1A4222941257006FFC45 /* CardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8A1A4122941257006FFC45 /* CardViewModel.swift */; };
 		4EA086AD2293DD1700DE5EE5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA086AC2293DD1700DE5EE5 /* AppDelegate.swift */; };
-		4EA086AF2293DD1700DE5EE5 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA086AE2293DD1700DE5EE5 /* ViewController.swift */; };
+		4EA086AF2293DD1700DE5EE5 /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA086AE2293DD1700DE5EE5 /* HomeVC.swift */; };
 		4EA086B22293DD1700DE5EE5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4EA086B02293DD1700DE5EE5 /* Main.storyboard */; };
 		4EA086B42293DD1800DE5EE5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4EA086B32293DD1800DE5EE5 /* Assets.xcassets */; };
 		4EA086B72293DD1900DE5EE5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4EA086B52293DD1900DE5EE5 /* LaunchScreen.storyboard */; };
@@ -19,9 +21,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4E8A1A3E22940A22006FFC45 /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
+		4E8A1A4122941257006FFC45 /* CardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardViewModel.swift; sourceTree = "<group>"; };
 		4EA086A92293DD1700DE5EE5 /* Tinder Firestore.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Tinder Firestore.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4EA086AC2293DD1700DE5EE5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		4EA086AE2293DD1700DE5EE5 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		4EA086AE2293DD1700DE5EE5 /* HomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeVC.swift; sourceTree = "<group>"; };
 		4EA086B12293DD1700DE5EE5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		4EA086B32293DD1800DE5EE5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4EA086B62293DD1900DE5EE5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -43,6 +47,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4E8A1A402294123F006FFC45 /* viewModel */ = {
+			isa = PBXGroup;
+			children = (
+				4E8A1A4122941257006FFC45 /* CardViewModel.swift */,
+			);
+			path = viewModel;
+			sourceTree = "<group>";
+		};
 		4EA086A02293DD1700DE5EE5 = {
 			isa = PBXGroup;
 			children = (
@@ -63,8 +75,9 @@
 			isa = PBXGroup;
 			children = (
 				4EA086AC2293DD1700DE5EE5 /* AppDelegate.swift */,
-				4EA086C32293E0F400DE5EE5 /* views */,
+				4E8A1A402294123F006FFC45 /* viewModel */,
 				4EA086C02293DD2E00DE5EE5 /* model */,
+				4EA086C32293E0F400DE5EE5 /* views */,
 				4EA086BF2293DD2800DE5EE5 /* view */,
 				4EA086BE2293DD1E00DE5EE5 /* controller */,
 				4EA086B02293DD1700DE5EE5 /* Main.storyboard */,
@@ -79,7 +92,7 @@
 		4EA086BE2293DD1E00DE5EE5 /* controller */ = {
 			isa = PBXGroup;
 			children = (
-				4EA086AE2293DD1700DE5EE5 /* ViewController.swift */,
+				4EA086AE2293DD1700DE5EE5 /* HomeVC.swift */,
 			);
 			path = controller;
 			sourceTree = "<group>";
@@ -94,6 +107,7 @@
 		4EA086C02293DD2E00DE5EE5 /* model */ = {
 			isa = PBXGroup;
 			children = (
+				4E8A1A3E22940A22006FFC45 /* UserModel.swift */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -179,9 +193,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4EA086AF2293DD1700DE5EE5 /* ViewController.swift in Sources */,
+				4EA086AF2293DD1700DE5EE5 /* HomeVC.swift in Sources */,
+				4E8A1A3F22940A22006FFC45 /* UserModel.swift in Sources */,
 				4EA086C52293E12300DE5EE5 /* HomeBottomControlsStackView.swift in Sources */,
 				4EA086C72293E39300DE5EE5 /* topNavigationStackView.swift in Sources */,
+				4E8A1A4222941257006FFC45 /* CardViewModel.swift in Sources */,
 				4EA086AD2293DD1700DE5EE5 /* AppDelegate.swift in Sources */,
 				4EA086C92293E97C00DE5EE5 /* CardView.swift in Sources */,
 				4EA086C22293DE1E00DE5EE5 /* ExtensionUivew.swift in Sources */,
