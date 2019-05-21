@@ -28,7 +28,6 @@ class HomeVC: UIViewController {
        let viewModels = producer.map({return $0.toCardViewModel()})
         return viewModels
     }()
-    
     let topStackView = topNavigationStackView()
     let bottomStackView = HomeBottomControlsStackView()
     let cardDeskView:UIView = {
@@ -45,21 +44,28 @@ class HomeVC: UIViewController {
     func setupDumyCard()  {
         cardViewArray.forEach { (cardVM) in
             let cardView = CardView(frame: .zero)
-            cardView.card = cardVM
+            cardView.cards = cardVM
             cardDeskView.addSubview(cardView)
             cardView.fillSuperview()
         }
     }
     
     func setupViews()  {
+       
+        
+       
+        
+        
         view.backgroundColor = .white
         
         let mainStack = UIStackView(arrangedSubviews: [topStackView,cardDeskView,bottomStackView])
         mainStack.bringSubviewToFront(cardDeskView) // to make it hide the other
         mainStack.axis = .vertical
         
+        
         view.addSubview(mainStack)
         mainStack.anchor(top: view.safeAreaLayoutGuide.topAnchor, leading: view.leadingAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor, trailing: view.trailingAnchor)
+        
     }
     
 }

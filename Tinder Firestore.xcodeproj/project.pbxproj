@@ -49,6 +49,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4E65E99A22942D2B0001AED3 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				4EA086C12293DE1D00DE5EE5 /* ExtensionUivew.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		4E8A1A402294123F006FFC45 /* viewModel */ = {
 			isa = PBXGroup;
 			children = (
@@ -80,13 +88,12 @@
 				4E8A1A402294123F006FFC45 /* viewModel */,
 				4EA086C02293DD2E00DE5EE5 /* model */,
 				4EA086C32293E0F400DE5EE5 /* views */,
-				4EA086BF2293DD2800DE5EE5 /* view */,
 				4EA086BE2293DD1E00DE5EE5 /* controller */,
 				4EA086B02293DD1700DE5EE5 /* Main.storyboard */,
 				4EA086B32293DD1800DE5EE5 /* Assets.xcassets */,
 				4EA086B52293DD1900DE5EE5 /* LaunchScreen.storyboard */,
 				4EA086B82293DD1900DE5EE5 /* Info.plist */,
-				4EA086C12293DE1D00DE5EE5 /* ExtensionUivew.swift */,
+				4E65E99A22942D2B0001AED3 /* Extensions */,
 			);
 			path = "Tinder Firestore";
 			sourceTree = "<group>";
@@ -97,13 +104,6 @@
 				4EA086AE2293DD1700DE5EE5 /* HomeVC.swift */,
 			);
 			path = controller;
-			sourceTree = "<group>";
-		};
-		4EA086BF2293DD2800DE5EE5 /* view */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = view;
 			sourceTree = "<group>";
 		};
 		4EA086C02293DD2E00DE5EE5 /* model */ = {

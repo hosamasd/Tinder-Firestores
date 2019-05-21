@@ -10,10 +10,9 @@ import UIKit
 
 class CardView: UIView {
     
-    var card:CardViewModel? {
+    var cards:CardViewModel! {
         didSet{
-            guard let cards = card else { return }
-           mainImage.image = UIImage(named: cards.imageName )
+          mainImage.image = UIImage(named: cards.imageName )
             userInfo.attributedText = cards.attributedText
             userInfo.textAlignment = cards.textAlignment
         }
@@ -22,7 +21,8 @@ class CardView: UIView {
     //Configuration values
     fileprivate let threShold:CGFloat = 90
     
-     let gradiantLayer = CAGradientLayer()
+    let barStackView = UIStackView()
+let gradiantLayer = CAGradientLayer()
   fileprivate  let mainImage:UIImageView = {
     let im = UIImageView()
        im.clipsToBounds = true
@@ -40,11 +40,24 @@ class CardView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        
+       
          setupGradiantLayer()
+        
         setupViews()
        
         addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(handlePan)))
+    }
+    
+    func setupBarStackView()  {
+        addSubview(barStackView)
+        barStackView.anchor(top: mainImage.topAnchor, leading: mainImage.leadingAnchor, bottom: nil, trailing: mainImage.trailingAnchor,padding: .init(top: 8, left: 8, bottom: 0, right: 8),size: .init(width: 0, height: 4))
+barStackView.spacing = 4
+        barStackView.distribution = .fillEqually
+        (0..<10).forEach { (_) in
+            let vi = UIView()
+            vi.backgroundColor = .white
+            barStackView.addArrangedSubview(vi)
+        }
     }
     
     func setupGradiantLayer()  {
@@ -60,12 +73,17 @@ class CardView: UIView {
         gradiantLayer.frame = self.frame
     }
     func setupViews()  {
-       backgroundColor = .white
+        
+       
+        
+        
         addSubview(mainImage)
+         setupBarStackView()
         addSubview(userInfo)
         
         mainImage.fillSuperview(padding: .init(top: 12, left: 12, bottom: 12, right: 12))
         userInfo.anchor(top: nil, leading: mainImage.leadingAnchor, bottom: mainImage.bottomAnchor, trailing: mainImage.trailingAnchor,padding: .init(top: 0, left: 16, bottom: 20, right: 0))
+        
     }
     
     fileprivate func handleChaneged(_ gesture: UIPanGestureRecognizer) {
