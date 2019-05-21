@@ -15,6 +15,7 @@
 		4EA086C22293DE1E00DE5EE5 /* ExtensionUivew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA086C12293DE1D00DE5EE5 /* ExtensionUivew.swift */; };
 		4EA086C52293E12300DE5EE5 /* HomeBottomControlsStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA086C42293E12300DE5EE5 /* HomeBottomControlsStackView.swift */; };
 		4EA086C72293E39300DE5EE5 /* topNavigationStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA086C62293E39300DE5EE5 /* topNavigationStackView.swift */; };
+		4EA086C92293E97C00DE5EE5 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA086C82293E97C00DE5EE5 /* CardView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		4EA086C12293DE1D00DE5EE5 /* ExtensionUivew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionUivew.swift; sourceTree = "<group>"; };
 		4EA086C42293E12300DE5EE5 /* HomeBottomControlsStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeBottomControlsStackView.swift; sourceTree = "<group>"; };
 		4EA086C62293E39300DE5EE5 /* topNavigationStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = topNavigationStackView.swift; sourceTree = "<group>"; };
+		4EA086C82293E97C00DE5EE5 /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,6 +103,7 @@
 			children = (
 				4EA086C42293E12300DE5EE5 /* HomeBottomControlsStackView.swift */,
 				4EA086C62293E39300DE5EE5 /* topNavigationStackView.swift */,
+				4EA086C82293E97C00DE5EE5 /* CardView.swift */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -180,6 +183,7 @@
 				4EA086C52293E12300DE5EE5 /* HomeBottomControlsStackView.swift in Sources */,
 				4EA086C72293E39300DE5EE5 /* topNavigationStackView.swift in Sources */,
 				4EA086AD2293DD1700DE5EE5 /* AppDelegate.swift in Sources */,
+				4EA086C92293E97C00DE5EE5 /* CardView.swift in Sources */,
 				4EA086C22293DE1E00DE5EE5 /* ExtensionUivew.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

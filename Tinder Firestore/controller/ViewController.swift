@@ -12,22 +12,27 @@ class ViewController: UIViewController {
     
     let topStackView = topNavigationStackView()
     let bottomStackView = HomeBottomControlsStackView()
-    let blueView:UIView = {
+    let cardDeskView:UIView = {
         let v = UIView()
-        v.backgroundColor = .blue
-        
         return v
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
+        setupDumyCard()
     }
     
+    func setupDumyCard()  {
+        let cardView = CardView(frame: .zero)
+        cardDeskView.addSubview(cardView)
+        cardView.fillSuperview()
+    }
     func setupViews()  {
         view.backgroundColor = .white
         
-        let mainStack = UIStackView(arrangedSubviews: [topStackView,blueView,bottomStackView])
+        let mainStack = UIStackView(arrangedSubviews: [topStackView,cardDeskView,bottomStackView])
+        mainStack.bringSubviewToFront(cardDeskView) // to make it hide the other
         mainStack.axis = .vertical
         
         view.addSubview(mainStack)
