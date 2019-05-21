@@ -19,6 +19,10 @@ class HomeVC: UIViewController {
         Advertiser(title: "Slide out menu", brandName: "hosam mohamed", posterImageName: "slide_out_menu_poster"),
             UserModel(name: "hosam", imageName: "lady5c", job: "student", age: 24),
             UserModel(name: "zaki", imageName: "lady4c", job: "techer", age: 28),
+            UserModel(name: "Kelly", imageName: "lady5c", job: "Music DJ", age: 23),
+            UserModel(name: "Jane", imageName: "lady4c", job: "Teacher", age: 18),
+            Advertiser(title: "Slide Out Menu", brandName: "Lets Build That App", posterImageName: "slide_out_menu_poster"),
+            UserModel(name: "Jane", imageName: "lady4c", job: "Teacher", age: 18)
             
         ] as [ProduceCardViewModel]
        let viewModels = producer.map({return $0.toCardViewModel()})

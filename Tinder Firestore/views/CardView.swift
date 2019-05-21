@@ -22,7 +22,7 @@ class CardView: UIView {
     //Configuration values
     fileprivate let threShold:CGFloat = 90
     
-    
+     let gradiantLayer = CAGradientLayer()
   fileprivate  let mainImage:UIImageView = {
     let im = UIImageView()
        im.clipsToBounds = true
@@ -40,14 +40,27 @@ class CardView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        backgroundColor = .white
+        
+         setupGradiantLayer()
         setupViews()
+       
         addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(handlePan)))
     }
     
-    func setupViews()  {
+    func setupGradiantLayer()  {
        
-      
+        gradiantLayer.colors = [UIColor.clear.cgColor,UIColor.black.cgColor]
+        gradiantLayer.locations = [0.5,1.1]
+//        gradiantLayer.frame = self.frame //frame is zero
+//        gradiantLayer.frame = CGRect(x: 0, y: 0, width: 300, height: 400)
+        layer.addSublayer(gradiantLayer)
+    }
+    
+    override func layoutSubviews() {
+        gradiantLayer.frame = self.frame
+    }
+    func setupViews()  {
+       backgroundColor = .white
         addSubview(mainImage)
         addSubview(userInfo)
         
@@ -85,7 +98,13 @@ class CardView: UIView {
     }
     
     @objc func handlePan(gesture:UIPanGestureRecognizer)  {
+        
         switch gesture.state {
+           
+        case .began:
+            superview?.subviews.forEach({ (subView) in
+                subView.layer.removeAllAnimations()  //solve multi animation occures in screen
+            })
         case .changed:
             handleChaneged(gesture)
         case .ended:
