@@ -9,20 +9,14 @@
 import UIKit
 
 class HomeVC: UIViewController {
-    
-//    var userArray = [
-//        UserModel(name: "hosam", imageName: "screen", job: "student", age: 24),
-//        UserModel(name: "zaki", imageName: "holiday", job: "techer", age: 28)
-// ]
+ 
     var cardViewArray:[CardViewModel] = {
       let producer =    [
+        UserModel(name: "kelly", imageNames: ["kelly1","kelly2","kelly3"], job: "student", age: 24),
         Advertiser(title: "Slide out menu", brandName: "hosam mohamed", posterImageName: "slide_out_menu_poster"),
-            UserModel(name: "hosam", imageName: "lady5c", job: "student", age: 24),
-            UserModel(name: "zaki", imageName: "lady4c", job: "techer", age: 28),
-            UserModel(name: "Kelly", imageName: "lady5c", job: "Music DJ", age: 23),
-            UserModel(name: "Jane", imageName: "lady4c", job: "Teacher", age: 18),
-            Advertiser(title: "Slide Out Menu", brandName: "Lets Build That App", posterImageName: "slide_out_menu_poster"),
-            UserModel(name: "Jane", imageName: "lady4c", job: "Teacher", age: 18)
+        
+            UserModel(name: "jane", imageNames: ["jane1","jane2","jane3"], job: "Music DJ", age: 23),
+        
             
         ] as [ProduceCardViewModel]
        let viewModels = producer.map({return $0.toCardViewModel()})
@@ -52,10 +46,6 @@ class HomeVC: UIViewController {
     
     func setupViews()  {
        
-        
-       
-        
-        
         view.backgroundColor = .white
         
         let mainStack = UIStackView(arrangedSubviews: [topStackView,cardDeskView,bottomStackView])

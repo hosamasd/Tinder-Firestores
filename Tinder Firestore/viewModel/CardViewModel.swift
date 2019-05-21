@@ -14,7 +14,7 @@ protocol ProduceCardViewModel {
 struct CardViewModel {
 
     // we will design MVVM design pattern
-    let imageName:String
+    let imageNames:[String]
     let attributedText:NSAttributedString
     let textAlignment:NSTextAlignment
     

@@ -12,15 +12,26 @@ class CardView: UIView {
     
     var cards:CardViewModel! {
         didSet{
-          mainImage.image = UIImage(named: cards.imageName )
+          mainImage.image = UIImage(named: cards.imageNames.first ?? "" )
             userInfo.attributedText = cards.attributedText
             userInfo.textAlignment = cards.textAlignment
+            
+            (0..<cards.imageNames.count).forEach { (_) in
+                let vi = UIView()
+                vi.backgroundColor = barDeselctedItem
+                barStackView.addArrangedSubview(vi)
+                
+                barStackView.arrangedSubviews.first?.backgroundColor = .white
+
+            }
         }
     }
     
     //Configuration values
     fileprivate let threShold:CGFloat = 90
+    fileprivate let barDeselctedItem = UIColor(white: 0, alpha: 0.1)
     
+     var imageIndex = 0
     let barStackView = UIStackView()
 let gradiantLayer = CAGradientLayer()
   fileprivate  let mainImage:UIImageView = {
@@ -44,8 +55,13 @@ let gradiantLayer = CAGradientLayer()
          setupGradiantLayer()
         
         setupViews()
-       
-        addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(handlePan)))
+       setupGestures()
+    }
+    
+    func setupGestures ()  {
+    addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(handlePan)))
+
+        addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTapped)))
     }
     
     func setupBarStackView()  {
@@ -53,11 +69,7 @@ let gradiantLayer = CAGradientLayer()
         barStackView.anchor(top: mainImage.topAnchor, leading: mainImage.leadingAnchor, bottom: nil, trailing: mainImage.trailingAnchor,padding: .init(top: 8, left: 8, bottom: 0, right: 8),size: .init(width: 0, height: 4))
 barStackView.spacing = 4
         barStackView.distribution = .fillEqually
-        (0..<10).forEach { (_) in
-            let vi = UIView()
-            vi.backgroundColor = .white
-            barStackView.addArrangedSubview(vi)
-        }
+        
     }
     
     func setupGradiantLayer()  {
@@ -72,12 +84,10 @@ barStackView.spacing = 4
     override func layoutSubviews() {
         gradiantLayer.frame = self.frame
     }
+    
     func setupViews()  {
         
-       
-        
-        
-        addSubview(mainImage)
+         addSubview(mainImage)
          setupBarStackView()
         addSubview(userInfo)
         
@@ -113,6 +123,27 @@ barStackView.spacing = 4
             self.removeFromSuperview()
 //            self.frame = CGRect(x: 0, y: 0, width: self.superview!.frame.width, height: self.superview!.frame.height)
         }
+    }
+    
+    @objc  func handleTapped(gesture:UITapGestureRecognizer)  {
+        let tapPosition = gesture.location(in: nil)
+        let shouldGoNextPhoto = tapPosition.x > frame.width / 2 ? true : false
+        
+       
+        
+        if shouldGoNextPhoto {
+            imageIndex = min(imageIndex + 1, cards.imageNames.count - 1)
+        }else {
+            imageIndex = max(0, imageIndex - 1)
+        }
+       let imageName = cards.imageNames[imageIndex]
+        mainImage.image = UIImage(named: imageName)
+        
+        barStackView.arrangedSubviews.forEach { (v) in
+            v.backgroundColor = barDeselctedItem
+        }
+        
+        barStackView.arrangedSubviews[imageIndex].backgroundColor = .white
     }
     
     @objc func handlePan(gesture:UIPanGestureRecognizer)  {

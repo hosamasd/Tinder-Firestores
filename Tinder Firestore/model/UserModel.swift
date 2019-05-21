@@ -10,7 +10,7 @@ import UIKit
 
 struct UserModel: ProduceCardViewModel {
     let name:String
-    let imageName:String
+    let imageNames:[String]
     let job:String
     let age:Int
     
@@ -19,7 +19,7 @@ struct UserModel: ProduceCardViewModel {
         attributeText.append(NSAttributedString(string: "    \(age)", attributes: [NSAttributedString.Key.font :  UIFont.systemFont(ofSize: 24, weight: .regular)]))
         attributeText.append(NSAttributedString(string: " \n \(job)", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 20, weight: .regular)]))
 
-      return  CardViewModel(imageName: imageName, attributedText: attributeText, textAlignment: .left)
+      return  CardViewModel(imageNames: imageNames, attributedText: attributeText, textAlignment: .left)
 
     }
 }
