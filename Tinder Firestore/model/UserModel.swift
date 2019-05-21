@@ -8,7 +8,7 @@
 
 import UIKit
 
-struct UserModel {
+struct UserModel: ProduceCardViewModel {
     let name:String
     let imageName:String
     let job:String

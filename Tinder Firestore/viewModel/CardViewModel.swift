@@ -8,6 +8,9 @@
 
 import UIKit
 
+protocol ProduceCardViewModel {
+     func toCardViewModel() -> CardViewModel
+}
 struct CardViewModel {
 
     // we will design MVVM design pattern

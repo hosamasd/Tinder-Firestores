@@ -23,14 +23,14 @@ class CardView: UIView {
     fileprivate let threShold:CGFloat = 90
     
     
-    let mainImage:UIImageView = {
-        let im = UIImageView(image: #imageLiteral(resourceName: "holiday"))
-        im.clipsToBounds = true
+  fileprivate  let mainImage:UIImageView = {
+    let im = UIImageView()
+       im.clipsToBounds = true
         im.layer.cornerRadius = 12
         
         return im
     }()
-    let userInfo:UILabel = {
+   fileprivate let userInfo:UILabel = {
         let la = UILabel(string: "hosam", font: .boldSystemFont(ofSize: 30), numberOfLines: 0)
        la.textColor = .white
         return la
@@ -52,7 +52,7 @@ class CardView: UIView {
         addSubview(userInfo)
         
         mainImage.fillSuperview(padding: .init(top: 12, left: 12, bottom: 12, right: 12))
-        userInfo.anchor(top: nil, leading: mainImage.leadingAnchor, bottom: mainImage.bottomAnchor, trailing: nil,padding: .init(top: 0, left: 16, bottom: 20, right: 0))
+        userInfo.anchor(top: nil, leading: mainImage.leadingAnchor, bottom: mainImage.bottomAnchor, trailing: mainImage.trailingAnchor,padding: .init(top: 0, left: 16, bottom: 20, right: 0))
     }
     
     fileprivate func handleChaneged(_ gesture: UIPanGestureRecognizer) {

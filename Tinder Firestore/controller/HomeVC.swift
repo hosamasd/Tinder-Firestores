@@ -14,10 +14,16 @@ class HomeVC: UIViewController {
 //        UserModel(name: "hosam", imageName: "screen", job: "student", age: 24),
 //        UserModel(name: "zaki", imageName: "holiday", job: "techer", age: 28)
 // ]
-    var cardViewArray = [
-     UserModel(name: "hosam", imageName: "screen", job: "student", age: 24).toCardViewModel(),
-     UserModel(name: "zaki", imageName: "holiday", job: "techer", age: 28).toCardViewModel()
-    ]
+    var cardViewArray:[CardViewModel] = {
+      let producer =    [
+        Advertiser(title: "Slide out menu", brandName: "hosam mohamed", posterImageName: "slide_out_menu_poster"),
+            UserModel(name: "hosam", imageName: "lady5c", job: "student", age: 24),
+            UserModel(name: "zaki", imageName: "lady4c", job: "techer", age: 28),
+            
+        ] as [ProduceCardViewModel]
+       let viewModels = producer.map({return $0.toCardViewModel()})
+        return viewModels
+    }()
     
     let topStackView = topNavigationStackView()
     let bottomStackView = HomeBottomControlsStackView()

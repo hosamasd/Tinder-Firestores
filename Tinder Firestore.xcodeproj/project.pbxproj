@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4E7DD81922941E7500D6DEF0 /* Advertiser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7DD81822941E7500D6DEF0 /* Advertiser.swift */; };
 		4E8A1A3F22940A22006FFC45 /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8A1A3E22940A22006FFC45 /* UserModel.swift */; };
 		4E8A1A4222941257006FFC45 /* CardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8A1A4122941257006FFC45 /* CardViewModel.swift */; };
 		4EA086AD2293DD1700DE5EE5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA086AC2293DD1700DE5EE5 /* AppDelegate.swift */; };
@@ -21,6 +22,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4E7DD81822941E7500D6DEF0 /* Advertiser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Advertiser.swift; sourceTree = "<group>"; };
 		4E8A1A3E22940A22006FFC45 /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		4E8A1A4122941257006FFC45 /* CardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardViewModel.swift; sourceTree = "<group>"; };
 		4EA086A92293DD1700DE5EE5 /* Tinder Firestore.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Tinder Firestore.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -108,6 +110,7 @@
 			isa = PBXGroup;
 			children = (
 				4E8A1A3E22940A22006FFC45 /* UserModel.swift */,
+				4E7DD81822941E7500D6DEF0 /* Advertiser.swift */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -195,6 +198,7 @@
 			files = (
 				4EA086AF2293DD1700DE5EE5 /* HomeVC.swift in Sources */,
 				4E8A1A3F22940A22006FFC45 /* UserModel.swift in Sources */,
+				4E7DD81922941E7500D6DEF0 /* Advertiser.swift in Sources */,
 				4EA086C52293E12300DE5EE5 /* HomeBottomControlsStackView.swift in Sources */,
 				4EA086C72293E39300DE5EE5 /* topNavigationStackView.swift in Sources */,
 				4E8A1A4222941257006FFC45 /* CardViewModel.swift in Sources */,
