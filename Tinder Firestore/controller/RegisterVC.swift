@@ -106,9 +106,9 @@ class RegisterVC: UIViewController {
     //MARK:-user methods
     
     fileprivate func setupRegisterViewModelObserver(){
-        registerViewModel.isFormValidate = { (isValid) in
-            self.registerButton.isEnabled = isValid
-            if isValid {
+        registerViewModel.isFormValidate = { (isValidForm) in
+            self.registerButton.isEnabled = isValidForm
+            if isValidForm {
                 self.registerButton.backgroundColor = #colorLiteral(red: 0.8273344636, green: 0.09256268293, blue: 0.324395299, alpha: 1)
                 self.registerButton.setTitleColor(.white, for: .normal)
             }else {
