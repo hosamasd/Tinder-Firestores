@@ -11,11 +11,15 @@ import UIKit
 class CustomTextField: UITextField {
     
     let padding:CGFloat
+    let height:CGFloat = 50
     
     init(padding:CGFloat) {
         self.padding = padding
+        
         super.init(frame: .zero)
+        self.layer.cornerRadius = height / 2
     }
+    
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -30,6 +34,7 @@ class CustomTextField: UITextField {
     }
     
     override var intrinsicContentSize: CGSize {
-        return CGSize(width: 0, height: 50)
+        return CGSize(width: 0, height: height)
+        
     }
 }
