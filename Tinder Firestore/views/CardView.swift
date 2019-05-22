@@ -10,28 +10,39 @@ import UIKit
 
 class CardView: UIView {
     
-    var cards:CardViewModel! {
+    var cardViewModel:CardViewModel! {
         didSet{
-          mainImage.image = UIImage(named: cards.imageNames.first ?? "" )
-            userInfo.attributedText = cards.attributedText
-            userInfo.textAlignment = cards.textAlignment
+          mainImage.image = UIImage(named: cardViewModel.imageNames.first ?? "" )
+            userInfo.attributedText = cardViewModel.attributedText
+            userInfo.textAlignment = cardViewModel.textAlignment
             
-            (0..<cards.imageNames.count).forEach { (_) in
+            (0..<cardViewModel.imageNames.count).forEach { (_) in
                 let vi = UIView()
                 vi.backgroundColor = barDeselctedItem
                 barStackView.addArrangedSubview(vi)
                 
                 barStackView.arrangedSubviews.first?.backgroundColor = .white
 
+                setupImageNndexObserver()
             }
         }
     }
     
+    func setupImageNndexObserver()  {
+        cardViewModel.imageIndexObserver = { [weak self] (index,image) in
+         self?.mainImage.image = image
+            self?.barStackView.arrangedSubviews.forEach { (v) in
+                v.backgroundColor = self?.barDeselctedItem
+            }
+            
+            self?.barStackView.arrangedSubviews[index].backgroundColor = .white
+
+        }
+    }
     //Configuration values
     fileprivate let threShold:CGFloat = 90
     fileprivate let barDeselctedItem = UIColor(white: 0, alpha: 0.1)
     
-     var imageIndex = 0
     let barStackView = UIStackView()
 let gradiantLayer = CAGradientLayer()
   fileprivate  let mainImage:UIImageView = {
@@ -129,21 +140,11 @@ barStackView.spacing = 4
         let tapPosition = gesture.location(in: nil)
         let shouldGoNextPhoto = tapPosition.x > frame.width / 2 ? true : false
         
-       
-        
         if shouldGoNextPhoto {
-            imageIndex = min(imageIndex + 1, cards.imageNames.count - 1)
+            cardViewModel.goToNextPhoto()
         }else {
-            imageIndex = max(0, imageIndex - 1)
-        }
-       let imageName = cards.imageNames[imageIndex]
-        mainImage.image = UIImage(named: imageName)
-        
-        barStackView.arrangedSubviews.forEach { (v) in
-            v.backgroundColor = barDeselctedItem
-        }
-        
-        barStackView.arrangedSubviews[imageIndex].backgroundColor = .white
+            cardViewModel.goToPreviousPhoto()
+       }
     }
     
     @objc func handlePan(gesture:UIPanGestureRecognizer)  {

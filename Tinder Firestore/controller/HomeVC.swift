@@ -38,7 +38,7 @@ class HomeVC: UIViewController {
     func setupDumyCard()  {
         cardViewArray.forEach { (cardVM) in
             let cardView = CardView(frame: .zero)
-            cardView.cards = cardVM
+            cardView.cardViewModel = cardVM
             cardDeskView.addSubview(cardView)
             cardView.fillSuperview()
         }
