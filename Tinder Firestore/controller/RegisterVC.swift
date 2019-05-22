@@ -7,20 +7,21 @@
 //
 
 import UIKit
-
+import Firebase
+import JGProgressHUD
 class RegisterVC: UIViewController {
     
     let registerViewModel = RegistrationViewModel()
     
     let gradiantLayer = CAGradientLayer()
-   
+    
     lazy var selectedPhotoButton:UIButton = {
         let bt = UIButton(title: "Select Photo", titleColor: .black, font: .systemFont(ofSize: 32, weight: .heavy), backgroundColor: .white, target: self, action: #selector(handleSelectPhoto))
         bt.layer.cornerRadius = 16
         bt.imageView?.contentMode = .scaleAspectFill
         bt.clipsToBounds = true
         
-         return bt
+        return bt
     }()
     lazy var emailTextField:CustomTextField = {
         let tf = CustomTextField(padding: 16, height: 50)
@@ -40,7 +41,7 @@ class RegisterVC: UIViewController {
         let tf = CustomTextField(padding: 16, height: 50)
         tf.isSecureTextEntry = true
         tf.placeholder = "enter your password"
-      tf.addTarget(self, action: #selector(handleTextChange), for: .editingChanged)
+        tf.addTarget(self, action: #selector(handleTextChange), for: .editingChanged)
         return tf
     }()
     
@@ -111,16 +112,26 @@ class RegisterVC: UIViewController {
     //MARK:-user methods
     
     fileprivate func setupRegisterViewModelObserver(){
-        registerViewModel.isFormValidate = { (isValidForm) in
-            self.registerButton.isEnabled = isValidForm
-            if isValidForm {
+        registerViewModel.bindableIsFormValidate.bind { [unowned self ] (isValidForm) in
+            guard let isValid = isValidForm else {return}
+            self.registerButton.isEnabled = isValid
+            if isValid {
                 self.registerButton.backgroundColor = #colorLiteral(red: 0.8273344636, green: 0.09256268293, blue: 0.324395299, alpha: 1)
                 self.registerButton.setTitleColor(.white, for: .normal)
             }else {
                 self.registerButton.backgroundColor = UIColor.lightGray
                 self.registerButton.setTitleColor(.gray, for: .normal)
             }
-  }
+        }
+    
+        
+        
+        
+        registerViewModel.bindableImage.bind(observer: { [unowned self ] (img) in
+            self.selectedPhotoButton.setImage(img?.withRenderingMode(UIImage.RenderingMode.alwaysOriginal), for: .normal)
+            
+        }) 
+        
     }
     
     fileprivate  func setupGradiantLayer()  {
@@ -147,11 +158,11 @@ class RegisterVC: UIViewController {
     fileprivate func setupNotificationObservers() {
         //when make notification you should remove them to avoid retain cycle
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardShowing), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardDismiss), name: UIResponder.keyboardWillHideNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleDismissKeyboard), name: UIResponder.keyboardWillHideNotification, object: nil)
         
     }
     fileprivate func setupGestures()  {
-        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleViewTapped)))
+        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleDismissKeyboard)))
     }
     
     fileprivate func animateView(){
@@ -160,14 +171,39 @@ class RegisterVC: UIViewController {
         })
     }
     
+    fileprivate func showHUDWithError(err:Error){
+        let hud = JGProgressHUD(style: .dark)
+        hud.textLabel.text = "Registration Faield"
+        hud.detailTextLabel.text = err.localizedDescription
+        hud.show(in: self.view)
+        hud.dismiss(afterDelay: 4)
+    }
+    
     //TODO:-handle methods
     
     @objc func handleRegister()  {
-        print(023)
+        self.handleDismissKeyboard()
+        
+        guard let email = emailTextField.text,
+            let password = passwordTextField.text
+            else { return  }
+        
+        Auth.auth().createUser(withEmail: email, password: password) { (user, err) in
+            if let err = err{
+                print(err)
+                self.showHUDWithError(err: err)
+                return
+            }
+            print(user?.user.uid)
+        }
     }
     
     @objc func handleSelectPhoto()  {
-        print(321)
+        let imagePickers = UIImagePickerController()
+        imagePickers.delegate = self
+        imagePickers.sourceType = .photoLibrary
+        
+        present(imagePickers, animated: true, completion: nil)
     }
     
     @objc  func handleKeyboardShowing(notify:Notification)  {
@@ -181,11 +217,8 @@ class RegisterVC: UIViewController {
         
     }
     
-    @objc  func handleKeyboardDismiss()  {
-        animateView()
-    }
     
-    @objc func handleViewTapped()  {
+    @objc func handleDismissKeyboard()  {
         view.endEditing(true)
         
         animateView()
@@ -202,4 +235,18 @@ class RegisterVC: UIViewController {
     }
 }
 
+extension RegisterVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate{
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if  let image = info[.originalImage] as? UIImage {
+            registerViewModel.bindableImage.value = image
+            dismiss(animated: true, completion: nil)
+        }
+        
+    }
+}
 
