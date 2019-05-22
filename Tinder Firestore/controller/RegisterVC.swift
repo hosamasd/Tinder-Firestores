@@ -10,6 +10,7 @@ import UIKit
 
 class RegisterVC: UIViewController {
     
+     let gradiantLayer = CAGradientLayer()
     lazy var selectedPhotoButton:UIButton = {
         let bt = UIButton(title: "Select Photo", titleColor: .black, font: .systemFont(ofSize: 32, weight: .heavy), backgroundColor: .white, target: self, action: #selector(handleSelectPhoto))
         bt.layer.cornerRadius = 6
@@ -42,12 +43,22 @@ class RegisterVC: UIViewController {
         return tf
     }()
 
-    lazy var mainStack = UIStackView(arrangedSubviews: [
-        selectedPhotoButton,
+    lazy var verticalStackView:UIStackView = {
+       let sv = UIStackView(arrangedSubviews: [
         nameTextField,
         emailTextField,
         passwordTextField,
-        registerButton])
+        registerButton
+        ])
+        sv.axis = .vertical
+        sv.spacing = 8
+        sv.distribution = .fillEqually
+        return sv
+    }()
+    lazy var mainStack = UIStackView(arrangedSubviews: [
+        selectedPhotoButton,
+        verticalStackView
+        ])
     
     lazy var registerButton:UIButton = {
         let bt = UIButton(title: "Register", titleColor: .white, font: .systemFont(ofSize: 20, weight: .heavy), backgroundColor: #colorLiteral(red: 0.8273344636, green: 0.09256268293, blue: 0.324395299, alpha: 1), target: self, action: #selector(handleRegister))
@@ -66,28 +77,45 @@ class RegisterVC: UIViewController {
         setupGestures()
     }
     
+    //TODO:- landscape mode
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        if self.traitCollection.verticalSizeClass == .compact {
+            mainStack.axis = .horizontal
+        }else {
+            mainStack.axis = .vertical
+        }
+    }
+    
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        gradiantLayer.frame = view.bounds
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
         NotificationCenter.default.removeObserver(self) // for avoiding retain cycle!
     }
     
+   
     //MARK:-user methods
     
   fileprivate  func setupGradiantLayer()  {
-        let layer = CAGradientLayer()
+    
         let topColor = #colorLiteral(red: 0.989370048, green: 0.3686362505, blue: 0.3827736974, alpha: 1)
         let bottomColor = #colorLiteral(red: 0.8902122974, green: 0.1073872522, blue: 0.4597495198, alpha: 1)
         
-        layer.colors = [topColor.cgColor,bottomColor.cgColor]
-        layer.locations = [0,1]
-        view.layer.addSublayer(layer)
-        layer.frame = view.bounds
+        gradiantLayer.colors = [topColor.cgColor,bottomColor.cgColor]
+        gradiantLayer.locations = [0,1]
+        view.layer.addSublayer(gradiantLayer)
+        gradiantLayer.frame = view.bounds
     }
     
   fileprivate  func setupViews()  {
        
-        mainStack.axis = .vertical
-        mainStack.spacing = 10
-        
+        mainStack.axis = .horizontal
+        mainStack.spacing = 8
+    selectedPhotoButton.constrainWidth(constant: 275)
+    
         view.addSubview(mainStack)
         mainStack.anchor(top: nil, leading: view.leadingAnchor, bottom: nil, trailing: view.trailingAnchor,padding: .init(top: 0, left: 32, bottom: 0, right: 32))
         mainStack.centerYInSuperview()
