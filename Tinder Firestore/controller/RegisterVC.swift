@@ -13,36 +13,34 @@ class RegisterVC: UIViewController {
     let registerViewModel = RegistrationViewModel()
     
     let gradiantLayer = CAGradientLayer()
+   
     lazy var selectedPhotoButton:UIButton = {
         let bt = UIButton(title: "Select Photo", titleColor: .black, font: .systemFont(ofSize: 32, weight: .heavy), backgroundColor: .white, target: self, action: #selector(handleSelectPhoto))
-        bt.layer.cornerRadius = 6
-        bt.constrainHeight(constant: 250)
-        bt.constrainWidth(constant: 275)
+        bt.layer.cornerRadius = 16
+        bt.imageView?.contentMode = .scaleAspectFill
+        bt.clipsToBounds = true
         
-        return bt
+         return bt
     }()
     lazy var emailTextField:CustomTextField = {
-        let tf = CustomTextField(padding: 16)
+        let tf = CustomTextField(padding: 16, height: 50)
         tf.keyboardType = .emailAddress
         tf.placeholder = "enter your email"
-        tf.backgroundColor = .white
         tf.addTarget(self, action: #selector(handleTextChange), for: .editingChanged)
         
         return tf
     }()
     lazy var nameTextField:CustomTextField = {
-        let tf = CustomTextField(padding: 16)
+        let tf = CustomTextField(padding: 16, height: 50)
         tf.placeholder = "enter your full name"
-        tf.backgroundColor = .white
         tf.addTarget(self, action: #selector(handleTextChange), for: .editingChanged)
         return tf
     }()
     lazy var passwordTextField:CustomTextField = {
-        let tf = CustomTextField(padding: 16)
+        let tf = CustomTextField(padding: 16, height: 50)
         tf.isSecureTextEntry = true
         tf.placeholder = "enter your password"
-        tf.backgroundColor = .white
-        tf.addTarget(self, action: #selector(handleTextChange), for: .editingChanged)
+      tf.addTarget(self, action: #selector(handleTextChange), for: .editingChanged)
         return tf
     }()
     
@@ -67,11 +65,12 @@ class RegisterVC: UIViewController {
         let bt = UIButton(title: "Register", titleColor: .white, font: .systemFont(ofSize: 20, weight: .heavy), backgroundColor: UIColor.lightGray, target: self, action: #selector(handleRegister))
         bt.setTitleColor(.gray, for: .disabled)
         bt.isEnabled = false
-        bt.layer.cornerRadius = 25
-        bt.constrainHeight(constant: 50)
+        bt.layer.cornerRadius = 22
+        bt.constrainHeight(constant: 44)
         return bt
     }()
-    
+    lazy var selectPhotoButtonWidthAnchor = selectedPhotoButton.widthAnchor.constraint(equalToConstant: 275)
+    lazy var selectPhotoButtonHeightAnchor = selectedPhotoButton.heightAnchor.constraint(equalToConstant: 275)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -88,8 +87,14 @@ class RegisterVC: UIViewController {
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         if self.traitCollection.verticalSizeClass == .compact {
             mainStack.axis = .horizontal
+            mainStack.distribution = .fillEqually
+            selectPhotoButtonHeightAnchor.isActive = false
+            selectPhotoButtonWidthAnchor.isActive = true
         }else {
             mainStack.axis = .vertical
+            mainStack.distribution = .fill
+            selectPhotoButtonWidthAnchor.isActive = false
+            selectPhotoButtonHeightAnchor.isActive = true
         }
     }
     
@@ -135,7 +140,7 @@ class RegisterVC: UIViewController {
         mainStack.spacing = 8
         
         view.addSubview(mainStack)
-        mainStack.anchor(top: nil, leading: view.leadingAnchor, bottom: nil, trailing: view.trailingAnchor,padding: .init(top: 0, left: 32, bottom: 0, right: 32))
+        mainStack.anchor(top: nil, leading: view.leadingAnchor, bottom: nil, trailing: view.trailingAnchor,padding: .init(top: 0, left: 50, bottom: 0, right: 50))
         mainStack.centerYInSuperview()
     }
     
