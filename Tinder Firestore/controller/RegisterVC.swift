@@ -27,6 +27,7 @@ class RegisterVC: UIViewController {
         let tf = CustomTextField(padding: 16, height: 50)
         tf.keyboardType = .emailAddress
         tf.placeholder = "enter your email"
+        tf.text = "h@h.com"
         tf.addTarget(self, action: #selector(handleTextChange), for: .editingChanged)
         
         return tf
@@ -34,6 +35,7 @@ class RegisterVC: UIViewController {
     lazy var nameTextField:CustomTextField = {
         let tf = CustomTextField(padding: 16, height: 50)
         tf.placeholder = "enter your full name"
+          tf.text = "hosam"
         tf.addTarget(self, action: #selector(handleTextChange), for: .editingChanged)
         return tf
     }()
@@ -41,6 +43,7 @@ class RegisterVC: UIViewController {
         let tf = CustomTextField(padding: 16, height: 50)
         tf.isSecureTextEntry = true
         tf.placeholder = "enter your password"
+          tf.text = "123456"
         tf.addTarget(self, action: #selector(handleTextChange), for: .editingChanged)
         return tf
     }()
@@ -124,14 +127,20 @@ class RegisterVC: UIViewController {
             }
         }
     
-        
-        
-        
         registerViewModel.bindableImage.bind(observer: { [unowned self ] (img) in
             self.selectedPhotoButton.setImage(img?.withRenderingMode(UIImage.RenderingMode.alwaysOriginal), for: .normal)
             
         }) 
         
+        registerViewModel.bindableIsRegistraing.bind { [unowned self] (isReg) in
+            if isReg == true {
+                self.registerHUD.textLabel.text = "Register"
+                self.registerHUD.show(in: self.view)
+                
+            }else {
+                self.registerHUD.dismiss()
+            }
+        }
     }
     
     fileprivate  func setupGradiantLayer()  {
@@ -172,6 +181,7 @@ class RegisterVC: UIViewController {
     }
     
     fileprivate func showHUDWithError(err:Error){
+        registerHUD.dismiss()
         let hud = JGProgressHUD(style: .dark)
         hud.textLabel.text = "Registration Faield"
         hud.detailTextLabel.text = err.localizedDescription
@@ -180,22 +190,18 @@ class RegisterVC: UIViewController {
     }
     
     //TODO:-handle methods
+    var registerHUD = JGProgressHUD(style: .dark)
     
     @objc func handleRegister()  {
         self.handleDismissKeyboard()
         
-        guard let email = emailTextField.text,
-            let password = passwordTextField.text
-            else { return  }
-        
-        Auth.auth().createUser(withEmail: email, password: password) { (user, err) in
-            if let err = err{
-                print(err)
+        registerViewModel.performRegistration { (err) in
+            if let err = err {
                 self.showHUDWithError(err: err)
                 return
-            }
-            print(user?.user.uid)
         }
+        }
+        
     }
     
     @objc func handleSelectPhoto()  {
