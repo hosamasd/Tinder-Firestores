@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4E7ACB2522952FFD00A8D148 /* RegisterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7ACB2422952FFD00A8D148 /* RegisterVC.swift */; };
+		4E7ACB28229536B500A8D148 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7ACB27229536B500A8D148 /* CustomTextField.swift */; };
 		4E7DD81922941E7500D6DEF0 /* Advertiser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7DD81822941E7500D6DEF0 /* Advertiser.swift */; };
 		4E8A1A3F22940A22006FFC45 /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8A1A3E22940A22006FFC45 /* UserModel.swift */; };
 		4E8A1A4222941257006FFC45 /* CardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8A1A4122941257006FFC45 /* CardViewModel.swift */; };
@@ -22,6 +24,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4E7ACB2422952FFD00A8D148 /* RegisterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterVC.swift; sourceTree = "<group>"; };
+		4E7ACB27229536B500A8D148 /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
 		4E7DD81822941E7500D6DEF0 /* Advertiser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Advertiser.swift; sourceTree = "<group>"; };
 		4E8A1A3E22940A22006FFC45 /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		4E8A1A4122941257006FFC45 /* CardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardViewModel.swift; sourceTree = "<group>"; };
@@ -55,6 +59,14 @@
 				4EA086C12293DE1D00DE5EE5 /* ExtensionUivew.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		4E7ACB26229536AB00A8D148 /* Custom */ = {
+			isa = PBXGroup;
+			children = (
+				4E7ACB27229536B500A8D148 /* CustomTextField.swift */,
+			);
+			path = Custom;
 			sourceTree = "<group>";
 		};
 		4E8A1A402294123F006FFC45 /* viewModel */ = {
@@ -102,6 +114,7 @@
 			isa = PBXGroup;
 			children = (
 				4EA086AE2293DD1700DE5EE5 /* HomeVC.swift */,
+				4E7ACB2422952FFD00A8D148 /* RegisterVC.swift */,
 			);
 			path = controller;
 			sourceTree = "<group>";
@@ -121,6 +134,7 @@
 				4EA086C42293E12300DE5EE5 /* HomeBottomControlsStackView.swift */,
 				4EA086C62293E39300DE5EE5 /* topNavigationStackView.swift */,
 				4EA086C82293E97C00DE5EE5 /* CardView.swift */,
+				4E7ACB26229536AB00A8D148 /* Custom */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -197,6 +211,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4EA086AF2293DD1700DE5EE5 /* HomeVC.swift in Sources */,
+				4E7ACB28229536B500A8D148 /* CustomTextField.swift in Sources */,
 				4E8A1A3F22940A22006FFC45 /* UserModel.swift in Sources */,
 				4E7DD81922941E7500D6DEF0 /* Advertiser.swift in Sources */,
 				4EA086C52293E12300DE5EE5 /* HomeBottomControlsStackView.swift in Sources */,
@@ -205,6 +220,7 @@
 				4EA086AD2293DD1700DE5EE5 /* AppDelegate.swift in Sources */,
 				4EA086C92293E97C00DE5EE5 /* CardView.swift in Sources */,
 				4EA086C22293DE1E00DE5EE5 /* ExtensionUivew.swift in Sources */,
+				4E7ACB2522952FFD00A8D148 /* RegisterVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

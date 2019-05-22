@@ -31,6 +31,9 @@ class HomeVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        topStackView.settingButton.addTarget(self, action: #selector(handleNextVC), for: .touchUpInside)
+        
         setupViews()
         setupDumyCard()
     }
@@ -58,5 +61,9 @@ class HomeVC: UIViewController {
         
     }
     
+   @objc func handleNextVC()  {
+        let regsiter = RegisterVC()
+        present(regsiter, animated: true, completion: nil)
+    }
 }
 
