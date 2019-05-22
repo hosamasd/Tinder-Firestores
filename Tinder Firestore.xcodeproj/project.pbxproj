@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4E77BED722955E5800FD770B /* RegistrationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E77BED622955E5800FD770B /* RegistrationViewModel.swift */; };
 		4E7ACB2522952FFD00A8D148 /* RegisterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7ACB2422952FFD00A8D148 /* RegisterVC.swift */; };
 		4E7ACB28229536B500A8D148 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7ACB27229536B500A8D148 /* CustomTextField.swift */; };
 		4E7DD81922941E7500D6DEF0 /* Advertiser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7DD81822941E7500D6DEF0 /* Advertiser.swift */; };
@@ -24,6 +25,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4E77BED622955E5800FD770B /* RegistrationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationViewModel.swift; sourceTree = "<group>"; };
 		4E7ACB2422952FFD00A8D148 /* RegisterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterVC.swift; sourceTree = "<group>"; };
 		4E7ACB27229536B500A8D148 /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
 		4E7DD81822941E7500D6DEF0 /* Advertiser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Advertiser.swift; sourceTree = "<group>"; };
@@ -73,6 +75,7 @@
 			isa = PBXGroup;
 			children = (
 				4E8A1A4122941257006FFC45 /* CardViewModel.swift */,
+				4E77BED622955E5800FD770B /* RegistrationViewModel.swift */,
 			);
 			path = viewModel;
 			sourceTree = "<group>";
@@ -211,6 +214,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4EA086AF2293DD1700DE5EE5 /* HomeVC.swift in Sources */,
+				4E77BED722955E5800FD770B /* RegistrationViewModel.swift in Sources */,
 				4E7ACB28229536B500A8D148 /* CustomTextField.swift in Sources */,
 				4E8A1A3F22940A22006FFC45 /* UserModel.swift in Sources */,
 				4E7DD81922941E7500D6DEF0 /* Advertiser.swift in Sources */,

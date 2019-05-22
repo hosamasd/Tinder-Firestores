@@ -10,19 +10,23 @@ import UIKit
 
 class RegisterVC: UIViewController {
     
-     let gradiantLayer = CAGradientLayer()
+    let registerViewModel = RegistrationViewModel()
+    
+    let gradiantLayer = CAGradientLayer()
     lazy var selectedPhotoButton:UIButton = {
         let bt = UIButton(title: "Select Photo", titleColor: .black, font: .systemFont(ofSize: 32, weight: .heavy), backgroundColor: .white, target: self, action: #selector(handleSelectPhoto))
         bt.layer.cornerRadius = 6
         bt.constrainHeight(constant: 250)
+        bt.constrainWidth(constant: 275)
+        
         return bt
     }()
     lazy var emailTextField:CustomTextField = {
-       let tf = CustomTextField(padding: 16)
+        let tf = CustomTextField(padding: 16)
         tf.keyboardType = .emailAddress
         tf.placeholder = "enter your email"
         tf.backgroundColor = .white
-        
+        tf.addTarget(self, action: #selector(handleTextChange), for: .editingChanged)
         
         return tf
     }()
@@ -30,7 +34,7 @@ class RegisterVC: UIViewController {
         let tf = CustomTextField(padding: 16)
         tf.placeholder = "enter your full name"
         tf.backgroundColor = .white
-        
+        tf.addTarget(self, action: #selector(handleTextChange), for: .editingChanged)
         return tf
     }()
     lazy var passwordTextField:CustomTextField = {
@@ -38,18 +42,17 @@ class RegisterVC: UIViewController {
         tf.isSecureTextEntry = true
         tf.placeholder = "enter your password"
         tf.backgroundColor = .white
-        
-        
+        tf.addTarget(self, action: #selector(handleTextChange), for: .editingChanged)
         return tf
     }()
-
+    
     lazy var verticalStackView:UIStackView = {
-       let sv = UIStackView(arrangedSubviews: [
-        nameTextField,
-        emailTextField,
-        passwordTextField,
-        registerButton
-        ])
+        let sv = UIStackView(arrangedSubviews: [
+            nameTextField,
+            emailTextField,
+            passwordTextField,
+            registerButton
+            ])
         sv.axis = .vertical
         sv.spacing = 8
         sv.distribution = .fillEqually
@@ -61,20 +64,23 @@ class RegisterVC: UIViewController {
         ])
     
     lazy var registerButton:UIButton = {
-        let bt = UIButton(title: "Register", titleColor: .white, font: .systemFont(ofSize: 20, weight: .heavy), backgroundColor: #colorLiteral(red: 0.8273344636, green: 0.09256268293, blue: 0.324395299, alpha: 1), target: self, action: #selector(handleRegister))
+        let bt = UIButton(title: "Register", titleColor: .white, font: .systemFont(ofSize: 20, weight: .heavy), backgroundColor: UIColor.lightGray, target: self, action: #selector(handleRegister))
+        bt.setTitleColor(.gray, for: .disabled)
+        bt.isEnabled = false
         bt.layer.cornerRadius = 25
         bt.constrainHeight(constant: 50)
         return bt
     }()
-   
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-       setupGradiantLayer()
+        setupGradiantLayer()
         setupViews()
         setupNotificationObservers()
         setupGestures()
+        setupRegisterViewModelObserver()
     }
     
     //TODO:- landscape mode
@@ -96,11 +102,24 @@ class RegisterVC: UIViewController {
         NotificationCenter.default.removeObserver(self) // for avoiding retain cycle!
     }
     
-   
+    
     //MARK:-user methods
     
-  fileprivate  func setupGradiantLayer()  {
+    fileprivate func setupRegisterViewModelObserver(){
+        registerViewModel.isFormValidate = { (isValid) in
+            self.registerButton.isEnabled = isValid
+            if isValid {
+                self.registerButton.backgroundColor = #colorLiteral(red: 0.8273344636, green: 0.09256268293, blue: 0.324395299, alpha: 1)
+                self.registerButton.setTitleColor(.white, for: .normal)
+            }else {
+                self.registerButton.backgroundColor = UIColor.lightGray
+                self.registerButton.setTitleColor(.gray, for: .normal)
+            }
+  }
+    }
     
+    fileprivate  func setupGradiantLayer()  {
+        
         let topColor = #colorLiteral(red: 0.989370048, green: 0.3686362505, blue: 0.3827736974, alpha: 1)
         let bottomColor = #colorLiteral(red: 0.8902122974, green: 0.1073872522, blue: 0.4597495198, alpha: 1)
         
@@ -110,12 +129,11 @@ class RegisterVC: UIViewController {
         gradiantLayer.frame = view.bounds
     }
     
-  fileprivate  func setupViews()  {
-       
+    fileprivate  func setupViews()  {
+        
         mainStack.axis = .horizontal
         mainStack.spacing = 8
-    selectedPhotoButton.constrainWidth(constant: 275)
-    
+        
         view.addSubview(mainStack)
         mainStack.anchor(top: nil, leading: view.leadingAnchor, bottom: nil, trailing: view.trailingAnchor,padding: .init(top: 0, left: 32, bottom: 0, right: 32))
         mainStack.centerYInSuperview()
@@ -125,7 +143,7 @@ class RegisterVC: UIViewController {
         //when make notification you should remove them to avoid retain cycle
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardShowing), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardDismiss), name: UIResponder.keyboardWillHideNotification, object: nil)
-
+        
     }
     fileprivate func setupGestures()  {
         view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleViewTapped)))
@@ -139,11 +157,11 @@ class RegisterVC: UIViewController {
     
     //TODO:-handle methods
     
-   @objc func handleRegister()  {
+    @objc func handleRegister()  {
         print(023)
     }
     
-   @objc func handleSelectPhoto()  {
+    @objc func handleSelectPhoto()  {
         print(321)
     }
     
@@ -158,14 +176,24 @@ class RegisterVC: UIViewController {
         
     }
     
-  @objc  func handleKeyboardDismiss()  {
-   animateView()
+    @objc  func handleKeyboardDismiss()  {
+        animateView()
     }
     
-   @objc func handleViewTapped()  {
+    @objc func handleViewTapped()  {
         view.endEditing(true)
         
-       animateView()
+        animateView()
+    }
+    
+    @objc func handleTextChange(text:UITextField)  {
+        if text == emailTextField {
+            registerViewModel.email = text.text
+        }else  if text == nameTextField {
+            registerViewModel.fullName = text.text
+        }else {
+            registerViewModel.password = text.text
+        }
     }
 }
 
