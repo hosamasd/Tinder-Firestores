@@ -8,7 +8,8 @@
 
 import UIKit
 import Firebase
-
+import SDWebImage
+import JGProgressHUD
 class SettingVC: UITableViewController {
     
     lazy var headerView:UIView = {
@@ -42,6 +43,7 @@ class SettingVC: UITableViewController {
         super.viewDidLoad()
         setupNavigationItems()
         setupTableView()
+        fetchCurrentUser()
     }
     
     //MARK:- tableview
@@ -60,10 +62,18 @@ class SettingVC: UITableViewController {
         switch indexPath.section {
         case 1:
             cell.textEditable.placeholder = "Enter your name"
+            cell.textEditable.text = user?.name
+            cell.textEditable.addTarget(self, action: #selector(handlechangeName), for: .editingChanged)
         case 2:
             cell.textEditable.placeholder = "Enter your job"
+            cell.textEditable.text = user?.job
+            cell.textEditable.addTarget(self, action: #selector(handlechangeJob), for: .editingChanged)
         case 3:
             cell.textEditable.placeholder = "Enter your age"
+            cell.textEditable.addTarget(self, action: #selector(handlechangeAge), for: .editingChanged)
+            if let age = user?.age {
+                cell.textEditable.text = String(age)
+            }
         default:
            cell.textEditable.placeholder = "Enter your bio"
         }
@@ -89,6 +99,30 @@ class SettingVC: UITableViewController {
     }
     
     //MARK:- user methods
+    var user:UserModel?
+    
+    func fetchCurrentUser()  {
+        guard let uid = Auth.auth().currentUser?.uid else { return  }
+        Firestore.firestore().collection("Users").document(uid).getDocument { (snapshot, err) in
+            if let err = err {
+                print(err)
+                return
+            }
+            guard let dict = snapshot?.data() else {return}
+            self.user = UserModel(dict: dict)
+            self.loadUserPhoto()
+            
+            self.tableView.reloadData()
+        }
+    }
+    
+    func loadUserPhoto()  {
+        guard let imageUrl = user?.imageUrl1,let url = URL(string: imageUrl) else { return  }
+        
+        SDWebImageManager.shared().loadImage(with: url, options: .continueInBackground, progress: nil) { (img, _, _, _, _, _) in
+            self.image1Button.setImage(img?.withRenderingMode(.alwaysOriginal), for: .normal)
+        }
+    }
     
     func setupTableView()  {
         tableView.backgroundColor = UIColor(white: 0.95, alpha: 1)
@@ -129,7 +163,24 @@ class SettingVC: UITableViewController {
     }
     
    @objc func handleSave()  {
-        print(123)
+    guard let uid = Auth.auth().currentUser?.uid else { return  }
+    let values:[String:Any] = [
+        "uid":uid,"fullName":user?.name ?? "",
+        "age":user?.age ?? -1,
+        "job":user?.job ?? "",
+        "imageUrl1":user?.imageUrl1 ?? ""
+    ]
+    let hud = JGProgressHUD(style: .dark)
+    hud.textLabel.text = "Saving settings"
+    hud.show(in: view)
+    Firestore.firestore().collection("Users").document(uid).setData(values) { (err) in
+        hud.dismiss()
+        if let err = err {
+            print(err)
+            return
+        }
+        print("saved!")
+    }
     }
     
     @objc func handleLogout()  {
@@ -146,6 +197,18 @@ class SettingVC: UITableViewController {
     
    @objc func handleCancel()  {
         dismiss(animated: true, completion: nil)
+    }
+    
+   @objc func handlechangeName(text: UITextField)  {
+        self.user?.name = text.text ?? ""
+    }
+    
+    @objc func handlechangeJob(text: UITextField)  {
+        self.user?.job = text.text ?? ""
+    }
+    
+    @objc func handlechangeAge(text: UITextField)  {
+        self.user?.age = Int(text.text ?? "")
     }
 }
 
