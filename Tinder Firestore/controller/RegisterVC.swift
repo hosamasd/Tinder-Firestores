@@ -200,6 +200,8 @@ class RegisterVC: UIViewController {
                 self.showHUDWithError(err: err)
                 return
         }
+            let home = HomeVC()
+            self.present(home, animated: true, completion: nil)
         }
         
     }

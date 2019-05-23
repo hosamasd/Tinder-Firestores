@@ -38,6 +38,7 @@ class HomeVC: UIViewController {
         super.viewDidLoad()
         
         topStackView.settingButton.addTarget(self, action: #selector(handleNextVC), for: .touchUpInside)
+        bottomStackView.refreshButton.addTarget(self, action: #selector(handleRefresh), for: .touchUpInside)
         
         setupViews()
         setupFirestoreUserCards()
@@ -45,11 +46,16 @@ class HomeVC: UIViewController {
         fetchUsersFromFirestore()
     }
     
+    var lastFetchUser:UserModel?
+    
     func fetchUsersFromFirestore()  {
         let hud = JGProgressHUD(style: .dark)
         hud.textLabel.text = "Fetching Users"
         hud.show(in: view)
-        let query =  Firestore.firestore().collection("Users")
+        
+        //paginate here for limit users apppear
+        
+        let query =  Firestore.firestore().collection("Users").order(by: "uid").start(after: [lastFetchUser?.uid ?? ""]).limit(to: 2)
             
         query.getDocuments { (snapshot, err) in
             hud.dismiss()
@@ -62,10 +68,20 @@ class HomeVC: UIViewController {
                 let userDict  = query.data()
                let user = UserModel(dict: userDict)
                 self.cardViewModelArray.append(user.toCardViewModel())
-            })
+                self.lastFetchUser = user
+                self.fetchUserCards(user: user)
+           })
             
-            self.setupFirestoreUserCards()
+//            self.setupFirestoreUserCards()
         }
+    }
+    
+    func fetchUserCards(user:UserModel)  {
+        let cardView = CardView(frame: .zero)
+        cardView.cardViewModel = user.toCardViewModel()
+        cardDeskView.addSubview(cardView)
+        cardDeskView.sendSubviewToBack(cardView)
+        cardView.fillSuperview()
     }
     
     func setupFirestoreUserCards()  {
@@ -88,6 +104,10 @@ class HomeVC: UIViewController {
         view.addSubview(mainStack)
        mainStack.anchor(top: view.safeAreaLayoutGuide.topAnchor, leading: view.leadingAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor, trailing: view.trailingAnchor)
         
+    }
+    
+ @objc   func handleRefresh()  {
+       fetchUsersFromFirestore()
     }
     
    @objc func handleNextVC()  {
