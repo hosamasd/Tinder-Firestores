@@ -19,7 +19,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FirebaseApp.configure()
         window = UIWindow()
         window?.makeKeyAndVisible()
-        window?.rootViewController = RegisterVC()
+        window?.rootViewController = HomeVC()
+//        window?.rootViewController = RegisterVC()
         return true
     }
 

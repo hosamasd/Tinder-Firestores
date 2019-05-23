@@ -215,7 +215,6 @@ class RegisterVC: UIViewController {
     @objc  func handleKeyboardShowing(notify:Notification)  {
         guard let value = notify.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
         let keyboardFrame = value.cgRectValue
-        print(keyboardFrame)
         
         let bottomSpace = view.frame.height - mainStack.frame.origin.y - mainStack.frame.height
         let difference = keyboardFrame.height - bottomSpace

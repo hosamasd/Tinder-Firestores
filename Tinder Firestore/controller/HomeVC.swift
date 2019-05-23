@@ -7,21 +7,26 @@
 //
 
 import UIKit
+import Firebase
+import JGProgressHUD
 
 class HomeVC: UIViewController {
  
-    var cardViewArray:[CardViewModel] = {
-      let producer =    [
-        UserModel(name: "kelly", imageNames: ["kelly1","kelly2","kelly3"], job: "student", age: 24),
-        Advertiser(title: "Slide out menu", brandName: "hosam mohamed", posterImageName: "slide_out_menu_poster"),
-        
-            UserModel(name: "jane", imageNames: ["jane1","jane2","jane3"], job: "Music DJ", age: 23),
-        
-            
-        ] as [ProduceCardViewModel]
-       let viewModels = producer.map({return $0.toCardViewModel()})
-        return viewModels
-    }()
+//    var cardViewArray:[CardViewModel] = {
+//      let producer =    [
+//        UserModel(name: "kelly", imageNames: ["kelly1","kelly2","kelly3"], job: "student", age: 24),
+//        Advertiser(title: "Slide out menu", brandName: "hosam mohamed", posterImageName: "slide_out_menu_poster"),
+//
+//            UserModel(name: "jane", imageNames: ["jane1","jane2","jane3"], job: "Music DJ", age: 23),
+//
+//
+//        ] as [ProduceCardViewModel]
+//       let viewModels = producer.map({return $0.toCardViewModel()})
+//        return viewModels
+//    }()
+   
+    var cardViewModelArray = [CardViewModel]()
+    
     let topStackView = topNavigationStackView()
     let bottomStackView = HomeBottomControlsStackView()
     let cardDeskView:UIView = {
@@ -35,11 +40,36 @@ class HomeVC: UIViewController {
         topStackView.settingButton.addTarget(self, action: #selector(handleNextVC), for: .touchUpInside)
         
         setupViews()
-        setupDumyCard()
+        setupFirestoreUserCards()
+        
+        fetchUsersFromFirestore()
     }
     
-    func setupDumyCard()  {
-        cardViewArray.forEach { (cardVM) in
+    func fetchUsersFromFirestore()  {
+        let hud = JGProgressHUD(style: .dark)
+        hud.textLabel.text = "Fetching Users"
+        hud.show(in: view)
+        let query =  Firestore.firestore().collection("Users")
+            
+        query.getDocuments { (snapshot, err) in
+            hud.dismiss()
+            if let err = err {
+                print(err)
+                return
+            }
+            
+            snapshot?.documents.forEach({ (query) in
+                let userDict  = query.data()
+               let user = UserModel(dict: userDict)
+                self.cardViewModelArray.append(user.toCardViewModel())
+            })
+            
+            self.setupFirestoreUserCards()
+        }
+    }
+    
+    func setupFirestoreUserCards()  {
+       cardViewModelArray.forEach { (cardVM) in
             let cardView = CardView(frame: .zero)
             cardView.cardViewModel = cardVM
             cardDeskView.addSubview(cardView)
@@ -55,15 +85,14 @@ class HomeVC: UIViewController {
         mainStack.bringSubviewToFront(cardDeskView) // to make it hide the other
         mainStack.axis = .vertical
         
-        
         view.addSubview(mainStack)
-        mainStack.anchor(top: view.safeAreaLayoutGuide.topAnchor, leading: view.leadingAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor, trailing: view.trailingAnchor)
+       mainStack.anchor(top: view.safeAreaLayoutGuide.topAnchor, leading: view.leadingAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor, trailing: view.trailingAnchor)
         
     }
     
    @objc func handleNextVC()  {
-        let regsiter = RegisterVC()
-        present(regsiter, animated: true, completion: nil)
+        let setting = SettingVC()
+        present(UINavigationController(rootViewController: setting), animated: true, completion: nil)
     }
 }
 

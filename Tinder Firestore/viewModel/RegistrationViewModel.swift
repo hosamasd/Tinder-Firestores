@@ -37,26 +37,48 @@ class RegistrationViewModel {
                 completion(err)
                 return
             }
-            let fileName = UUID().uuidString
-            let ref =   Storage.storage().reference(withPath: "User-Images").child(fileName)
-            guard  let data = self.bindableImage.value?.jpegData(compressionQuality: 0.75) else {return}
-            ref.putData(data, metadata: nil, completion: { (_, err) in
+           
+            self.saveImageToStorage(completion: completion)
+        }
+    }
+    
+    func saveImageToStorage(completion : @escaping (Error?) ->())  {
+        let fileName = UUID().uuidString
+        let ref =   Storage.storage().reference(withPath: "User-Images").child(fileName)
+        guard  let data = self.bindableImage.value?.jpegData(compressionQuality: 0.75) else {return}
+        ref.putData(data, metadata: nil, completion: { (_, err) in
+            if let err = err {
+                completion(err)
+                return
+            }
+            
+            ref.downloadURL(completion: { (url, err) in
                 if let err = err {
-                   completion(err)
+                    completion(err)
                     return
                 }
                 
-                ref.downloadURL(completion: { (url, err) in
-                    if let err = err {
-                      completion(err)
-                        return
-                    }
-                    
-                    self.bindableIsRegistraing.value = false
-                    print(url?.absoluteString)
-                })
+                self.bindableIsRegistraing.value = false
+                let url = url?.absoluteString ?? ""
+                self.saveInfoToFirestore(imageUrl: url, completion: completion)
+                
             })
+        })
+    }
+    
+    func saveInfoToFirestore(imageUrl:String,completion : @escaping (Error?) ->())  {
+        guard let auth = Auth.auth().currentUser?.uid else { return }
+        let values = ["fullName":fullName ?? "","uid":auth,"imageUrl1":imageUrl]
+        
+        Firestore.firestore().collection("Users").document(auth).setData(values) { (err) in
+            if let err = err {
+                completion(err)
+                return
+            }
+            
+            completion(nil)
         }
+        
     }
     
     func checkFormValid()  {
