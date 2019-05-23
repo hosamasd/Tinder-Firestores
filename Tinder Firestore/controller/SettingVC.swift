@@ -11,27 +11,9 @@ import Firebase
 
 class SettingVC: UITableViewController {
     
-    lazy var image1Button = createButtons(selector: #selector(handleChooseImage))
-    lazy var image2Button = createButtons(selector: #selector(handleChooseImage))
-    lazy var image3Button = createButtons(selector: #selector(handleChooseImage))
-    
-    fileprivate let padding:CGFloat = 16
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setupNavigationItems()
-    }
-    
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
-    }
-    
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return UITableViewCell()
-    }
-    
-    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    lazy var headerView:UIView = {
         let headerView = UIView()
-        headerView.backgroundColor = .red
+        headerView.backgroundColor = .lightGray
         headerView.addSubview(image1Button)
         image1Button.anchor(top: headerView.topAnchor, leading: headerView.leadingAnchor, bottom: headerView.bottomAnchor, trailing: nil,padding: .init(top: padding, left: padding, bottom: padding, right: 0))
         image1Button.widthAnchor.constraint(equalTo: headerView.widthAnchor, multiplier: 0.45).isActive = true
@@ -44,10 +26,75 @@ class SettingVC: UITableViewController {
         
         mainStack.anchor(top: headerView.topAnchor, leading: image1Button.trailingAnchor, bottom: headerView.bottomAnchor, trailing: headerView.trailingAnchor,padding: .init(top: padding, left: padding, bottom: padding, right: padding))
         return headerView
+    }()
+    
+   fileprivate let cellId = "cellId"
+    fileprivate let padding:CGFloat = 16
+    let dummayArray = ["Name","Job","Age","Bio"]
+    
+    
+    lazy var image1Button = createButtons(selector: #selector(handleChooseImage))
+    lazy var image2Button = createButtons(selector: #selector(handleChooseImage))
+    lazy var image3Button = createButtons(selector: #selector(handleChooseImage))
+    
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupNavigationItems()
+        setupTableView()
+    }
+    
+    //MARK:- tableview
+    
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return dummayArray.count+1
+    }
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return section == 0 ? 0 : 1
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! SettingCell
+       
+        switch indexPath.section {
+        case 1:
+            cell.textEditable.placeholder = "Enter your name"
+        case 2:
+            cell.textEditable.placeholder = "Enter your job"
+        case 3:
+            cell.textEditable.placeholder = "Enter your age"
+        default:
+           cell.textEditable.placeholder = "Enter your bio"
+        }
+       
+        return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+       
+        
+        if section == 0 {
+            return headerView
+        }
+         let text = dummayArray[section - 1]
+        let label = CustomHeaderLabel()
+        label.text = text
+        
+        return label
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 300
+        return  section == 0 ? 300 : 40
+    }
+    
+    //MARK:- user methods
+    
+    func setupTableView()  {
+        tableView.backgroundColor = UIColor(white: 0.95, alpha: 1)
+        tableView.register(SettingCell.self, forCellReuseIdentifier: cellId)
+        tableView.keyboardDismissMode = .interactive
+        tableView.tableFooterView = UIView()
     }
     
     func setupNavigationItems()  {

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4E4FA03E2296BA8000F7EBC8 /* CustomHeaderLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E4FA03D2296BA8000F7EBC8 /* CustomHeaderLabel.swift */; };
+		4E4FA0402296BC2600F7EBC8 /* SettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E4FA03F2296BC2600F7EBC8 /* SettingCell.swift */; };
 		4E6A76B9229691AF00BFDDE9 /* SettingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6A76B8229691AF00BFDDE9 /* SettingVC.swift */; };
 		4E6A76BB2296978F00BFDDE9 /* CustomImagePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6A76BA2296978F00BFDDE9 /* CustomImagePickerController.swift */; };
 		4E7067F4229591E400F70242 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4E7067F3229591E400F70242 /* GoogleService-Info.plist */; };
@@ -32,6 +34,8 @@
 /* Begin PBXFileReference section */
 		010AE4DA0874909B2FEFB17F /* Pods-Tinder Firestore.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tinder Firestore.release.xcconfig"; path = "Target Support Files/Pods-Tinder Firestore/Pods-Tinder Firestore.release.xcconfig"; sourceTree = "<group>"; };
 		0CAEBB04C8F985485DFC3B5B /* Pods-Tinder Firestore.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tinder Firestore.debug.xcconfig"; path = "Target Support Files/Pods-Tinder Firestore/Pods-Tinder Firestore.debug.xcconfig"; sourceTree = "<group>"; };
+		4E4FA03D2296BA8000F7EBC8 /* CustomHeaderLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomHeaderLabel.swift; sourceTree = "<group>"; };
+		4E4FA03F2296BC2600F7EBC8 /* SettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingCell.swift; sourceTree = "<group>"; };
 		4E6A76B8229691AF00BFDDE9 /* SettingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingVC.swift; sourceTree = "<group>"; };
 		4E6A76BA2296978F00BFDDE9 /* CustomImagePickerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomImagePickerController.swift; sourceTree = "<group>"; };
 		4E7067F3229591E400F70242 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -98,6 +102,7 @@
 			children = (
 				4E7ACB27229536B500A8D148 /* CustomTextField.swift */,
 				4E6A76BA2296978F00BFDDE9 /* CustomImagePickerController.swift */,
+				4E4FA03D2296BA8000F7EBC8 /* CustomHeaderLabel.swift */,
 			);
 			path = Custom;
 			sourceTree = "<group>";
@@ -170,6 +175,7 @@
 		4EA086C32293E0F400DE5EE5 /* views */ = {
 			isa = PBXGroup;
 			children = (
+				4E4FA03F2296BC2600F7EBC8 /* SettingCell.swift */,
 				4EA086C42293E12300DE5EE5 /* HomeBottomControlsStackView.swift */,
 				4EA086C62293E39300DE5EE5 /* topNavigationStackView.swift */,
 				4EA086C82293E97C00DE5EE5 /* CardView.swift */,
@@ -317,11 +323,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4E4FA0402296BC2600F7EBC8 /* SettingCell.swift in Sources */,
 				4E7067F62295998200F70242 /* Bindable.swift in Sources */,
 				4E6A76B9229691AF00BFDDE9 /* SettingVC.swift in Sources */,
 				4EA086AF2293DD1700DE5EE5 /* HomeVC.swift in Sources */,
 				4E77BED722955E5800FD770B /* RegistrationViewModel.swift in Sources */,
 				4E7ACB28229536B500A8D148 /* CustomTextField.swift in Sources */,
+				4E4FA03E2296BA8000F7EBC8 /* CustomHeaderLabel.swift in Sources */,
 				4E8A1A3F22940A22006FFC45 /* UserModel.swift in Sources */,
 				4E7DD81922941E7500D6DEF0 /* Advertiser.swift in Sources */,
 				4EA086C52293E12300DE5EE5 /* HomeBottomControlsStackView.swift in Sources */,
