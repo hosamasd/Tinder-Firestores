@@ -9,8 +9,10 @@
 /* Begin PBXBuildFile section */
 		4E4FA03E2296BA8000F7EBC8 /* CustomHeaderLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E4FA03D2296BA8000F7EBC8 /* CustomHeaderLabel.swift */; };
 		4E4FA0402296BC2600F7EBC8 /* SettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E4FA03F2296BC2600F7EBC8 /* SettingCell.swift */; };
+		4E62F27122993DA300309753 /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E62F27022993DA300309753 /* LoginVC.swift */; };
 		4E6A76B9229691AF00BFDDE9 /* SettingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6A76B8229691AF00BFDDE9 /* SettingVC.swift */; };
 		4E6A76BB2296978F00BFDDE9 /* CustomImagePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6A76BA2296978F00BFDDE9 /* CustomImagePickerController.swift */; };
+		4E6BB3E222994DBB0099B030 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6BB3E122994DBB0099B030 /* LoginViewModel.swift */; };
 		4E7067F4229591E400F70242 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4E7067F3229591E400F70242 /* GoogleService-Info.plist */; };
 		4E7067F62295998200F70242 /* Bindable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7067F52295998200F70242 /* Bindable.swift */; };
 		4E77BED722955E5800FD770B /* RegistrationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E77BED622955E5800FD770B /* RegistrationViewModel.swift */; };
@@ -38,8 +40,10 @@
 		0CAEBB04C8F985485DFC3B5B /* Pods-Tinder Firestore.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tinder Firestore.debug.xcconfig"; path = "Target Support Files/Pods-Tinder Firestore/Pods-Tinder Firestore.debug.xcconfig"; sourceTree = "<group>"; };
 		4E4FA03D2296BA8000F7EBC8 /* CustomHeaderLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomHeaderLabel.swift; sourceTree = "<group>"; };
 		4E4FA03F2296BC2600F7EBC8 /* SettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingCell.swift; sourceTree = "<group>"; };
+		4E62F27022993DA300309753 /* LoginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginVC.swift; sourceTree = "<group>"; };
 		4E6A76B8229691AF00BFDDE9 /* SettingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingVC.swift; sourceTree = "<group>"; };
 		4E6A76BA2296978F00BFDDE9 /* CustomImagePickerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomImagePickerController.swift; sourceTree = "<group>"; };
+		4E6BB3E122994DBB0099B030 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		4E7067F3229591E400F70242 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		4E7067F52295998200F70242 /* Bindable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bindable.swift; sourceTree = "<group>"; };
 		4E77BED622955E5800FD770B /* RegistrationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationViewModel.swift; sourceTree = "<group>"; };
@@ -93,6 +97,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		4E62F27222993DCD00309753 /* Registration */ = {
+			isa = PBXGroup;
+			children = (
+				4E7ACB2422952FFD00A8D148 /* RegisterVC.swift */,
+				4E62F27022993DA300309753 /* LoginVC.swift */,
+			);
+			path = Registration;
+			sourceTree = "<group>";
+		};
 		4E65E99A22942D2B0001AED3 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -125,6 +138,7 @@
 			children = (
 				4E8A1A4122941257006FFC45 /* CardViewModel.swift */,
 				4E77BED622955E5800FD770B /* RegistrationViewModel.swift */,
+				4E6BB3E122994DBB0099B030 /* LoginViewModel.swift */,
 			);
 			path = viewModel;
 			sourceTree = "<group>";
@@ -169,7 +183,7 @@
 			isa = PBXGroup;
 			children = (
 				4EA086AE2293DD1700DE5EE5 /* HomeVC.swift */,
-				4E7ACB2422952FFD00A8D148 /* RegisterVC.swift */,
+				4E62F27222993DCD00309753 /* Registration */,
 				4E7067F52295998200F70242 /* Bindable.swift */,
 				4E6A76B8229691AF00BFDDE9 /* SettingVC.swift */,
 			);
@@ -351,11 +365,13 @@
 				4EA086C52293E12300DE5EE5 /* HomeBottomControlsStackView.swift in Sources */,
 				4EA086C72293E39300DE5EE5 /* topNavigationStackView.swift in Sources */,
 				4E8A1A4222941257006FFC45 /* CardViewModel.swift in Sources */,
+				4E62F27122993DA300309753 /* LoginVC.swift in Sources */,
 				4EA086AD2293DD1700DE5EE5 /* AppDelegate.swift in Sources */,
 				4EA086C92293E97C00DE5EE5 /* CardView.swift in Sources */,
 				4E6A76BB2296978F00BFDDE9 /* CustomImagePickerController.swift in Sources */,
 				4EA086C22293DE1E00DE5EE5 /* ExtensionUivew.swift in Sources */,
 				4E7ACB2522952FFD00A8D148 /* RegisterVC.swift in Sources */,
+				4E6BB3E222994DBB0099B030 /* LoginViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

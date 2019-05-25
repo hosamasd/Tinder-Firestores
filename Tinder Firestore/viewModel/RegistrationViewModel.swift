@@ -8,6 +8,7 @@
 
 import UIKit
 import Firebase
+
 class RegistrationViewModel {
     
     //using bindable

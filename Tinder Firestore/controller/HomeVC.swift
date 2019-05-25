@@ -48,6 +48,16 @@ class HomeVC: UIViewController {
          fetchCurrentUser()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if  Auth.auth().currentUser?.uid ==  nil {
+            let login = LoginVC()
+            login.delgate = self
+            let nav = UINavigationController(rootViewController: login)
+            present(nav, animated: true, completion: nil)
+            
+        }
+    }
    
     
     func fetchCurrentUser()  {
@@ -132,7 +142,11 @@ class HomeVC: UIViewController {
     }
 }
 
-extension HomeVC: SettingVCDelgate {
+extension HomeVC: SettingVCDelgate ,LoginVCDelgate{
+    func performFetchData() {
+        fetchCurrentUser()
+    }
+    
     
     func didSaveChange() {
         fetchCurrentUser()

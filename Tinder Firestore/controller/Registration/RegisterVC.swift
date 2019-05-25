@@ -12,6 +12,7 @@ import JGProgressHUD
 class RegisterVC: UIViewController {
     
     let registerViewModel = RegistrationViewModel()
+    var delgate:LoginVCDelgate?
     
     let gradiantLayer = CAGradientLayer()
     
@@ -47,6 +48,14 @@ class RegisterVC: UIViewController {
         tf.addTarget(self, action: #selector(handleTextChange), for: .editingChanged)
         return tf
     }()
+    lazy var registerButton:UIButton = {
+        let bt = UIButton(title: "Register", titleColor: .white, font: .systemFont(ofSize: 20, weight: .heavy), backgroundColor: UIColor.lightGray, target: self, action: #selector(handleRegister))
+        bt.setTitleColor(.gray, for: .disabled)
+        bt.isEnabled = false
+        bt.layer.cornerRadius = 22
+        bt.constrainHeight(constant: 44)
+        return bt
+    }()
     
     lazy var verticalStackView:UIStackView = {
         let sv = UIStackView(arrangedSubviews: [
@@ -65,11 +74,10 @@ class RegisterVC: UIViewController {
         verticalStackView
         ])
     
-    lazy var registerButton:UIButton = {
-        let bt = UIButton(title: "Register", titleColor: .white, font: .systemFont(ofSize: 20, weight: .heavy), backgroundColor: UIColor.lightGray, target: self, action: #selector(handleRegister))
-        bt.setTitleColor(.gray, for: .disabled)
-        bt.isEnabled = false
-        bt.layer.cornerRadius = 22
+   
+    lazy var loginButton:UIButton = {
+        let bt = UIButton(title: "Go To Login", titleColor: .white, font: .systemFont(ofSize: 20, weight: .heavy), backgroundColor: #colorLiteral(red: 0.8902122974, green: 0.1073872522, blue: 0.4597495198, alpha: 1)
+            , target: self, action: #selector(handleLogin))
         bt.constrainHeight(constant: 44)
         return bt
     }()
@@ -160,8 +168,11 @@ class RegisterVC: UIViewController {
         mainStack.spacing = 8
         
         view.addSubview(mainStack)
+        view.addSubview(loginButton)
         mainStack.anchor(top: nil, leading: view.leadingAnchor, bottom: nil, trailing: view.trailingAnchor,padding: .init(top: 0, left: 50, bottom: 0, right: 50))
         mainStack.centerYInSuperview()
+        loginButton.anchor(top: nil, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor,padding: .init(top: 0, left: 50, bottom: 50, right: 50))
+        loginButton.centerYAnchor
     }
     
     fileprivate func setupNotificationObservers() {
@@ -170,6 +181,7 @@ class RegisterVC: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(handleDismissKeyboard), name: UIResponder.keyboardWillHideNotification, object: nil)
         
     }
+    
     fileprivate func setupGestures()  {
         view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleDismissKeyboard)))
     }
@@ -200,8 +212,9 @@ class RegisterVC: UIViewController {
                 self.showHUDWithError(err: err)
                 return
         }
-            let home = HomeVC()
-            self.present(home, animated: true, completion: nil)
+            self.dismiss(animated: true, completion: {
+                self.delgate?.performFetchData()
+            })
         }
         
     }
@@ -239,6 +252,11 @@ class RegisterVC: UIViewController {
         }else {
             registerViewModel.password = text.text
         }
+    }
+    
+    @objc func handleLogin(){
+        let login = LoginVC()
+        present(login, animated: true, completion: nil)
     }
 }
 
