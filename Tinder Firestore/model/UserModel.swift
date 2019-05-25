@@ -13,6 +13,8 @@ struct UserModel: ProduceCardViewModel {
     var job:String?
     var age:Int?
     var imageUrl1:String?
+    var imageUrl2:String?
+    var imageUrl3:String?
     var uid:String?
     
     init(dict: [String:Any]) {
@@ -20,6 +22,8 @@ struct UserModel: ProduceCardViewModel {
         self.job = dict["job"] as? String  
         self.name = dict["fullName"] as? String ?? ""
          self.imageUrl1 = dict["imageUrl1"] as? String  ?? ""
+         self.imageUrl2 = dict["imageUrl2"] as? String  ?? ""
+         self.imageUrl3 = dict["imageUrl3"] as? String  ?? ""
         self.uid = dict["uid"] as? String ?? ""
   }
     
@@ -30,7 +34,12 @@ struct UserModel: ProduceCardViewModel {
         let jobString = job != nil ? job! : "Not Avaiable"
         attributeText.append(NSAttributedString(string: " \n \(jobString)", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 20, weight: .regular)]))
 
-      return  CardViewModel(imageNames: [imageUrl1 ?? ""], attributedText: attributeText, textAlignment: .left)
+        var imageUrls = [String]()
+        if let url = imageUrl1 { imageUrls.append(url)}
+          if let url = imageUrl2 { imageUrls.append(url)}
+          if let url = imageUrl3 { imageUrls.append(url)}
+        
+      return  CardViewModel(imageNames: imageUrls, attributedText: attributeText, textAlignment: .left)
 
     }
 }

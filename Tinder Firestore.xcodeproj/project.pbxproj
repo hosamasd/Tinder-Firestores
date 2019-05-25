@@ -17,6 +17,8 @@
 		4E7ACB2522952FFD00A8D148 /* RegisterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7ACB2422952FFD00A8D148 /* RegisterVC.swift */; };
 		4E7ACB28229536B500A8D148 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7ACB27229536B500A8D148 /* CustomTextField.swift */; };
 		4E7DD81922941E7500D6DEF0 /* Advertiser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7DD81822941E7500D6DEF0 /* Advertiser.swift */; };
+		4E7FB5EC2299218C00DE7929 /* SettingAageRangeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7FB5EB2299218C00DE7929 /* SettingAageRangeCell.swift */; };
+		4E7FB5EF229921B800DE7929 /* BaseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7FB5EE229921B800DE7929 /* BaseCell.swift */; };
 		4E8A1A3F22940A22006FFC45 /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8A1A3E22940A22006FFC45 /* UserModel.swift */; };
 		4E8A1A4222941257006FFC45 /* CardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8A1A4122941257006FFC45 /* CardViewModel.swift */; };
 		4EA086AD2293DD1700DE5EE5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA086AC2293DD1700DE5EE5 /* AppDelegate.swift */; };
@@ -44,6 +46,8 @@
 		4E7ACB2422952FFD00A8D148 /* RegisterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterVC.swift; sourceTree = "<group>"; };
 		4E7ACB27229536B500A8D148 /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
 		4E7DD81822941E7500D6DEF0 /* Advertiser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Advertiser.swift; sourceTree = "<group>"; };
+		4E7FB5EB2299218C00DE7929 /* SettingAageRangeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingAageRangeCell.swift; sourceTree = "<group>"; };
+		4E7FB5EE229921B800DE7929 /* BaseCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCell.swift; sourceTree = "<group>"; };
 		4E8A1A3E22940A22006FFC45 /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		4E8A1A4122941257006FFC45 /* CardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardViewModel.swift; sourceTree = "<group>"; };
 		4EA086A92293DD1700DE5EE5 /* Tinder Firestore.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Tinder Firestore.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -105,6 +109,15 @@
 				4E4FA03D2296BA8000F7EBC8 /* CustomHeaderLabel.swift */,
 			);
 			path = Custom;
+			sourceTree = "<group>";
+		};
+		4E7FB5ED2299219700DE7929 /* Setting */ = {
+			isa = PBXGroup;
+			children = (
+				4E4FA03F2296BC2600F7EBC8 /* SettingCell.swift */,
+				4E7FB5EB2299218C00DE7929 /* SettingAageRangeCell.swift */,
+			);
+			path = Setting;
 			sourceTree = "<group>";
 		};
 		4E8A1A402294123F006FFC45 /* viewModel */ = {
@@ -175,7 +188,8 @@
 		4EA086C32293E0F400DE5EE5 /* views */ = {
 			isa = PBXGroup;
 			children = (
-				4E4FA03F2296BC2600F7EBC8 /* SettingCell.swift */,
+				4E7FB5EE229921B800DE7929 /* BaseCell.swift */,
+				4E7FB5ED2299219700DE7929 /* Setting */,
 				4EA086C42293E12300DE5EE5 /* HomeBottomControlsStackView.swift */,
 				4EA086C62293E39300DE5EE5 /* topNavigationStackView.swift */,
 				4EA086C82293E97C00DE5EE5 /* CardView.swift */,
@@ -323,12 +337,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4E7FB5EF229921B800DE7929 /* BaseCell.swift in Sources */,
 				4E4FA0402296BC2600F7EBC8 /* SettingCell.swift in Sources */,
 				4E7067F62295998200F70242 /* Bindable.swift in Sources */,
 				4E6A76B9229691AF00BFDDE9 /* SettingVC.swift in Sources */,
 				4EA086AF2293DD1700DE5EE5 /* HomeVC.swift in Sources */,
 				4E77BED722955E5800FD770B /* RegistrationViewModel.swift in Sources */,
 				4E7ACB28229536B500A8D148 /* CustomTextField.swift in Sources */,
+				4E7FB5EC2299218C00DE7929 /* SettingAageRangeCell.swift in Sources */,
 				4E4FA03E2296BA8000F7EBC8 /* CustomHeaderLabel.swift in Sources */,
 				4E8A1A3F22940A22006FFC45 /* UserModel.swift in Sources */,
 				4E7DD81922941E7500D6DEF0 /* Advertiser.swift in Sources */,

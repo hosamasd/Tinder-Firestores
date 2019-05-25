@@ -1,24 +1,17 @@
 //
-//  SettingCell.swift
+//  BaseCell.swift
 //  Tinder Firestore
 //
-//  Created by hosam on 5/23/19.
+//  Created by hosam on 5/25/19.
 //  Copyright © 2019 hosam. All rights reserved.
 //
 
 import UIKit
 
-class SettingCell: UITableViewCell {
-    
-    let textEditable:CustomTextField = {
-       let tx = CustomTextField(padding: 16, height: 40)
-        
-        return tx
-    }()
+class BaseCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
         setupViews()
     }
     
@@ -27,9 +20,6 @@ class SettingCell: UITableViewCell {
     }
     
     func setupViews()  {
-        backgroundColor = .white
-        addSubview(textEditable)
         
-        textEditable.fillSuperview()
     }
 }

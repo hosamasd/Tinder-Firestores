@@ -29,9 +29,9 @@ class SettingVC: UITableViewController {
         return headerView
     }()
     
-   fileprivate let cellId = "cellId"
+    fileprivate let cellId = "cellId"
     fileprivate let padding:CGFloat = 16
-    let dummayArray = ["Name","Job","Age","Bio"]
+    let dummayArray = ["Name","Job","Age","Bio","Seeking age range"]
     
     
     lazy var image1Button = createButtons(selector: #selector(handleChooseImage))
@@ -58,7 +58,7 @@ class SettingVC: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! SettingCell
-       
+        
         switch indexPath.section {
         case 1:
             cell.textEditable.placeholder = "Enter your name"
@@ -75,19 +75,19 @@ class SettingVC: UITableViewController {
                 cell.textEditable.text = String(age)
             }
         default:
-           cell.textEditable.placeholder = "Enter your bio"
+            cell.textEditable.placeholder = "Enter your bio"
         }
-       
+        
         return cell
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-       
+        
         
         if section == 0 {
             return headerView
         }
-         let text = dummayArray[section - 1]
+        let text = dummayArray[section - 1]
         let label = CustomHeaderLabel()
         label.text = text
         
@@ -117,10 +117,20 @@ class SettingVC: UITableViewController {
     }
     
     func loadUserPhoto()  {
-        guard let imageUrl = user?.imageUrl1,let url = URL(string: imageUrl) else { return  }
-        
-        SDWebImageManager.shared().loadImage(with: url, options: .continueInBackground, progress: nil) { (img, _, _, _, _, _) in
-            self.image1Button.setImage(img?.withRenderingMode(.alwaysOriginal), for: .normal)
+        if let imageUrl = user?.imageUrl1,let url = URL(string: imageUrl){
+            SDWebImageManager.shared().loadImage(with: url, options: .continueInBackground, progress: nil) { (img, _, _, _, _, _) in
+                self.image1Button.setImage(img?.withRenderingMode(.alwaysOriginal), for: .normal)
+            }
+        }
+        if let imageUr2 = user?.imageUrl2,let url = URL(string: imageUr2){
+            SDWebImageManager.shared().loadImage(with: url, options: .continueInBackground, progress: nil) { (img, _, _, _, _, _) in
+                self.image2Button.setImage(img?.withRenderingMode(.alwaysOriginal), for: .normal)
+            }
+        }
+        if let imageUr3 = user?.imageUrl3,let url = URL(string: imageUr3){
+            SDWebImageManager.shared().loadImage(with: url, options: .continueInBackground, progress: nil) { (img, _, _, _, _, _) in
+                self.image3Button.setImage(img?.withRenderingMode(.alwaysOriginal), for: .normal)
+            }
         }
     }
     
@@ -136,8 +146,8 @@ class SettingVC: UITableViewController {
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(handleCancel))
         navigationItem.rightBarButtonItems = [
-        UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(handleSave)),
-        UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(handleLogout))
+            UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(handleSave)),
+            UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(handleLogout))
         ]
     }
     
@@ -162,25 +172,27 @@ class SettingVC: UITableViewController {
         present(imagePicker, animated: true, completion: nil)
     }
     
-   @objc func handleSave()  {
-    guard let uid = Auth.auth().currentUser?.uid else { return  }
-    let values:[String:Any] = [
-        "uid":uid,"fullName":user?.name ?? "",
-        "age":user?.age ?? -1,
-        "job":user?.job ?? "",
-        "imageUrl1":user?.imageUrl1 ?? ""
-    ]
-    let hud = JGProgressHUD(style: .dark)
-    hud.textLabel.text = "Saving settings"
-    hud.show(in: view)
-    Firestore.firestore().collection("Users").document(uid).setData(values) { (err) in
-        hud.dismiss()
-        if let err = err {
-            print(err)
-            return
+    @objc func handleSave()  {
+        guard let uid = Auth.auth().currentUser?.uid else { return  }
+        let values:[String:Any] = [
+            "uid":uid,"fullName":user?.name ?? "",
+            "age":user?.age ?? -1,
+            "job":user?.job ?? "",
+            "imageUrl1":user?.imageUrl1 ?? "",
+            "imageUrl2":user?.imageUrl2 ?? "",
+            "imageUrl3":user?.imageUrl3 ?? ""
+        ]
+        let hud = JGProgressHUD(style: .dark)
+        hud.textLabel.text = "Saving settings"
+        hud.show(in: view)
+        Firestore.firestore().collection("Users").document(uid).setData(values) { (err) in
+            hud.dismiss()
+            if let err = err {
+                print(err)
+                return
+            }
+            print("saved!")
         }
-        print("saved!")
-    }
     }
     
     @objc func handleLogout()  {
@@ -195,11 +207,11 @@ class SettingVC: UITableViewController {
         
     }
     
-   @objc func handleCancel()  {
+    @objc func handleCancel()  {
         dismiss(animated: true, completion: nil)
     }
     
-   @objc func handlechangeName(text: UITextField)  {
+    @objc func handlechangeName(text: UITextField)  {
         self.user?.name = text.text ?? ""
     }
     
@@ -215,12 +227,49 @@ class SettingVC: UITableViewController {
 extension SettingVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        if  let selectedImage = info[.originalImage] as? UIImage {
-            if let button = (picker as? CustomImagePickerController)?.imageButton{
-                button.setImage(selectedImage.withRenderingMode(.alwaysOriginal), for: .normal)
-            }
+          let selectedImage = info[.originalImage] as? UIImage
+             let button = (picker as? CustomImagePickerController)?.imageButton
+        button?.setImage(selectedImage?.withRenderingMode(.alwaysOriginal), for: .normal)
+        
+         dismiss(animated: true, completion: nil)
             
-        }
-        dismiss(animated: true, completion: nil)
+            let hud = JGProgressHUD(style: .dark)
+            hud.textLabel.text = "Uploading image"
+            hud.show(in: view)
+            //uploade to storage
+            let fileName = UUID().uuidString
+            let ref =   Storage.storage().reference(withPath: "User-Images").child(fileName)
+        guard  let data = selectedImage?.jpegData(compressionQuality: 0.75) else {return}
+            ref.putData(data, metadata: nil, completion: { (_, err) in
+                if let err = err {
+                    print(err)
+                    return
+                }
+                
+                ref.downloadURL(completion: { (url, err) in
+                    hud.dismiss()
+                    if let err = err {
+                        print(err)
+                        return
+                    }
+                    
+                    
+                    let url = url?.absoluteString ?? ""
+                    print(url)
+                    if  button == self.image1Button{
+                        self.user?.imageUrl1 = url
+                    }
+                   else if  button == self.image2Button{
+                        self.user?.imageUrl2 = url
+                    }
+                   else if  button == self.image3Button{
+                        self.user?.imageUrl3 = url
+                    }
+                    
+                })
+            })
+        
+        
+       
     }
 }
