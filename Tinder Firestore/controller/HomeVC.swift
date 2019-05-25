@@ -33,6 +33,8 @@ class HomeVC: UIViewController {
         let v = UIView()
         return v
     }()
+     var user:UserModel?
+     var lastFetchUser:UserModel?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,21 +43,35 @@ class HomeVC: UIViewController {
         bottomStackView.refreshButton.addTarget(self, action: #selector(handleRefresh), for: .touchUpInside)
         
         setupViews()
-        setupFirestoreUserCards()
-        
-        fetchUsersFromFirestore()
+//        setupFirestoreUserCards()
+//         fetchUsersFromFirestore()
+         fetchCurrentUser()
     }
     
-    var lastFetchUser:UserModel?
+   
+    
+    func fetchCurrentUser()  {
+        guard let uid = Auth.auth().currentUser?.uid else { return  }
+        Firestore.firestore().collection("Users").document(uid).getDocument { (snapshot, err) in
+            if let err = err {
+                print(err)
+                return
+            }
+            guard let dict = snapshot?.data() else {return}
+            self.user = UserModel(dict: dict)
+           self.fetchUsersFromFirestore()
+        }
+    }
     
     func fetchUsersFromFirestore()  {
+        guard let minAge = self.user?.minSeekingAge,let maxAge=user?.maxSeekingAge else { return }
         let hud = JGProgressHUD(style: .dark)
         hud.textLabel.text = "Fetching Users"
         hud.show(in: view)
         
         //paginate here for limit users apppear
         
-        let query =  Firestore.firestore().collection("Users").order(by: "uid").start(after: [lastFetchUser?.uid ?? ""]).limit(to: 2)
+        let query =  Firestore.firestore().collection("Users").whereField("age", isGreaterThanOrEqualTo: minAge).whereField("age", isLessThanOrEqualTo: maxAge)
             
         query.getDocuments { (snapshot, err) in
             hud.dismiss()
@@ -116,3 +132,11 @@ class HomeVC: UIViewController {
     }
 }
 
+extension HomeVC: SettingVCDelgate {
+    
+    func didSaveChange() {
+        fetchCurrentUser()
+    }
+    
+    
+}

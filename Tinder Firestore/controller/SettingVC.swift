@@ -10,6 +10,11 @@ import UIKit
 import Firebase
 import SDWebImage
 import JGProgressHUD
+
+protocol SettingVCDelgate {
+    func didSaveChange()
+}
+
 class SettingVC: UITableViewController {
     
     lazy var headerView:UIView = {
@@ -29,7 +34,10 @@ class SettingVC: UITableViewController {
         return headerView
     }()
     
+    var delgate:SettingVCDelgate?
+    
     fileprivate let cellId = "cellId"
+    fileprivate let cellAgeId = "cellAgeId"
     fileprivate let padding:CGFloat = 16
     let dummayArray = ["Name","Job","Age","Bio","Seeking age range"]
     
@@ -37,7 +45,7 @@ class SettingVC: UITableViewController {
     lazy var image1Button = createButtons(selector: #selector(handleChooseImage))
     lazy var image2Button = createButtons(selector: #selector(handleChooseImage))
     lazy var image3Button = createButtons(selector: #selector(handleChooseImage))
-    
+     var user:UserModel?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,10 +61,30 @@ class SettingVC: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return section == 0 ? 0 : 1
+        var count:Int = 0
+        
+        return section == 0  ? 0 : 1
+//        if section == 0 {
+//            count = 0
+//        }else if section == dummayArray.count {
+//            count = 2
+//        }else {
+//        count = 1
+//    }
+//        return count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if indexPath.section == dummayArray.count  {
+            let cells =   tableView.dequeueReusableCell(withIdentifier: cellAgeId, for: indexPath) as! SettingAageRangeCell
+            cells.minSlider.addTarget(self, action: #selector(handleMinAgeSlider), for: .valueChanged)
+             cells.maxSlider.addTarget(self, action: #selector(handleMaxAgeSlider), for: .valueChanged)
+            
+            cells.minAgeLabel.text = "Min: \(self.user?.minSeekingAge ?? -1)"
+            cells.maxAgeLabel.text = "Max: \(self.user?.maxSeekingAge ?? -1)"
+            return cells
+        }
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! SettingCell
         
         switch indexPath.section {
@@ -76,6 +104,8 @@ class SettingVC: UITableViewController {
             }
         default:
             cell.textEditable.placeholder = "Enter your bio"
+        
+            
         }
         
         return cell
@@ -99,7 +129,7 @@ class SettingVC: UITableViewController {
     }
     
     //MARK:- user methods
-    var user:UserModel?
+   
     
     func fetchCurrentUser()  {
         guard let uid = Auth.auth().currentUser?.uid else { return  }
@@ -137,7 +167,8 @@ class SettingVC: UITableViewController {
     func setupTableView()  {
         tableView.backgroundColor = UIColor(white: 0.95, alpha: 1)
         tableView.register(SettingCell.self, forCellReuseIdentifier: cellId)
-        tableView.keyboardDismissMode = .interactive
+        tableView.register(SettingAageRangeCell.self, forCellReuseIdentifier: cellAgeId)
+         tableView.keyboardDismissMode = .interactive
         tableView.tableFooterView = UIView()
     }
     
@@ -180,7 +211,9 @@ class SettingVC: UITableViewController {
             "job":user?.job ?? "",
             "imageUrl1":user?.imageUrl1 ?? "",
             "imageUrl2":user?.imageUrl2 ?? "",
-            "imageUrl3":user?.imageUrl3 ?? ""
+            "imageUrl3":user?.imageUrl3 ?? "",
+            "minSeekingAge": user?.minSeekingAge ?? -1,
+             "maxSeekingAge": user?.maxSeekingAge ?? -1
         ]
         let hud = JGProgressHUD(style: .dark)
         hud.textLabel.text = "Saving settings"
@@ -191,7 +224,9 @@ class SettingVC: UITableViewController {
                 print(err)
                 return
             }
-            print("saved!")
+            self.dismiss(animated: true, completion: {
+                self.delgate?.didSaveChange()
+            })
         }
     }
     
@@ -222,6 +257,24 @@ class SettingVC: UITableViewController {
     @objc func handlechangeAge(text: UITextField)  {
         self.user?.age = Int(text.text ?? "")
     }
+    
+    @objc func handleMinAgeSlider(slider:UISlider)  {
+        let value = Int(slider.value)
+        let index = IndexPath(row: 0, section: dummayArray.count)
+        let ageRange = tableView.cellForRow(at: index) as! SettingAageRangeCell
+        ageRange.minAgeLabel.text = "Min: \(Int(value))"
+        self.user?.minSeekingAge = Int(value)
+    }
+    
+    @objc func handleMaxAgeSlider(slider:UISlider)  {
+         let value = Int(slider.value)
+        let index = IndexPath(row: 0, section: dummayArray.count)
+        let ageRange = tableView.cellForRow(at: index) as! SettingAageRangeCell
+        ageRange.maxAgeLabel.text = "Max: \(Int(value))"
+    self.user?.maxSeekingAge = value
+    }
+    
+   
 }
 
 extension SettingVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
@@ -268,8 +321,7 @@ extension SettingVC: UIImagePickerControllerDelegate, UINavigationControllerDele
                     
                 })
             })
-        
-        
-       
-    }
+     }
+    
+  
 }
