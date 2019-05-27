@@ -20,8 +20,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow()
         window?.makeKeyAndVisible()
 //        window?.rootViewController = HomeVC()
-//        window?.rootViewController = UserDetailVC()
-        window?.rootViewController = SwipingPhotoVC(transitionStyle: .scroll, navigationOrientation: .horizontal)
+        window?.rootViewController = UserDetailVC()
+//        window?.rootViewController = SwipingPhotoVC(transitionStyle: .scroll, navigationOrientation: .horizontal)
         return true
     }
 

@@ -6,9 +6,20 @@
 //  Copyright © 2019 hosam. All rights reserved.
 //
 import UIKit
+import SDWebImage
 
 class UserDetailVC: UIViewController {
     
+    var cardView:CardViewModel!  {
+        didSet{
+            infoLabel.attributedText = cardView.attributedText
+            
+           swipingPageV.cardsUser = cardView
+            
+        }
+    }
+    
+    fileprivate let extraHeight:CGFloat = 80
     lazy var scrollView:UIScrollView = {
        let sv = UIScrollView()
         sv.delegate = self
@@ -16,13 +27,8 @@ sv.alwaysBounceVertical = true
         sv.contentInsetAdjustmentBehavior = .never
         return sv
     }()
-    let imageView:UIImageView = {
-       let im = UIImageView(image: #imageLiteral(resourceName: "kelly1"))
-       im.contentMode = .scaleAspectFill
-        im.clipsToBounds = true
-        
-        return im
-    }()
+    let swipingPageV = SwipingPhotoVC(transitionStyle: .scroll, navigationOrientation: .horizontal)
+     lazy var SwipingImageView = swipingPageV.view!
     
     let infoLabel: UILabel = {
         let label = UILabel()
@@ -52,19 +58,25 @@ sv.alwaysBounceVertical = true
         setupBottomControls()
     }
     
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+         SwipingImageView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.width + extraHeight)
+    }
     
   fileprivate  func setupViews()  {
         view.backgroundColor = .white
+//    let imageView = swipingPageV.view!
+    
         view.addSubview(scrollView)
         
         scrollView.fillSuperview()
-        scrollView.addSubview(imageView)
+        scrollView.addSubview(SwipingImageView)
         scrollView.addSubview(infoLabel)
     scrollView.addSubview(dismissButton)
     
-        imageView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.width)
-        infoLabel.anchor(top: imageView.bottomAnchor, leading: scrollView.leadingAnchor, bottom: nil, trailing: scrollView.trailingAnchor, padding: .init(top: 16, left: 16, bottom: 0, right: 16))
-    dismissButton.anchor(top: imageView.bottomAnchor, leading: nil, bottom: nil, trailing: view.trailingAnchor, padding: .init(top: -25, left: 0, bottom: 0, right: 24), size: .init(width: 50, height: 50))
+    
+        infoLabel.anchor(top: SwipingImageView.bottomAnchor, leading: scrollView.leadingAnchor, bottom: nil, trailing: scrollView.trailingAnchor, padding: .init(top: 16, left: 16, bottom: 0, right: 16))
+    dismissButton.anchor(top: SwipingImageView.bottomAnchor, leading: nil, bottom: nil, trailing: view.trailingAnchor, padding: .init(top: -25, left: 0, bottom: 0, right: 24), size: .init(width: 50, height: 50))
     }
     
     fileprivate func setupBottomControls() {
@@ -111,6 +123,7 @@ extension UserDetailVC:UIScrollViewDelegate{
         print(valueY)
         var width = view.frame.width - valueY * 2
         width = max(view.frame.width, width)
-        imageView.frame =  CGRect(x: min(0,valueY), y: min(0,valueY), width: width, height: width )
+        
+        SwipingImageView.frame =  CGRect(x: min(0,valueY), y: min(0,valueY), width: width, height: width + extraHeight)
     }
 }

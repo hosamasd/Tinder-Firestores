@@ -154,9 +154,10 @@ extension HomeVC: SettingVCDelgate ,LoginVCDelgate, CardViewDelegate{
         fetchCurrentUser()
     }
     
-    func didTapMoreInfo() {
+    func didTapMoreInfo(card:CardViewModel) {
         print("Home controller going to show user details now")
         let userDetailsController = UserDetailVC()
+        userDetailsController.cardView = card
         present(userDetailsController, animated: true)
     }
     
