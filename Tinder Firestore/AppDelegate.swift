@@ -19,8 +19,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FirebaseApp.configure()
         window = UIWindow()
         window?.makeKeyAndVisible()
-        window?.rootViewController = HomeVC()
-//        window?.rootViewController = RegisterVC()
+//        window?.rootViewController = HomeVC()
+//        window?.rootViewController = UserDetailVC()
+        window?.rootViewController = SwipingPhotoVC(transitionStyle: .scroll, navigationOrientation: .horizontal)
         return true
     }
 

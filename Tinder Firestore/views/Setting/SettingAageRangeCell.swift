@@ -10,17 +10,17 @@ import UIKit
 
 class SettingAageRangeCell: BaseCell {
     
-  
+    
     
     let minAgeLabel:UILabel = {
-       let la = UILabel()
+        let la = UILabel()
         
         la.text = "Min: 20"
         la.constrainWidth(constant: 100)
         return la
     }()
     let minSlider:UISlider = {
-       let sl = UISlider()
+        let sl = UISlider()
         sl.minimumValue = 20
         sl.maximumValue = 100
         
@@ -35,7 +35,7 @@ class SettingAageRangeCell: BaseCell {
     }()
     let maxAgeLabel:UILabel = {
         let la = UILabel()
-         la.constrainWidth(constant: 100)
+        la.constrainWidth(constant: 100)
         la.text = "Max: 20"
         return la
     }()

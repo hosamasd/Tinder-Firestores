@@ -8,6 +8,7 @@
 
 import UIKit
 import Firebase
+import FirebaseAuth
 
 class LoginViewModel {
     
@@ -23,13 +24,14 @@ class LoginViewModel {
             else { return  }
         bindableIsLogining.value = true
         
-        Auth.auth().createUser(withEmail: email, password: password) { (user, err) in
+        Auth.auth().signIn(withEmail: email, password: password) { (user, err) in
             if let err = err{
                 print(err)
                 completion(err)
                 return
             }
-               }
+        }
+        
     }
     
     func checkFormValid()  {

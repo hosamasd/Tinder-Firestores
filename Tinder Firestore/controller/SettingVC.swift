@@ -45,7 +45,7 @@ class SettingVC: UITableViewController {
     lazy var image1Button = createButtons(selector: #selector(handleChooseImage))
     lazy var image2Button = createButtons(selector: #selector(handleChooseImage))
     lazy var image3Button = createButtons(selector: #selector(handleChooseImage))
-     var user:UserModel?
+    var user:UserModel?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -64,21 +64,21 @@ class SettingVC: UITableViewController {
         var count:Int = 0
         
         return section == 0  ? 0 : 1
-//        if section == 0 {
-//            count = 0
-//        }else if section == dummayArray.count {
-//            count = 2
-//        }else {
-//        count = 1
-//    }
-//        return count
+        //        if section == 0 {
+        //            count = 0
+        //        }else if section == dummayArray.count {
+        //            count = 2
+        //        }else {
+        //        count = 1
+        //    }
+        //        return count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == dummayArray.count  {
             let cells =   tableView.dequeueReusableCell(withIdentifier: cellAgeId, for: indexPath) as! SettingAageRangeCell
             cells.minSlider.addTarget(self, action: #selector(handleMinAgeSlider), for: .valueChanged)
-             cells.maxSlider.addTarget(self, action: #selector(handleMaxAgeSlider), for: .valueChanged)
+            cells.maxSlider.addTarget(self, action: #selector(handleMaxAgeSlider), for: .valueChanged)
             
             cells.minAgeLabel.text = "Min: \(self.user?.minSeekingAge ?? -1)"
             cells.maxAgeLabel.text = "Max: \(self.user?.maxSeekingAge ?? -1)"
@@ -104,7 +104,7 @@ class SettingVC: UITableViewController {
             }
         default:
             cell.textEditable.placeholder = "Enter your bio"
-        
+            
             
         }
         
@@ -129,7 +129,7 @@ class SettingVC: UITableViewController {
     }
     
     //MARK:- user methods
-   
+    
     
     func fetchCurrentUser()  {
         guard let uid = Auth.auth().currentUser?.uid else { return  }
@@ -168,7 +168,7 @@ class SettingVC: UITableViewController {
         tableView.backgroundColor = UIColor(white: 0.95, alpha: 1)
         tableView.register(SettingCell.self, forCellReuseIdentifier: cellId)
         tableView.register(SettingAageRangeCell.self, forCellReuseIdentifier: cellAgeId)
-         tableView.keyboardDismissMode = .interactive
+        tableView.keyboardDismissMode = .interactive
         tableView.tableFooterView = UIView()
     }
     
@@ -213,7 +213,7 @@ class SettingVC: UITableViewController {
             "imageUrl2":user?.imageUrl2 ?? "",
             "imageUrl3":user?.imageUrl3 ?? "",
             "minSeekingAge": user?.minSeekingAge ?? -1,
-             "maxSeekingAge": user?.maxSeekingAge ?? -1
+            "maxSeekingAge": user?.maxSeekingAge ?? -1
         ]
         let hud = JGProgressHUD(style: .dark)
         hud.textLabel.text = "Saving settings"
@@ -267,61 +267,61 @@ class SettingVC: UITableViewController {
     }
     
     @objc func handleMaxAgeSlider(slider:UISlider)  {
-         let value = Int(slider.value)
+        let value = Int(slider.value)
         let index = IndexPath(row: 0, section: dummayArray.count)
         let ageRange = tableView.cellForRow(at: index) as! SettingAageRangeCell
         ageRange.maxAgeLabel.text = "Max: \(Int(value))"
-    self.user?.maxSeekingAge = value
+        self.user?.maxSeekingAge = value
     }
     
-   
+    
 }
 
 extension SettingVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-          let selectedImage = info[.originalImage] as? UIImage
-             let button = (picker as? CustomImagePickerController)?.imageButton
+        let selectedImage = info[.originalImage] as? UIImage
+        let button = (picker as? CustomImagePickerController)?.imageButton
         button?.setImage(selectedImage?.withRenderingMode(.alwaysOriginal), for: .normal)
         
-         dismiss(animated: true, completion: nil)
-            
-            let hud = JGProgressHUD(style: .dark)
-            hud.textLabel.text = "Uploading image"
-            hud.show(in: view)
-            //uploade to storage
-            let fileName = UUID().uuidString
-            let ref =   Storage.storage().reference(withPath: "User-Images").child(fileName)
+        dismiss(animated: true, completion: nil)
+        
+        let hud = JGProgressHUD(style: .dark)
+        hud.textLabel.text = "Uploading image"
+        hud.show(in: view)
+        //uploade to storage
+        let fileName = UUID().uuidString
+        let ref =   Storage.storage().reference(withPath: "User-Images").child(fileName)
         guard  let data = selectedImage?.jpegData(compressionQuality: 0.75) else {return}
-            ref.putData(data, metadata: nil, completion: { (_, err) in
+        ref.putData(data, metadata: nil, completion: { (_, err) in
+            if let err = err {
+                print(err)
+                return
+            }
+            
+            ref.downloadURL(completion: { (url, err) in
+                hud.dismiss()
                 if let err = err {
                     print(err)
                     return
                 }
                 
-                ref.downloadURL(completion: { (url, err) in
-                    hud.dismiss()
-                    if let err = err {
-                        print(err)
-                        return
-                    }
-                    
-                    
-                    let url = url?.absoluteString ?? ""
-                    print(url)
-                    if  button == self.image1Button{
-                        self.user?.imageUrl1 = url
-                    }
-                   else if  button == self.image2Button{
-                        self.user?.imageUrl2 = url
-                    }
-                   else if  button == self.image3Button{
-                        self.user?.imageUrl3 = url
-                    }
-                    
-                })
+                
+                let url = url?.absoluteString ?? ""
+                print(url)
+                if  button == self.image1Button{
+                    self.user?.imageUrl1 = url
+                }
+                else if  button == self.image2Button{
+                    self.user?.imageUrl2 = url
+                }
+                else if  button == self.image3Button{
+                    self.user?.imageUrl3 = url
+                }
+                
             })
-     }
+        })
+    }
     
-  
+    
 }

@@ -18,7 +18,8 @@ class LoginVC: UIViewController {
     
     let loginViewModel = LoginViewModel ()
     var delgate:LoginVCDelgate? 
-     var registerHUD = JGProgressHUD(style: .dark)
+    var registerHUD = JGProgressHUD(style: .dark)
+     let gradiantLayer = CAGradientLayer()
     
     lazy var emailTextField:CustomTextField = {
         let tf = CustomTextField(padding: 16, height: 50)
@@ -29,7 +30,6 @@ class LoginVC: UIViewController {
         
         return tf
     }()
-   
     lazy var passwordTextField:CustomTextField = {
         let tf = CustomTextField(padding: 16, height: 50)
         tf.isSecureTextEntry = true
@@ -39,7 +39,7 @@ class LoginVC: UIViewController {
         return tf
     }()
     lazy var loginButton:UIButton = {
-        let bt = UIButton(title: "Login", titleColor: .white, font: .systemFont(ofSize: 20, weight: .heavy), backgroundColor: UIColor.lightGray, target: self, action: #selector(handleLogin))
+        let bt = UIButton(title: "Login", titleColor: .white, font: .systemFont(ofSize: 20, weight: .heavy), backgroundColor: .lightGray, target: self, action: #selector(handleLogin))
         bt.setTitleColor(.gray, for: .disabled)
         bt.isEnabled = false
         bt.layer.cornerRadius = 22
@@ -55,7 +55,7 @@ class LoginVC: UIViewController {
     
     lazy var verticalStackView:UIStackView = {
         let sv = UIStackView(arrangedSubviews: [
-           emailTextField,
+            emailTextField,
             passwordTextField,
             loginButton
             ])
@@ -64,19 +64,61 @@ class LoginVC: UIViewController {
         sv.distribution = .fillEqually
         return sv
     }()
-   
-    let gradiantLayer = CAGradientLayer()
     
-    override func viewDidLoad() {
+   override func viewDidLoad() {
         super.viewDidLoad()
-         setupGradiantLayer()
-         setupViews()
-         setupNotificationObservers()
+        setupGradiantLayer()
+        setupViews()
+        setupNotificationObservers()
+    setupLoginViewModelObserver()
+    }
+    
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        gradiantLayer.frame = view.bounds
+    }
+    
+    //    override func viewWillDisappear(_ animated: Bool) {
+    //        super.viewWillDisappear(animated)
+    //        navigationController?.navigationBar.isHidden = false
+    //    }
+    
+     //MARK:-user methods
+    
+    fileprivate func setupLoginViewModelObserver(){
+        loginViewModel.bindableIsFormValidate.bind { (isValidForm) in
+            guard let isValid = isValidForm else {return}
+            self.loginButton.isEnabled = isValid
+            
+            if isValid {
+                self.loginButton.backgroundColor = #colorLiteral(red: 0.8273344636, green: 0.09256268293, blue: 0.324395299, alpha: 1)
+                self.loginButton.setTitleColor(.white, for: .normal)
+                
+            
+            }else {
+                self.loginButton.backgroundColor = UIColor.lightGray
+                self.loginButton.setTitleColor(.gray, for: .normal)
+                
+            }
+
+         }
+        
+        loginViewModel.bindableIsLogining.bind(observer: {  [unowned self] (isReg) in
+                if isReg == true {
+                    self.registerHUD.textLabel.text = "Login"
+                    self.registerHUD.show(in: self.view)
+                    
+                }else {
+                    self.registerHUD.dismiss()
+                }
+            
+
+        })
     }
     
     fileprivate  func setupViews()  {
         
-      
+        navigationController?.isNavigationBarHidden = true
         
         view.addSubview(verticalStackView)
         view.addSubview(registerButton)
@@ -120,6 +162,8 @@ class LoginVC: UIViewController {
         hud.dismiss(afterDelay: 4)
     }
     
+    //TODO:-handle methods
+    
     @objc  func handleKeyboardShowing(notify:Notification)  {
         guard let value = notify.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
         let keyboardFrame = value.cgRectValue
@@ -137,20 +181,18 @@ class LoginVC: UIViewController {
         animateView()
     }
     
-  @objc  func handleLogin()  {
-    self.handleDismissKeyboard()
-    
-    loginViewModel.performLogin { (err) in
-        if let err = err {
-            self.showHUDWithError(err: err)
-            return
-        }
-        self.dismiss(animated: true, completion: {
-            self.delgate?.performFetchData()
-        })
-    }
-    
+    @objc  func handleLogin()  {
+        self.handleDismissKeyboard()
         
+        loginViewModel.performLogin { (err) in
+            if let err = err {
+                self.showHUDWithError(err: err)
+                return
+            }
+            self.dismiss(animated: true, completion: {
+                self.delgate?.performFetchData()
+            })
+        }
     }
     
     @objc func handleTextChange(text:UITextField)  {

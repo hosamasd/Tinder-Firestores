@@ -8,7 +8,15 @@
 
 import UIKit
 import SDWebImage
+
+protocol CardViewDelegate {
+    func didTapMoreInfo()
+}
+
 class CardView: UIView {
+    
+    var delgate:CardViewDelegate?
+    
     
     var cardViewModel:CardViewModel! {
         didSet{
@@ -25,11 +33,26 @@ class CardView: UIView {
                 barStackView.addArrangedSubview(vi)
                 
                 barStackView.arrangedSubviews.first?.backgroundColor = .white
-
+                
                 setupImageNndexObserver()
             }
         }
     }
+    
+   
+    fileprivate let moreInfoButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(#imageLiteral(resourceName: "info_icon").withRenderingMode(.alwaysOriginal), for: .normal)
+        button.addTarget(self, action: #selector(handleMoreInfo), for: .touchUpInside)
+        return button
+    }()
+    
+    @objc fileprivate func handleMoreInfo() {
+        // use a delegate instead, much more elegant
+        delgate?.didTapMoreInfo()
+        
+    }
+   
     
     func setupImageNndexObserver()  {
         cardViewModel.imageIndexObserver = { [weak self] (index,imageUrl) in
@@ -42,7 +65,7 @@ class CardView: UIView {
             }
             
             self?.barStackView.arrangedSubviews[index].backgroundColor = .white
-
+            
         }
     }
     //Configuration values
@@ -50,51 +73,51 @@ class CardView: UIView {
     fileprivate let barDeselctedItem = UIColor(white: 0, alpha: 0.1)
     
     let barStackView = UIStackView()
-let gradiantLayer = CAGradientLayer()
-  fileprivate  let mainImage:UIImageView = {
-    let im = UIImageView()
-       im.clipsToBounds = true
+    let gradiantLayer = CAGradientLayer()
+    fileprivate  let mainImage:UIImageView = {
+        let im = UIImageView()
+        im.clipsToBounds = true
         im.layer.cornerRadius = 12
         
         return im
     }()
-   fileprivate let userInfo:UILabel = {
+    fileprivate let userInfo:UILabel = {
         let la = UILabel(string: "hosam", font: .boldSystemFont(ofSize: 30), numberOfLines: 0)
-       la.textColor = .white
+        la.textColor = .white
         return la
     }()
     
-   
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-       
-         setupGradiantLayer()
+        
+        setupGradiantLayer()
         
         setupViews()
-       setupGestures()
+        setupGestures()
     }
     
     func setupGestures ()  {
-    addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(handlePan)))
-
+        addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(handlePan)))
+        
         addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTapped)))
     }
     
     func setupBarStackView()  {
         addSubview(barStackView)
         barStackView.anchor(top: mainImage.topAnchor, leading: mainImage.leadingAnchor, bottom: nil, trailing: mainImage.trailingAnchor,padding: .init(top: 8, left: 8, bottom: 0, right: 8),size: .init(width: 0, height: 4))
-barStackView.spacing = 4
+        barStackView.spacing = 4
         barStackView.distribution = .fillEqually
         
     }
     
     func setupGradiantLayer()  {
-       
+        
         gradiantLayer.colors = [UIColor.clear.cgColor,UIColor.black.cgColor]
         gradiantLayer.locations = [0.5,1.1]
-//        gradiantLayer.frame = self.frame //frame is zero
-//        gradiantLayer.frame = CGRect(x: 0, y: 0, width: 300, height: 400)
+        //        gradiantLayer.frame = self.frame //frame is zero
+        //        gradiantLayer.frame = CGRect(x: 0, y: 0, width: 300, height: 400)
         layer.addSublayer(gradiantLayer)
     }
     
@@ -104,13 +127,15 @@ barStackView.spacing = 4
     
     func setupViews()  {
         
-         addSubview(mainImage)
-         setupBarStackView()
+        addSubview(mainImage)
+        setupBarStackView()
         addSubview(userInfo)
+        
         
         mainImage.fillSuperview(padding: .init(top: 12, left: 12, bottom: 12, right: 12))
         userInfo.anchor(top: nil, leading: mainImage.leadingAnchor, bottom: mainImage.bottomAnchor, trailing: mainImage.trailingAnchor,padding: .init(top: 0, left: 16, bottom: 20, right: 0))
-        
+        addSubview(moreInfoButton)
+        moreInfoButton.anchor(top: nil, leading: nil, bottom: bottomAnchor, trailing: trailingAnchor, padding: .init(top: 0, left: 0, bottom: 30, right: 16), size: .init(width: 44, height: 44))
     }
     
     fileprivate func handleChaneged(_ gesture: UIPanGestureRecognizer) {
@@ -138,7 +163,7 @@ barStackView.spacing = 4
         }){(_) in
             self.transform = .identity
             self.removeFromSuperview()
-//            self.frame = CGRect(x: 0, y: 0, width: self.superview!.frame.width, height: self.superview!.frame.height)
+            //            self.frame = CGRect(x: 0, y: 0, width: self.superview!.frame.width, height: self.superview!.frame.height)
         }
     }
     
@@ -150,13 +175,13 @@ barStackView.spacing = 4
             cardViewModel.goToNextPhoto()
         }else {
             cardViewModel.goToPreviousPhoto()
-       }
+        }
     }
     
     @objc func handlePan(gesture:UIPanGestureRecognizer)  {
         
         switch gesture.state {
-           
+            
         case .began:
             superview?.subviews.forEach({ (subView) in
                 subView.layer.removeAllAnimations()  //solve multi animation occures in screen

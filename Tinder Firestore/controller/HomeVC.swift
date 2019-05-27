@@ -59,6 +59,7 @@ class HomeVC: UIViewController {
         }
     }
    
+    //MARK:-user methods
     
     func fetchCurrentUser()  {
         guard let uid = Auth.auth().currentUser?.uid else { return  }
@@ -104,6 +105,7 @@ class HomeVC: UIViewController {
     
     func fetchUserCards(user:UserModel)  {
         let cardView = CardView(frame: .zero)
+        cardView.delgate = self
         cardView.cardViewModel = user.toCardViewModel()
         cardDeskView.addSubview(cardView)
         cardDeskView.sendSubviewToBack(cardView)
@@ -119,11 +121,12 @@ class HomeVC: UIViewController {
         }
     }
     
-    func setupViews()  {
+  fileprivate  func setupViews()  {
        
         view.backgroundColor = .white
         
         let mainStack = UIStackView(arrangedSubviews: [topStackView,cardDeskView,bottomStackView])
+    
         mainStack.bringSubviewToFront(cardDeskView) // to make it hide the other
         mainStack.axis = .vertical
         
@@ -132,21 +135,30 @@ class HomeVC: UIViewController {
         
     }
     
+    //TODO:-handle methods
+    
  @objc   func handleRefresh()  {
        fetchUsersFromFirestore()
     }
     
    @objc func handleNextVC()  {
         let setting = SettingVC()
+    setting.delgate = self
         present(UINavigationController(rootViewController: setting), animated: true, completion: nil)
     }
 }
 
-extension HomeVC: SettingVCDelgate ,LoginVCDelgate{
+extension HomeVC: SettingVCDelgate ,LoginVCDelgate, CardViewDelegate{
+    
     func performFetchData() {
         fetchCurrentUser()
     }
     
+    func didTapMoreInfo() {
+        print("Home controller going to show user details now")
+        let userDetailsController = UserDetailVC()
+        present(userDetailsController, animated: true)
+    }
     
     func didSaveChange() {
         fetchCurrentUser()

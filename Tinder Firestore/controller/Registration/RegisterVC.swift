@@ -13,8 +13,11 @@ class RegisterVC: UIViewController {
     
     let registerViewModel = RegistrationViewModel()
     var delgate:LoginVCDelgate?
-    
     let gradiantLayer = CAGradientLayer()
+    var registerHUD = JGProgressHUD(style: .dark)
+    
+    lazy var selectPhotoButtonWidthAnchor = selectedPhotoButton.widthAnchor.constraint(equalToConstant: 275)
+    lazy var selectPhotoButtonHeightAnchor = selectedPhotoButton.heightAnchor.constraint(equalToConstant: 275)
     
     lazy var selectedPhotoButton:UIButton = {
         let bt = UIButton(title: "Select Photo", titleColor: .black, font: .systemFont(ofSize: 32, weight: .heavy), backgroundColor: .white, target: self, action: #selector(handleSelectPhoto))
@@ -36,7 +39,7 @@ class RegisterVC: UIViewController {
     lazy var nameTextField:CustomTextField = {
         let tf = CustomTextField(padding: 16, height: 50)
         tf.placeholder = "enter your full name"
-          tf.text = "hosam"
+        tf.text = "hosam"
         tf.addTarget(self, action: #selector(handleTextChange), for: .editingChanged)
         return tf
     }()
@@ -44,7 +47,7 @@ class RegisterVC: UIViewController {
         let tf = CustomTextField(padding: 16, height: 50)
         tf.isSecureTextEntry = true
         tf.placeholder = "enter your password"
-          tf.text = "123456"
+        tf.text = "123456"
         tf.addTarget(self, action: #selector(handleTextChange), for: .editingChanged)
         return tf
     }()
@@ -56,7 +59,6 @@ class RegisterVC: UIViewController {
         bt.constrainHeight(constant: 44)
         return bt
     }()
-    
     lazy var verticalStackView:UIStackView = {
         let sv = UIStackView(arrangedSubviews: [
             nameTextField,
@@ -73,16 +75,13 @@ class RegisterVC: UIViewController {
         selectedPhotoButton,
         verticalStackView
         ])
-    
-   
     lazy var loginButton:UIButton = {
         let bt = UIButton(title: "Go To Login", titleColor: .white, font: .systemFont(ofSize: 20, weight: .heavy), backgroundColor: #colorLiteral(red: 0.8902122974, green: 0.1073872522, blue: 0.4597495198, alpha: 1)
             , target: self, action: #selector(handleLogin))
         bt.constrainHeight(constant: 44)
         return bt
     }()
-    lazy var selectPhotoButtonWidthAnchor = selectedPhotoButton.widthAnchor.constraint(equalToConstant: 275)
-    lazy var selectPhotoButtonHeightAnchor = selectedPhotoButton.heightAnchor.constraint(equalToConstant: 275)
+   
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -134,7 +133,7 @@ class RegisterVC: UIViewController {
                 self.registerButton.setTitleColor(.gray, for: .normal)
             }
         }
-    
+        
         registerViewModel.bindableImage.bind(observer: { [unowned self ] (img) in
             self.selectedPhotoButton.setImage(img?.withRenderingMode(UIImage.RenderingMode.alwaysOriginal), for: .normal)
             
@@ -202,22 +201,20 @@ class RegisterVC: UIViewController {
     }
     
     //TODO:-handle methods
-    var registerHUD = JGProgressHUD(style: .dark)
     
-    @objc func handleRegister()  {
+     @objc func handleRegister()  {
         self.handleDismissKeyboard()
         
         registerViewModel.performRegistration { (err) in
             if let err = err {
                 self.showHUDWithError(err: err)
                 return
-        }
+            }
             self.dismiss(animated: true, completion: {
                 self.delgate?.performFetchData()
             })
         }
-        
-    }
+   }
     
     @objc func handleSelectPhoto()  {
         let imagePickers = UIImagePickerController()
