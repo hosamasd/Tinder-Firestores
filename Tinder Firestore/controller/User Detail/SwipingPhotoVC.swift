@@ -10,13 +10,14 @@ import UIKit
 import SDWebImage
 class SwipingPhotoVC: UIPageViewController, UIPageViewControllerDataSource {
     
-    var cardsUser:CardViewModel! {
+    var cardsUser:CardViewModel? {
         didSet {
-            vcs = cardsUser.imageNames.map({ (imageUrl) -> UIViewController in
+            vcs = cardsUser!.imageNames.map({ (imageUrl) -> UIViewController in
                 let photoVC = PhotoVC(image: imageUrl)
                 return photoVC
             })
-             setViewControllers([vcs.first!], direction: .forward, animated: true, completion: nil)
+            setViewControllers([vcs.first!], direction: .forward, animated: true, completion: nil)
+             setupBarStackView()
         }
     }
     let deSelectedBar:UIColor = UIColor(white: 0, alpha: 0.1)
@@ -24,30 +25,63 @@ class SwipingPhotoVC: UIPageViewController, UIPageViewControllerDataSource {
     let barStackView = UIStackView(arrangedSubviews: [])
     
     var vcs = [UIViewController]()
+    fileprivate var isCardViewModel:Bool = false
     
-//    let vcs = [
-//    PhotoVC(image: #imageLiteral(resourceName: "dismiss_circle")),
-//    PhotoVC(image: #imageLiteral(resourceName: "refresh_circle")),
-//    PhotoVC(image: #imageLiteral(resourceName: "like_circle")),
-//    PhotoVC(image: #imageLiteral(resourceName: "dismiss_down_arrow")),
-//    PhotoVC(image: #imageLiteral(resourceName: "super_like_circle"))
-//    ]
+    init(isCarViewMode:Bool = false) {
+        self.isCardViewModel = isCarViewMode
+        super.init(transitionStyle: .scroll, navigationOrientation: .horizontal)
+    }
     
- 
-    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         dataSource = self
         delegate = self
-        setupBarStackView()
-//          setViewControllers([vcs.first!], direction: .forward, animated: true, completion: nil)
-        
+       
+        if isCardViewModel {
+            disableSwipingAbility()
+        }
+        //          setViewControllers([vcs.first!], direction: .forward, animated: true, completion: nil)
+        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleNextVC)))
     }
     
+    @objc func handleNextVC(gesture:UITapGestureRecognizer)  {
+        let currentVC = viewControllers!.first!
+      
+        if let index = self.vcs.firstIndex(of: currentVC) {
+            barStackView.arrangedSubviews.forEach({$0.backgroundColor = self.deSelectedBar})
+            
+            if gesture.location(in: self.view).x > view.frame.width / 2 {
+                let minIndex = min(index + 1, vcs.count - 1)
+                let nextVC = vcs[minIndex]
+                setViewControllers([nextVC], direction: .forward, animated: false, completion: nil)
+               print(minIndex)
+                barStackView.arrangedSubviews[minIndex ].backgroundColor = .white
+                
+            }else {
+                    let maxIndex = max(0, index - 1)
+                    let previousVC = vcs[maxIndex]
+                    setViewControllers([previousVC], direction: .forward, animated: false, completion: nil)
+                    barStackView.arrangedSubviews[maxIndex ].backgroundColor = .white
+                print(maxIndex)
+                }
+            
+        }
+    }
+    
+    func disableSwipingAbility()  {
+        view.subviews.forEach { (v) in
+            if let v = v as? UIScrollView {
+                v.isScrollEnabled = false
+            }
+        }
+    }
     func setupBarStackView()  {
-        cardsUser.imageNames.forEach { (_) in
+        cardsUser?.imageNames.forEach { (_) in
             let views = UIView()
             views.backgroundColor = deSelectedBar
             barStackView.addArrangedSubview(views)
@@ -56,13 +90,16 @@ class SwipingPhotoVC: UIPageViewController, UIPageViewControllerDataSource {
         barStackView.spacing = 4
         barStackView.distribution = .fillEqually
         view.addSubview(barStackView)
-        let paddingTop = UIApplication.shared.statusBarFrame.height + 8
+        var paddingTop:CGFloat = 8
+        if !isCardViewModel {
+            paddingTop +=  UIApplication.shared.statusBarFrame.height
+        }
         
         barStackView.anchor(top: view.topAnchor, leading: view.leadingAnchor, bottom: nil, trailing: view.trailingAnchor,padding: .init(top: paddingTop, left: 8, bottom: 0, right: 8),size: .init(width: 0, height: 4))
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-      
+        
         
         let index = self.vcs.firstIndex(where: {$0 == viewController}) ?? 0
         if index == 0 {
@@ -73,7 +110,7 @@ class SwipingPhotoVC: UIPageViewController, UIPageViewControllerDataSource {
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
         
-         let index = self.vcs.firstIndex(where: {$0 == viewController}) ?? 0
+        let index = self.vcs.firstIndex(where: {$0 == viewController}) ?? 0
         if index == vcs.count - 1 {
             return nil
         }
@@ -81,27 +118,7 @@ class SwipingPhotoVC: UIPageViewController, UIPageViewControllerDataSource {
     }
 }
 
-class PhotoVC: UIViewController {
-    var imageView = UIImageView()
-    
-    init(image:String) {
-        if let url = URL(string: image) {
-            self.imageView.sd_setImage(with: url)
-        }
-       super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-      view.addSubview(imageView)
-        imageView.fillSuperview()
-    }
-    
-}
+
 
 extension SwipingPhotoVC:UIPageViewControllerDelegate{
     func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {

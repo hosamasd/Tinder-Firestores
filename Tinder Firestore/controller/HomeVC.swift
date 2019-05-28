@@ -12,18 +12,6 @@ import JGProgressHUD
 
 class HomeVC: UIViewController {
  
-//    var cardViewArray:[CardViewModel] = {
-//      let producer =    [
-//        UserModel(name: "kelly", imageNames: ["kelly1","kelly2","kelly3"], job: "student", age: 24),
-//        Advertiser(title: "Slide out menu", brandName: "hosam mohamed", posterImageName: "slide_out_menu_poster"),
-//
-//            UserModel(name: "jane", imageNames: ["jane1","jane2","jane3"], job: "Music DJ", age: 23),
-//
-//
-//        ] as [ProduceCardViewModel]
-//       let viewModels = producer.map({return $0.toCardViewModel()})
-//        return viewModels
-//    }()
    
     var cardViewModelArray = [CardViewModel]()
      fileprivate let hud = JGProgressHUD(style: .dark)
@@ -41,21 +29,30 @@ class HomeVC: UIViewController {
         
         topStackView.settingButton.addTarget(self, action: #selector(handleNextVC), for: .touchUpInside)
         bottomStackView.refreshButton.addTarget(self, action: #selector(handleRefresh), for: .touchUpInside)
-        
+        bottomStackView.likeButton.addTarget(self, action: #selector(handleRemoveCard), for: .touchUpInside)
         setupViews()
 //        setupFirestoreUserCards()
 //         fetchUsersFromFirestore()
          fetchCurrentUser()
     }
     
+    var topCarddView:CardView?
+    
+   
+    
+    func setupTopCardView()  {
+        self.topCarddView?.removeFromSuperview()
+        self.topCarddView = self.topCarddView!.nextCardView
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if  Auth.auth().currentUser?.uid ==  nil {
-            let login = LoginVC()
-            login.delgate = self
-            let nav = UINavigationController(rootViewController: login)
+        if  Auth.auth().currentUser ==  nil {
+            let reg = RegisterVC()
+            reg.delgate = self
+            let nav = UINavigationController(rootViewController: reg)
             present(nav, animated: true, completion: nil)
-            
+
         }
     }
    
@@ -97,26 +94,36 @@ class HomeVC: UIViewController {
                 print(err)
                 return
             }
+            var previousCardView:CardView?
             
             snapshot?.documents.forEach({ (query) in
                 let userDict  = query.data()
                let user = UserModel(dict: userDict)
                 self.cardViewModelArray.append(user.toCardViewModel())
                 self.lastFetchUser = user
-                self.fetchUserCards(user: user)
+             let cardView =  self.fetchUserCards(user: user)
+                
+                //linked list as each node contain itis data and linked to other node
+                
+                previousCardView?.nextCardView = cardView
+                previousCardView = cardView
+                if self.topCarddView == nil {
+                    self.topCarddView = cardView
+                }
            })
             
 //            self.setupFirestoreUserCards()
         }
     }
     
-    func fetchUserCards(user:UserModel)  {
+    func fetchUserCards(user:UserModel) ->CardView  {
         let cardView = CardView(frame: .zero)
         cardView.delgate = self
         cardView.cardViewModel = user.toCardViewModel()
         cardDeskView.addSubview(cardView)
         cardDeskView.sendSubviewToBack(cardView)
         cardView.fillSuperview()
+        return cardView
     }
     
     func setupFirestoreUserCards()  {
@@ -153,9 +160,23 @@ class HomeVC: UIViewController {
     setting.delgate = self
         present(UINavigationController(rootViewController: setting), animated: true, completion: nil)
     }
+    
+    @objc func handleRemoveCard(){
+        UIView.animate(withDuration: 1.0, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0.1, options: .curveEaseInOut, animations: {
+            self.topCarddView?.frame = CGRect(x: 600, y: 0, width: self.topCarddView!.frame.width, height: self.topCarddView!.frame.height)
+            let angle = 15 * CGFloat.pi / 150
+            self.topCarddView?.transform = CGAffineTransform(rotationAngle: angle)
+        }) { (_) in
+            self.setupTopCardView()
+        }
+    }
 }
 
 extension HomeVC: SettingVCDelgate ,LoginVCDelgate, CardViewDelegate{
+    func didRemoveCard(card: CardView) {
+        self.setupTopCardView()
+    }
+    
     
     func performFetchData() {
         fetchCurrentUser()

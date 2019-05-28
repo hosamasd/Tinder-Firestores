@@ -11,19 +11,29 @@ import SDWebImage
 
 protocol CardViewDelegate {
     func didTapMoreInfo(card:CardViewModel)
+    func didRemoveCard(card:CardView)
 }
 
 class CardView: UIView {
     
     var delgate:CardViewDelegate?
+    //Configuration values
+    fileprivate let threShold:CGFloat = 90
+    fileprivate let barDeselctedItem = UIColor(white: 0, alpha: 0.1)
     
+     let swipingViewController = SwipingPhotoVC(isCarViewMode: true)
+    let barStackView = UIStackView()
+    let gradiantLayer = CAGradientLayer()
+    
+    var nextCardView:CardView? 
     
     var cardViewModel:CardViewModel! {
         didSet{
-            let image = cardViewModel.imageNames.first ?? ""
-            if let url = URL(string: image) {
-                mainImage.sd_setImage(with: url, placeholderImage: #imageLiteral(resourceName: "photo_placeholder"), options: .continueInBackground) // if user not have any phoho
-            }
+//            let image = cardViewModel.imageNames.first ?? ""
+//            if let url = URL(string: image) {
+//                mainImage.sd_setImage(with: url, placeholderImage: #imageLiteral(resourceName: "photo_placeholder"), options: .continueInBackground) // if user not have any phoho
+//            }
+            swipingViewController.cardsUser = cardViewModel
             userInfo.attributedText = cardViewModel.attributedText
             userInfo.textAlignment = cardViewModel.textAlignment
             
@@ -51,15 +61,14 @@ class CardView: UIView {
         // use a delegate instead, much more elegant
         
         delgate?.didTapMoreInfo(card: self.cardViewModel)
-        
     }
    
     
     func setupImageNndexObserver()  {
         cardViewModel.imageIndexObserver = { [weak self] (index,imageUrl) in
-            if let url = URL(string: imageUrl ?? "") {
-                self?.mainImage.sd_setImage(with: url, placeholderImage: #imageLiteral(resourceName: "photo_placeholder"), options: .continueInBackground) // if user not have any phoho
-           }
+//            if let url = URL(string: imageUrl ?? "") {
+//                self?.mainImage.sd_setImage(with: url, placeholderImage: #imageLiteral(resourceName: "photo_placeholder"), options: .continueInBackground) // if user not have any phoho
+//           }
             self?.barStackView.arrangedSubviews.forEach { (v) in
                 v.backgroundColor = self?.barDeselctedItem
             }
@@ -68,19 +77,17 @@ class CardView: UIView {
             
         }
     }
-    //Configuration values
-    fileprivate let threShold:CGFloat = 90
-    fileprivate let barDeselctedItem = UIColor(white: 0, alpha: 0.1)
+   
+    //replaceing this wit swiping page VC
+//    fileprivate  let mainImage:UIImageView = {
+//        let im = UIImageView()
+//        im.clipsToBounds = true
+//        im.layer.cornerRadius = 12
+//
+//        return im
+//    }()
+   
     
-    let barStackView = UIStackView()
-    let gradiantLayer = CAGradientLayer()
-    fileprivate  let mainImage:UIImageView = {
-        let im = UIImageView()
-        im.clipsToBounds = true
-        im.layer.cornerRadius = 12
-        
-        return im
-    }()
     fileprivate let userInfo:UILabel = {
         let la = UILabel(string: "hosam", font: .boldSystemFont(ofSize: 30), numberOfLines: 0)
         la.textColor = .white
@@ -93,9 +100,10 @@ class CardView: UIView {
         
         
         setupGradiantLayer()
-        
+      
         setupViews()
         setupGestures()
+          setupBarStackView()
     }
     
     func setupGestures ()  {
@@ -103,10 +111,12 @@ class CardView: UIView {
         
         addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTapped)))
     }
+  
     
     func setupBarStackView()  {
+        var swipingPhoto = swipingViewController.view!
         addSubview(barStackView)
-        barStackView.anchor(top: mainImage.topAnchor, leading: mainImage.leadingAnchor, bottom: nil, trailing: mainImage.trailingAnchor,padding: .init(top: 8, left: 8, bottom: 0, right: 8),size: .init(width: 0, height: 4))
+        barStackView.anchor(top: swipingPhoto.topAnchor, leading: swipingPhoto.leadingAnchor, bottom: nil, trailing: swipingPhoto.trailingAnchor,padding: .init(top: 8, left: 8, bottom: 0, right: 8),size: .init(width: 0, height: 4))
         barStackView.spacing = 4
         barStackView.distribution = .fillEqually
         
@@ -126,14 +136,14 @@ class CardView: UIView {
     }
     
     func setupViews()  {
-        
-        addSubview(mainImage)
-        setupBarStackView()
+        var swipingPhoto = swipingViewController.view!
+        addSubview(swipingPhoto)
+//        setupBarStackView()
         addSubview(userInfo)
         
         
-        mainImage.fillSuperview(padding: .init(top: 12, left: 12, bottom: 12, right: 12))
-        userInfo.anchor(top: nil, leading: mainImage.leadingAnchor, bottom: mainImage.bottomAnchor, trailing: mainImage.trailingAnchor,padding: .init(top: 0, left: 16, bottom: 20, right: 0))
+        swipingPhoto.fillSuperview(padding: .init(top: 12, left: 12, bottom: 12, right: 12))
+        userInfo.anchor(top: nil, leading: swipingPhoto.leadingAnchor, bottom: swipingPhoto.bottomAnchor, trailing: swipingPhoto.trailingAnchor,padding: .init(top: 0, left: 16, bottom: 20, right: 0))
         addSubview(moreInfoButton)
         moreInfoButton.anchor(top: nil, leading: nil, bottom: bottomAnchor, trailing: trailingAnchor, padding: .init(top: 0, left: 0, bottom: 30, right: 16), size: .init(width: 44, height: 44))
     }
@@ -164,6 +174,7 @@ class CardView: UIView {
             self.transform = .identity
             self.removeFromSuperview()
             //            self.frame = CGRect(x: 0, y: 0, width: self.superview!.frame.width, height: self.superview!.frame.height)
+            self.delgate?.didRemoveCard(card: self)
         }
     }
     

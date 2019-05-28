@@ -14,21 +14,21 @@ class UserDetailVC: UIViewController {
         didSet{
             infoLabel.attributedText = cardView.attributedText
             
-           swipingPageV.cardsUser = cardView
+            swipingPageV.cardsUser = cardView
             
         }
     }
     
     fileprivate let extraHeight:CGFloat = 80
     lazy var scrollView:UIScrollView = {
-       let sv = UIScrollView()
+        let sv = UIScrollView()
         sv.delegate = self
-sv.alwaysBounceVertical = true
+        sv.alwaysBounceVertical = true
         sv.contentInsetAdjustmentBehavior = .never
         return sv
     }()
-    let swipingPageV = SwipingPhotoVC(transitionStyle: .scroll, navigationOrientation: .horizontal)
-     lazy var SwipingImageView = swipingPageV.view!
+    let swipingPageV = SwipingPhotoVC()
+    lazy var SwipingImageView = swipingPageV.view!
     
     let infoLabel: UILabel = {
         let label = UILabel()
@@ -60,23 +60,23 @@ sv.alwaysBounceVertical = true
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
-         SwipingImageView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.width + extraHeight)
+        SwipingImageView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.width + extraHeight)
     }
     
-  fileprivate  func setupViews()  {
+    fileprivate  func setupViews()  {
         view.backgroundColor = .white
-//    let imageView = swipingPageV.view!
-    
+        //    let imageView = swipingPageV.view!
+        
         view.addSubview(scrollView)
         
         scrollView.fillSuperview()
         scrollView.addSubview(SwipingImageView)
         scrollView.addSubview(infoLabel)
-    scrollView.addSubview(dismissButton)
-    
-    
+        scrollView.addSubview(dismissButton)
+        
+        
         infoLabel.anchor(top: SwipingImageView.bottomAnchor, leading: scrollView.leadingAnchor, bottom: nil, trailing: scrollView.trailingAnchor, padding: .init(top: 16, left: 16, bottom: 0, right: 16))
-    dismissButton.anchor(top: SwipingImageView.bottomAnchor, leading: nil, bottom: nil, trailing: view.trailingAnchor, padding: .init(top: -25, left: 0, bottom: 0, right: 24), size: .init(width: 50, height: 50))
+        dismissButton.anchor(top: SwipingImageView.bottomAnchor, leading: nil, bottom: nil, trailing: view.trailingAnchor, padding: .init(top: -25, left: 0, bottom: 0, right: 24), size: .init(width: 50, height: 50))
     }
     
     fileprivate func setupBottomControls() {
@@ -86,7 +86,7 @@ sv.alwaysBounceVertical = true
         view.addSubview(stackView)
         stackView.anchor(top: nil, leading: nil, bottom: view.safeAreaLayoutGuide.bottomAnchor, trailing: nil, padding: .init(top: 0, left: 0, bottom: 0, right: 0), size: .init(width: 300, height: 80))
         stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-    
+        
     }
     
     fileprivate func setupVisualBlurEffectView() {

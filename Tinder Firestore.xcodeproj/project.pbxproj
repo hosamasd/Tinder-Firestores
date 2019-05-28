@@ -34,6 +34,7 @@
 		4EA086C52293E12300DE5EE5 /* HomeBottomControlsStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA086C42293E12300DE5EE5 /* HomeBottomControlsStackView.swift */; };
 		4EA086C72293E39300DE5EE5 /* topNavigationStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA086C62293E39300DE5EE5 /* topNavigationStackView.swift */; };
 		4EA086C92293E97C00DE5EE5 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA086C82293E97C00DE5EE5 /* CardView.swift */; };
+		4EAFF7CE229D15A200C8E099 /* PhotoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EAFF7CD229D15A200C8E099 /* PhotoVC.swift */; };
 		5986718AD755CAF573B8DA21 /* Pods_Tinder_Firestore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89D830909AABC8CC613BE337 /* Pods_Tinder_Firestore.framework */; };
 /* End PBXBuildFile section */
 
@@ -69,6 +70,7 @@
 		4EA086C42293E12300DE5EE5 /* HomeBottomControlsStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeBottomControlsStackView.swift; sourceTree = "<group>"; };
 		4EA086C62293E39300DE5EE5 /* topNavigationStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = topNavigationStackView.swift; sourceTree = "<group>"; };
 		4EA086C82293E97C00DE5EE5 /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
+		4EAFF7CD229D15A200C8E099 /* PhotoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoVC.swift; sourceTree = "<group>"; };
 		89D830909AABC8CC613BE337 /* Pods_Tinder_Firestore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Tinder_Firestore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -106,6 +108,7 @@
 			children = (
 				4E123EEA229BC5370003AF66 /* UserDdetailVC.swift */,
 				4E7D577F229BE29200BA0FB2 /* SwipingPhotoVC.swift */,
+				4EAFF7CD229D15A200C8E099 /* PhotoVC.swift */,
 			);
 			path = "User Detail";
 			sourceTree = "<group>";
@@ -376,6 +379,7 @@
 				4E4FA03E2296BA8000F7EBC8 /* CustomHeaderLabel.swift in Sources */,
 				4E8A1A3F22940A22006FFC45 /* UserModel.swift in Sources */,
 				4E7DD81922941E7500D6DEF0 /* Advertiser.swift in Sources */,
+				4EAFF7CE229D15A200C8E099 /* PhotoVC.swift in Sources */,
 				4EA086C52293E12300DE5EE5 /* HomeBottomControlsStackView.swift in Sources */,
 				4EA086C72293E39300DE5EE5 /* topNavigationStackView.swift in Sources */,
 				4E123EEB229BC5370003AF66 /* UserDdetailVC.swift in Sources */,
