@@ -17,6 +17,9 @@ protocol SettingVCDelgate {
 
 class SettingVC: UITableViewController {
     
+    static let defaultMinAgeSeeking = 18
+    static let defaultMaxAgeSeeking = 50
+    
     lazy var headerView:UIView = {
         let headerView = UIView()
         headerView.backgroundColor = .lightGray
@@ -79,9 +82,11 @@ class SettingVC: UITableViewController {
             let cells =   tableView.dequeueReusableCell(withIdentifier: cellAgeId, for: indexPath) as! SettingAageRangeCell
             cells.minSlider.addTarget(self, action: #selector(handleMinAgeSlider), for: .valueChanged)
             cells.maxSlider.addTarget(self, action: #selector(handleMaxAgeSlider), for: .valueChanged)
+            let user = self.user
             
-            cells.minAgeLabel.text = "Min: \(self.user?.minSeekingAge ?? -1)"
-            cells.maxAgeLabel.text = "Max: \(self.user?.maxSeekingAge ?? -1)"
+            cells.users = user
+//            cells.minAgeLabel.text = "Min: \(self.user?.minSeekingAge ?? -1)"
+//            cells.maxAgeLabel.text = "Max: \(self.user?.maxSeekingAge ?? -1)"
             return cells
         }
         

@@ -10,7 +10,18 @@ import UIKit
 
 class SettingAageRangeCell: BaseCell {
     
-    
+    var users:UserModel? {
+        didSet{
+            
+        let minAge = users?.minSeekingAge ?? SettingVC.defaultMinAgeSeeking
+        let maxAge  = users?.maxSeekingAge ?? SettingVC.defaultMaxAgeSeeking
+        
+            minAgeLabel.text = "Min: \(minAge)"
+            maxAgeLabel.text = "Max: \(maxAge)"
+            minSlider.value = Float(minAge)
+            maxSlider.value = Float(maxAge)
+    }
+    }
     
     let minAgeLabel:UILabel = {
         let la = UILabel()

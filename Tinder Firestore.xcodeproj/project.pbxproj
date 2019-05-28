@@ -195,8 +195,8 @@
 		4EA086BE2293DD1E00DE5EE5 /* controller */ = {
 			isa = PBXGroup;
 			children = (
-				4E123EE9229BC5220003AF66 /* User Detail */,
 				4EA086AE2293DD1700DE5EE5 /* HomeVC.swift */,
+				4E123EE9229BC5220003AF66 /* User Detail */,
 				4E62F27222993DCD00309753 /* Registration */,
 				4E7067F52295998200F70242 /* Bindable.swift */,
 				4E6A76B8229691AF00BFDDE9 /* SettingVC.swift */,

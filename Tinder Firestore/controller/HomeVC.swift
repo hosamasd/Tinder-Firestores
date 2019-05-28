@@ -26,7 +26,7 @@ class HomeVC: UIViewController {
 //    }()
    
     var cardViewModelArray = [CardViewModel]()
-    
+     fileprivate let hud = JGProgressHUD(style: .dark)
     let topStackView = topNavigationStackView()
     let bottomStackView = HomeBottomControlsStackView()
     let cardDeskView:UIView = {
@@ -62,10 +62,12 @@ class HomeVC: UIViewController {
     //MARK:-user methods
     
     func fetchCurrentUser()  {
+        hud.textLabel.text = "Loading"
+        hud.show(in: view)
         guard let uid = Auth.auth().currentUser?.uid else { return  }
         Firestore.firestore().collection("Users").document(uid).getDocument { (snapshot, err) in
             if let err = err {
-                print(err)
+                 self.hud.dismiss()
                 return
             }
             guard let dict = snapshot?.data() else {return}
@@ -75,17 +77,22 @@ class HomeVC: UIViewController {
     }
     
     func fetchUsersFromFirestore()  {
-        guard let minAge = self.user?.minSeekingAge,let maxAge=user?.maxSeekingAge else { return }
-        let hud = JGProgressHUD(style: .dark)
-        hud.textLabel.text = "Fetching Users"
-        hud.show(in: view)
+//        guard let minAge = self.user?.minSeekingAge,let maxAge=user?.maxSeekingAge else {
+//            self.hud.dismiss()
+//            return }
+        
+        let minAge = self.user?.minSeekingAge ?? SettingVC.defaultMinAgeSeeking
+        let maxAge=self.user?.maxSeekingAge ?? SettingVC.defaultMaxAgeSeeking
+//        let hud = JGProgressHUD(style: .dark)
+//        hud.textLabel.text = "Fetching Users"
+//        hud.show(in: view)
         
         //paginate here for limit users apppear
         
         let query =  Firestore.firestore().collection("Users").whereField("age", isGreaterThanOrEqualTo: minAge).whereField("age", isLessThanOrEqualTo: maxAge)
             
         query.getDocuments { (snapshot, err) in
-            hud.dismiss()
+            self.hud.dismiss()
             if let err = err {
                 print(err)
                 return

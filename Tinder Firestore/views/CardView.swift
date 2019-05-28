@@ -22,7 +22,7 @@ class CardView: UIView {
         didSet{
             let image = cardViewModel.imageNames.first ?? ""
             if let url = URL(string: image) {
-                mainImage.sd_setImage(with: url)
+                mainImage.sd_setImage(with: url, placeholderImage: #imageLiteral(resourceName: "photo_placeholder"), options: .continueInBackground) // if user not have any phoho
             }
             userInfo.attributedText = cardViewModel.attributedText
             userInfo.textAlignment = cardViewModel.textAlignment
@@ -58,9 +58,8 @@ class CardView: UIView {
     func setupImageNndexObserver()  {
         cardViewModel.imageIndexObserver = { [weak self] (index,imageUrl) in
             if let url = URL(string: imageUrl ?? "") {
-                self?.mainImage.sd_setImage(with: url)
-                
-            }
+                self?.mainImage.sd_setImage(with: url, placeholderImage: #imageLiteral(resourceName: "photo_placeholder"), options: .continueInBackground) // if user not have any phoho
+           }
             self?.barStackView.arrangedSubviews.forEach { (v) in
                 v.backgroundColor = self?.barDeselctedItem
             }

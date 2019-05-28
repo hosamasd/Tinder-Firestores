@@ -266,6 +266,7 @@ extension RegisterVC: UIImagePickerControllerDelegate, UINavigationControllerDel
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if  let image = info[.originalImage] as? UIImage {
             registerViewModel.bindableImage.value = image
+            registerViewModel.checkFormValid()
             dismiss(animated: true, completion: nil)
         }
         

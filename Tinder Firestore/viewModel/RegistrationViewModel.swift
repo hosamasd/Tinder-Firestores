@@ -69,7 +69,7 @@ class RegistrationViewModel {
     
     func saveInfoToFirestore(imageUrl:String,completion : @escaping (Error?) ->())  {
         guard let auth = Auth.auth().currentUser?.uid else { return }
-        let values = ["fullName":fullName ?? "","uid":auth,"imageUrl1":imageUrl]
+        let values: [String:Any] = ["fullName":fullName ?? "","uid":auth,"imageUrl1":imageUrl,"minSeekingAge":SettingVC.defaultMinAgeSeeking,"maxSeekingAge":SettingVC.defaultMaxAgeSeeking]
         
         Firestore.firestore().collection("Users").document(auth).setData(values) { (err) in
             if let err = err {
@@ -83,7 +83,7 @@ class RegistrationViewModel {
     }
     
     func checkFormValid()  {
-        let isValid = fullName?.isEmpty == false && email?.isEmpty == false && password?.isEmpty == false
+        let isValid = fullName?.isEmpty == false && email?.isEmpty == false && password?.isEmpty == false && bindableImage.value != nil
         
         bindableIsFormValidate.value = isValid
     }

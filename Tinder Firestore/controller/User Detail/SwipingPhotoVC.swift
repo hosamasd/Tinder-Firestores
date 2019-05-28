@@ -19,6 +19,9 @@ class SwipingPhotoVC: UIPageViewController, UIPageViewControllerDataSource {
              setViewControllers([vcs.first!], direction: .forward, animated: true, completion: nil)
         }
     }
+    let deSelectedBar:UIColor = UIColor(white: 0, alpha: 0.1)
+    
+    let barStackView = UIStackView(arrangedSubviews: [])
     
     var vcs = [UIViewController]()
     
@@ -37,9 +40,25 @@ class SwipingPhotoVC: UIPageViewController, UIPageViewControllerDataSource {
         super.viewDidLoad()
         view.backgroundColor = .white
         dataSource = self
-        
+        delegate = self
+        setupBarStackView()
 //          setViewControllers([vcs.first!], direction: .forward, animated: true, completion: nil)
         
+    }
+    
+    func setupBarStackView()  {
+        cardsUser.imageNames.forEach { (_) in
+            let views = UIView()
+            views.backgroundColor = deSelectedBar
+            barStackView.addArrangedSubview(views)
+        }
+        barStackView.arrangedSubviews.first?.backgroundColor = .white
+        barStackView.spacing = 4
+        barStackView.distribution = .fillEqually
+        view.addSubview(barStackView)
+        let paddingTop = UIApplication.shared.statusBarFrame.height + 8
+        
+        barStackView.anchor(top: view.topAnchor, leading: view.leadingAnchor, bottom: nil, trailing: view.trailingAnchor,padding: .init(top: paddingTop, left: 8, bottom: 0, right: 8),size: .init(width: 0, height: 4))
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
@@ -82,4 +101,14 @@ class PhotoVC: UIViewController {
         imageView.fillSuperview()
     }
     
+}
+
+extension SwipingPhotoVC:UIPageViewControllerDelegate{
+    func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
+        let currentVC = viewControllers!.first
+        guard let index = vcs.firstIndex(where: {$0==currentVC}) else { return  }
+        barStackView.arrangedSubviews.forEach({$0.backgroundColor = deSelectedBar})
+        
+        barStackView.arrangedSubviews[index].backgroundColor = .white
+    }
 }
