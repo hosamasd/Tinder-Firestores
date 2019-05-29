@@ -29,7 +29,8 @@ class HomeVC: UIViewController {
         
         topStackView.settingButton.addTarget(self, action: #selector(handleNextVC), for: .touchUpInside)
         bottomStackView.refreshButton.addTarget(self, action: #selector(handleRefresh), for: .touchUpInside)
-        bottomStackView.likeButton.addTarget(self, action: #selector(handleRemoveCard), for: .touchUpInside)
+        bottomStackView.likeButton.addTarget(self, action: #selector(handleLike), for: .touchUpInside)
+        bottomStackView.dislikeButton.addTarget(self, action: #selector(handleDisLike), for: .touchUpInside)
         setupViews()
 //        setupFirestoreUserCards()
 //         fetchUsersFromFirestore()
@@ -87,7 +88,7 @@ class HomeVC: UIViewController {
         //paginate here for limit users apppear
         
         let query =  Firestore.firestore().collection("Users").whereField("age", isGreaterThanOrEqualTo: minAge).whereField("age", isLessThanOrEqualTo: maxAge)
-            
+            topCarddView = nil
         query.getDocuments { (snapshot, err) in
             self.hud.dismiss()
             if let err = err {
@@ -161,14 +162,87 @@ class HomeVC: UIViewController {
         present(UINavigationController(rootViewController: setting), animated: true, completion: nil)
     }
     
-    @objc func handleRemoveCard(){
-        UIView.animate(withDuration: 1.0, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0.1, options: .curveEaseInOut, animations: {
-            self.topCarddView?.frame = CGRect(x: 600, y: 0, width: self.topCarddView!.frame.width, height: self.topCarddView!.frame.height)
-            let angle = 15 * CGFloat.pi / 150
-            self.topCarddView?.transform = CGAffineTransform(rotationAngle: angle)
-        }) { (_) in
-            self.setupTopCardView()
+   @objc func handleDisLike()  {
+//        swipeCardsAnimation(angle: -15, translation: -700)
+    let duration = 0.5
+    
+    let translation = CABasicAnimation(keyPath: "position.x")
+    translation.duration = duration
+    translation.toValue = -700
+    translation.timingFunction = CAMediaTimingFunction(name: .easeOut)
+    translation.isRemovedOnCompletion = false //for removing from view
+    translation.fillMode = .forwards //for removing from view
+    
+    let transform = CABasicAnimation(keyPath: "transform.rotation.z")
+    transform.toValue = -15 * CGFloat.pi / 180
+    transform.duration = duration
+    
+    let card = topCarddView
+    topCarddView = card?.nextCardView
+    
+    CATransaction.setCompletionBlock {
+        card?.removeFromSuperview()
+    }
+    
+    
+    card?.layer.add(translation, forKey: "traslation")
+    card?.layer.add(transform, forKey: "transform")
+    CATransaction.commit()
+    }
+    
+    fileprivate func swipeCardsAnimation(angle:CGFloat,translation:CGFloat) {
+        let duration = 0.5
+        
+        let translation = CABasicAnimation(keyPath: "position.x")
+        translation.duration = duration
+        translation.toValue = translation
+        translation.timingFunction = CAMediaTimingFunction(name: .easeOut)
+        translation.isRemovedOnCompletion = false //for removing from view
+        translation.fillMode = .forwards //for removing from view
+        
+        let transform = CABasicAnimation(keyPath: "transform.rotation.z")
+        transform.toValue = angle * CGFloat.pi / 180
+        transform.duration = duration
+        
+        let card = topCarddView
+        topCarddView = card?.nextCardView
+        
+        CATransaction.setCompletionBlock {
+            card?.removeFromSuperview()
         }
+        
+        
+        card?.layer.add(translation, forKey: "traslation")
+        card?.layer.add(transform, forKey: "transform")
+        CATransaction.commit()
+    }
+    
+    @objc func handleLike(){
+//        swipeCardsAnimation(angle: 15, translation: 700)
+        let duration = 0.5
+        
+        let translation = CABasicAnimation(keyPath: "position.x")
+        translation.duration = duration
+        translation.toValue = 700
+        translation.timingFunction = CAMediaTimingFunction(name: .easeOut)
+        translation.isRemovedOnCompletion = false //for removing from view
+        translation.fillMode = .forwards //for removing from view
+        
+        let transform = CABasicAnimation(keyPath: "transform.rotation.z")
+        transform.toValue = 15 * CGFloat.pi / 180
+        transform.duration = duration
+        
+        let card = topCarddView
+        topCarddView = card?.nextCardView
+        
+        CATransaction.setCompletionBlock {
+            card?.removeFromSuperview()
+        }
+        
+        
+        card?.layer.add(translation, forKey: "traslation")
+        card?.layer.add(transform, forKey: "transform")
+        CATransaction.commit()
     }
 }
 
