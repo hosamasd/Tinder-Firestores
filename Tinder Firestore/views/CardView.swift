@@ -21,7 +21,7 @@ class CardView: UIView {
     fileprivate let threShold:CGFloat = 90
     fileprivate let barDeselctedItem = UIColor(white: 0, alpha: 0.1)
     
-     let swipingViewController = SwipingPhotoVC(isCarViewMode: true)
+    let swipingViewController = SwipingPhotoVC(isCarViewMode: true)
     let barStackView = UIStackView()
     let gradiantLayer = CAGradientLayer()
     
@@ -29,10 +29,10 @@ class CardView: UIView {
     
     var cardViewModel:CardViewModel! {
         didSet{
-//            let image = cardViewModel.imageNames.first ?? ""
-//            if let url = URL(string: image) {
-//                mainImage.sd_setImage(with: url, placeholderImage: #imageLiteral(resourceName: "photo_placeholder"), options: .continueInBackground) // if user not have any phoho
-//            }
+            //            let image = cardViewModel.imageNames.first ?? ""
+            //            if let url = URL(string: image) {
+            //                mainImage.sd_setImage(with: url, placeholderImage: #imageLiteral(resourceName: "photo_placeholder"), options: .continueInBackground) // if user not have any phoho
+            //            }
             swipingViewController.cardsUser = cardViewModel
             userInfo.attributedText = cardViewModel.attributedText
             userInfo.textAlignment = cardViewModel.textAlignment
@@ -49,7 +49,7 @@ class CardView: UIView {
         }
     }
     
-   
+    
     fileprivate let moreInfoButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(#imageLiteral(resourceName: "info_icon").withRenderingMode(.alwaysOriginal), for: .normal)
@@ -62,13 +62,13 @@ class CardView: UIView {
         
         delgate?.didTapMoreInfo(card: self.cardViewModel)
     }
-   
+    
     
     func setupImageNndexObserver()  {
         cardViewModel.imageIndexObserver = { [weak self] (index,imageUrl) in
-//            if let url = URL(string: imageUrl ?? "") {
-//                self?.mainImage.sd_setImage(with: url, placeholderImage: #imageLiteral(resourceName: "photo_placeholder"), options: .continueInBackground) // if user not have any phoho
-//           }
+            //            if let url = URL(string: imageUrl ?? "") {
+            //                self?.mainImage.sd_setImage(with: url, placeholderImage: #imageLiteral(resourceName: "photo_placeholder"), options: .continueInBackground) // if user not have any phoho
+            //           }
             self?.barStackView.arrangedSubviews.forEach { (v) in
                 v.backgroundColor = self?.barDeselctedItem
             }
@@ -77,16 +77,16 @@ class CardView: UIView {
             
         }
     }
-   
+    
     //replaceing this wit swiping page VC
-//    fileprivate  let mainImage:UIImageView = {
-//        let im = UIImageView()
-//        im.clipsToBounds = true
-//        im.layer.cornerRadius = 12
-//
-//        return im
-//    }()
-   
+    //    fileprivate  let mainImage:UIImageView = {
+    //        let im = UIImageView()
+    //        im.clipsToBounds = true
+    //        im.layer.cornerRadius = 12
+    //
+    //        return im
+    //    }()
+    
     
     fileprivate let userInfo:UILabel = {
         let la = UILabel(string: "hosam", font: .boldSystemFont(ofSize: 30), numberOfLines: 0)
@@ -100,10 +100,10 @@ class CardView: UIView {
         
         
         setupGradiantLayer()
-      
+        
         setupViews()
         setupGestures()
-          setupBarStackView()
+        setupBarStackView()
     }
     
     func setupGestures ()  {
@@ -111,7 +111,7 @@ class CardView: UIView {
         
         addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTapped)))
     }
-  
+    
     
     func setupBarStackView()  {
         var swipingPhoto = swipingViewController.view!
@@ -138,7 +138,7 @@ class CardView: UIView {
     func setupViews()  {
         var swipingPhoto = swipingViewController.view!
         addSubview(swipingPhoto)
-//        setupBarStackView()
+        //        setupBarStackView()
         addSubview(userInfo)
         
         
@@ -178,16 +178,10 @@ class CardView: UIView {
                 }else {
                     self.transform = .identity
                 }
-
-        })
+                
+            })
         }
-       
-//        }){(_) in
-//            self.transform = .identity
-//            self.removeFromSuperview()
-//            //            self.frame = CGRect(x: 0, y: 0, width: self.superview!.frame.width, height: self.superview!.frame.height)
-//            self.delgate?.didRemoveCard(card: self)
-//        }
+        
     }
     
     @objc  func handleTapped(gesture:UITapGestureRecognizer)  {

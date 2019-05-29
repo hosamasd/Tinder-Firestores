@@ -11,18 +11,18 @@ import Firebase
 import JGProgressHUD
 
 class HomeVC: UIViewController {
- 
-   
+    
+    
     var cardViewModelArray = [CardViewModel]()
-     fileprivate let hud = JGProgressHUD(style: .dark)
+    fileprivate let hud = JGProgressHUD(style: .dark)
     let topStackView = topNavigationStackView()
     let bottomStackView = HomeBottomControlsStackView()
     let cardDeskView:UIView = {
         let v = UIView()
         return v
     }()
-     var user:UserModel?
-     var lastFetchUser:UserModel?
+    var user:UserModel?
+    var lastFetchUser:UserModel?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,14 +32,14 @@ class HomeVC: UIViewController {
         bottomStackView.likeButton.addTarget(self, action: #selector(handleLike), for: .touchUpInside)
         bottomStackView.dislikeButton.addTarget(self, action: #selector(handleDisLike), for: .touchUpInside)
         setupViews()
-//        setupFirestoreUserCards()
-//         fetchUsersFromFirestore()
-         fetchCurrentUser()
+        //        setupFirestoreUserCards()
+        //         fetchUsersFromFirestore()
+        fetchCurrentUser()
     }
     
     var topCarddView:CardView?
     
-   
+    
     
     func setupTopCardView()  {
         self.topCarddView?.removeFromSuperview()
@@ -53,10 +53,10 @@ class HomeVC: UIViewController {
             reg.delgate = self
             let nav = UINavigationController(rootViewController: reg)
             present(nav, animated: true, completion: nil)
-
+            
         }
     }
-   
+    
     //MARK:-user methods
     
     func fetchCurrentUser()  {
@@ -65,30 +65,41 @@ class HomeVC: UIViewController {
         guard let uid = Auth.auth().currentUser?.uid else { return  }
         Firestore.firestore().collection("Users").document(uid).getDocument { (snapshot, err) in
             if let err = err {
-                 self.hud.dismiss()
+                self.hud.dismiss()
                 return
             }
             guard let dict = snapshot?.data() else {return}
             self.user = UserModel(dict: dict)
-           self.fetchUsersFromFirestore()
+            self.fetchSwipes()
+            //           self.fetchUsersFromFirestore()
         }
     }
     
+    var swipes = [String:Any]()
+    
+    func fetchSwipes()  {
+        guard let uidds = Auth.auth().currentUser?.uid else{return}
+        Firestore.firestore().collection("Swipes").document(uidds).getDocument { (snapshot, err) in
+            if err != nil {
+                print(err)
+                return
+            }
+            guard let data = snapshot?.data() else {return}
+            self.swipes = data
+            self.fetchUsersFromFirestore()
+        }
+        
+    }
+    
     func fetchUsersFromFirestore()  {
-//        guard let minAge = self.user?.minSeekingAge,let maxAge=user?.maxSeekingAge else {
-//            self.hud.dismiss()
-//            return }
         
         let minAge = self.user?.minSeekingAge ?? SettingVC.defaultMinAgeSeeking
         let maxAge=self.user?.maxSeekingAge ?? SettingVC.defaultMaxAgeSeeking
-//        let hud = JGProgressHUD(style: .dark)
-//        hud.textLabel.text = "Fetching Users"
-//        hud.show(in: view)
         
         //paginate here for limit users apppear
         
         let query =  Firestore.firestore().collection("Users").whereField("age", isGreaterThanOrEqualTo: minAge).whereField("age", isLessThanOrEqualTo: maxAge)
-            topCarddView = nil
+        topCarddView = nil
         query.getDocuments { (snapshot, err) in
             self.hud.dismiss()
             if let err = err {
@@ -99,21 +110,23 @@ class HomeVC: UIViewController {
             
             snapshot?.documents.forEach({ (query) in
                 let userDict  = query.data()
-               let user = UserModel(dict: userDict)
-                self.cardViewModelArray.append(user.toCardViewModel())
-                self.lastFetchUser = user
-             let cardView =  self.fetchUserCards(user: user)
-                
-                //linked list as each node contain itis data and linked to other node
-                
-                previousCardView?.nextCardView = cardView
-                previousCardView = cardView
-                if self.topCarddView == nil {
-                    self.topCarddView = cardView
+                let user = UserModel(dict: userDict)
+                let isNotCurrentUser = user.uid! != Auth.auth().currentUser?.uid
+                let hasNotSwipedBefore = self.swipes[user.uid!] == nil
+                if isNotCurrentUser && hasNotSwipedBefore {
+                    let cardView =  self.fetchUserCards(user: user)
+                    //linked list as each node contain itis data and linked to other node
+                    
+                    previousCardView?.nextCardView = cardView
+                    previousCardView = cardView
+                    if self.topCarddView == nil {
+                        self.topCarddView = cardView
+                    }
                 }
-           })
-            
-//            self.setupFirestoreUserCards()
+                
+                
+                
+            })
         }
     }
     
@@ -128,7 +141,7 @@ class HomeVC: UIViewController {
     }
     
     func setupFirestoreUserCards()  {
-       cardViewModelArray.forEach { (cardVM) in
+        cardViewModelArray.forEach { (cardVM) in
             let cardView = CardView(frame: .zero)
             cardView.cardViewModel = cardVM
             cardDeskView.addSubview(cardView)
@@ -136,58 +149,60 @@ class HomeVC: UIViewController {
         }
     }
     
-  fileprivate  func setupViews()  {
-       
+    fileprivate  func setupViews()  {
+        
         view.backgroundColor = .white
         
         let mainStack = UIStackView(arrangedSubviews: [topStackView,cardDeskView,bottomStackView])
-    
+        
         mainStack.bringSubviewToFront(cardDeskView) // to make it hide the other
         mainStack.axis = .vertical
         
         view.addSubview(mainStack)
-       mainStack.anchor(top: view.safeAreaLayoutGuide.topAnchor, leading: view.leadingAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor, trailing: view.trailingAnchor)
+        mainStack.anchor(top: view.safeAreaLayoutGuide.topAnchor, leading: view.leadingAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor, trailing: view.trailingAnchor)
         
     }
     
     //TODO:-handle methods
     
- @objc   func handleRefresh()  {
-       fetchUsersFromFirestore()
+    @objc   func handleRefresh()  {
+        fetchUsersFromFirestore()
     }
     
-   @objc func handleNextVC()  {
+    @objc func handleNextVC()  {
         let setting = SettingVC()
-    setting.delgate = self
-        present(UINavigationController(rootViewController: setting), animated: true, completion: nil)
+        setting.delgate = self
+        let nav =   UINavigationController(rootViewController: setting)
+        
+        present(nav, animated: true, completion: nil)
     }
     
-   @objc func handleDisLike()  {
-//        swipeCardsAnimation(angle: -15, translation: -700)
-    saveSwipeToFirestore(with: 0)
-    let duration = 0.5
-    let translation = CABasicAnimation(keyPath: "position.x")
-    translation.duration = duration
-    translation.toValue = -700
-    translation.timingFunction = CAMediaTimingFunction(name: .easeOut)
-    translation.isRemovedOnCompletion = false //for removing from view
-    translation.fillMode = .forwards //for removing from view
-
-    let transform = CABasicAnimation(keyPath: "transform.rotation.z")
-    transform.toValue = -15 * CGFloat.pi / 180
-    transform.duration = duration
-
-    let card = topCarddView
-    topCarddView = card?.nextCardView
-
-    CATransaction.setCompletionBlock {
-        card?.removeFromSuperview()
-    }
-
-
-    card?.layer.add(translation, forKey: "traslation")
-    card?.layer.add(transform, forKey: "transform")
-    CATransaction.commit()
+    @objc func handleDisLike()  {
+        //        swipeCardsAnimation(angle: -15, translation: -700)
+        saveSwipeToFirestore(with: 0)
+        let duration = 0.5
+        let translation = CABasicAnimation(keyPath: "position.x")
+        translation.duration = duration
+        translation.toValue = -700
+        translation.timingFunction = CAMediaTimingFunction(name: .easeOut)
+        translation.isRemovedOnCompletion = false //for removing from view
+        translation.fillMode = .forwards //for removing from view
+        
+        let transform = CABasicAnimation(keyPath: "transform.rotation.z")
+        transform.toValue = -15 * CGFloat.pi / 180
+        transform.duration = duration
+        
+        let card = topCarddView
+        topCarddView = card?.nextCardView
+        
+        CATransaction.setCompletionBlock {
+            card?.removeFromSuperview()
+        }
+        
+        
+        card?.layer.add(translation, forKey: "traslation")
+        card?.layer.add(transform, forKey: "transform")
+        CATransaction.commit()
     }
     
     fileprivate func swipeCardsAnimation(angle:CGFloat,translation:CGFloat) {
@@ -218,7 +233,7 @@ class HomeVC: UIViewController {
     }
     
     func saveSwipeToFirestore(with value:Int)  {
-    guard let uid = Auth.auth().currentUser?.uid else { return  }
+        guard let uid = Auth.auth().currentUser?.uid else { return  }
         guard let cardUID = topCarddView?.cardViewModel.uid else { return  }
         let data = [cardUID:value]
         
@@ -236,6 +251,7 @@ class HomeVC: UIViewController {
                     }
                     
                     print("saved")
+                    self.checkIfMatchesSwiping(uid:cardUID)
                 }
             }else {
                 Firestore.firestore().collection("Swipes").document(uid).setData(data) { (err) in
@@ -245,6 +261,7 @@ class HomeVC: UIViewController {
                     }
                     
                     print("saved")
+                    self.checkIfMatchesSwiping(uid:cardUID)
                 }
             }
         }
@@ -252,9 +269,29 @@ class HomeVC: UIViewController {
         
     }
     
+    func checkIfMatchesSwiping(uid:String)  {
+        Firestore.firestore().collection("Swipes").document(uid).getDocument { (snapshot, err) in
+            if err != nil {
+                print(err)
+                return
+            }
+            guard let data = snapshot?.data() else {return}
+            guard let uidds = Auth.auth().currentUser?.uid else{return}
+            let hasMatched = data[uidds] as? Int == 1
+            
+            if hasMatched {
+                let hud = JGProgressHUD(style: .dark)
+                hud.textLabel.text = "Has A mAtch"
+                hud.show(in: self.view)
+                
+                hud.dismiss(afterDelay: 4)
+            }
+        }
+    }
+    
     @objc func handleLike(){
         saveSwipeToFirestore(with: 1)
-//        swipeCardsAnimation(angle: 15, translation: 700)
+        //        swipeCardsAnimation(angle: 15, translation: 700)
         let duration = 0.5
         
         let translation = CABasicAnimation(keyPath: "position.x")
