@@ -15,14 +15,17 @@ protocol ProduceCardViewModel {
 class CardViewModel {
 
     // we will design MVVM design pattern
+    let uid:String
+    
     let imageNames:[String]
     let attributedText:NSAttributedString
     let textAlignment:NSTextAlignment
     
-    init(imageNames:[String],attributedText:NSAttributedString,textAlignment:NSTextAlignment) {
+    init(uid:String,imageNames:[String],attributedText:NSAttributedString,textAlignment:NSTextAlignment) {
         self.textAlignment = textAlignment
         self.attributedText = attributedText
         self.imageNames = imageNames
+        self.uid = uid
     }
     
     fileprivate var imageIndex = 0 {

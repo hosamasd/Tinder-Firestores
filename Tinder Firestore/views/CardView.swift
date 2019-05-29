@@ -164,18 +164,30 @@ class CardView: UIView {
         let translateDirection:CGFloat = gesture.translation(in: nil).x > 1 ? 1 : -1
         let shouldDismisCard = abs(gesture.translation(in: nil).x) > threShold
         
-        UIView.animate(withDuration: 0.75, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0.1, options: .curveEaseInOut, animations: {
-            if shouldDismisCard {
-                self.frame = CGRect(x: 1000 * translateDirection, y: 0, width: self.frame.width, height: self.frame.height)
+        if shouldDismisCard {
+            guard let home = delgate as? HomeVC else { return  }
+            if translateDirection == 1 {
+                home.handleLike()
             }else {
-                self.transform = .identity
+                home.handleDisLike()
             }
-        }){(_) in
-            self.transform = .identity
-            self.removeFromSuperview()
-            //            self.frame = CGRect(x: 0, y: 0, width: self.superview!.frame.width, height: self.superview!.frame.height)
-            self.delgate?.didRemoveCard(card: self)
+        }else {
+            UIView.animate(withDuration: 0.75, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0.1, options: .curveEaseInOut, animations: {
+                if shouldDismisCard {
+                    self.frame = CGRect(x: 1000 * translateDirection, y: 0, width: self.frame.width, height: self.frame.height)
+                }else {
+                    self.transform = .identity
+                }
+
+        })
         }
+       
+//        }){(_) in
+//            self.transform = .identity
+//            self.removeFromSuperview()
+//            //            self.frame = CGRect(x: 0, y: 0, width: self.superview!.frame.width, height: self.superview!.frame.height)
+//            self.delgate?.didRemoveCard(card: self)
+//        }
     }
     
     @objc  func handleTapped(gesture:UITapGestureRecognizer)  {

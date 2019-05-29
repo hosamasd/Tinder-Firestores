@@ -164,27 +164,27 @@ class HomeVC: UIViewController {
     
    @objc func handleDisLike()  {
 //        swipeCardsAnimation(angle: -15, translation: -700)
+    saveSwipeToFirestore(with: 0)
     let duration = 0.5
-    
     let translation = CABasicAnimation(keyPath: "position.x")
     translation.duration = duration
     translation.toValue = -700
     translation.timingFunction = CAMediaTimingFunction(name: .easeOut)
     translation.isRemovedOnCompletion = false //for removing from view
     translation.fillMode = .forwards //for removing from view
-    
+
     let transform = CABasicAnimation(keyPath: "transform.rotation.z")
     transform.toValue = -15 * CGFloat.pi / 180
     transform.duration = duration
-    
+
     let card = topCarddView
     topCarddView = card?.nextCardView
-    
+
     CATransaction.setCompletionBlock {
         card?.removeFromSuperview()
     }
-    
-    
+
+
     card?.layer.add(translation, forKey: "traslation")
     card?.layer.add(transform, forKey: "transform")
     CATransaction.commit()
@@ -217,7 +217,43 @@ class HomeVC: UIViewController {
         CATransaction.commit()
     }
     
+    func saveSwipeToFirestore(with value:Int)  {
+    guard let uid = Auth.auth().currentUser?.uid else { return  }
+        guard let cardUID = topCarddView?.cardViewModel.uid else { return  }
+        let data = [cardUID:value]
+        
+        Firestore.firestore().collection("Swipes").document(uid).getDocument { (snapshot, err) in
+            if err != nil {
+                print(err)
+                return
+            }
+            
+            if snapshot?.exists == true{
+                Firestore.firestore().collection("Swipes").document(uid).updateData(data) { (err) in
+                    if err != nil {
+                        print(err)
+                        return
+                    }
+                    
+                    print("saved")
+                }
+            }else {
+                Firestore.firestore().collection("Swipes").document(uid).setData(data) { (err) in
+                    if err != nil {
+                        print(err)
+                        return
+                    }
+                    
+                    print("saved")
+                }
+            }
+        }
+        
+        
+    }
+    
     @objc func handleLike(){
+        saveSwipeToFirestore(with: 1)
 //        swipeCardsAnimation(angle: 15, translation: 700)
         let duration = 0.5
         
