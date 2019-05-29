@@ -10,6 +10,7 @@
 		4E123EEB229BC5370003AF66 /* UserDdetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E123EEA229BC5370003AF66 /* UserDdetailVC.swift */; };
 		4E4FA03E2296BA8000F7EBC8 /* CustomHeaderLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E4FA03D2296BA8000F7EBC8 /* CustomHeaderLabel.swift */; };
 		4E4FA0402296BC2600F7EBC8 /* SettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E4FA03F2296BC2600F7EBC8 /* SettingCell.swift */; };
+		4E6230B1229EA263002184DF /* MatchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6230B0229EA263002184DF /* MatchView.swift */; };
 		4E62F27122993DA300309753 /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E62F27022993DA300309753 /* LoginVC.swift */; };
 		4E6A76B9229691AF00BFDDE9 /* SettingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6A76B8229691AF00BFDDE9 /* SettingVC.swift */; };
 		4E6A76BB2296978F00BFDDE9 /* CustomImagePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6A76BA2296978F00BFDDE9 /* CustomImagePickerController.swift */; };
@@ -44,6 +45,7 @@
 		4E123EEA229BC5370003AF66 /* UserDdetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDdetailVC.swift; sourceTree = "<group>"; };
 		4E4FA03D2296BA8000F7EBC8 /* CustomHeaderLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomHeaderLabel.swift; sourceTree = "<group>"; };
 		4E4FA03F2296BC2600F7EBC8 /* SettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingCell.swift; sourceTree = "<group>"; };
+		4E6230B0229EA263002184DF /* MatchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchView.swift; sourceTree = "<group>"; };
 		4E62F27022993DA300309753 /* LoginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginVC.swift; sourceTree = "<group>"; };
 		4E6A76B8229691AF00BFDDE9 /* SettingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingVC.swift; sourceTree = "<group>"; };
 		4E6A76BA2296978F00BFDDE9 /* CustomImagePickerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomImagePickerController.swift; sourceTree = "<group>"; };
@@ -225,6 +227,7 @@
 				4EA086C62293E39300DE5EE5 /* topNavigationStackView.swift */,
 				4EA086C82293E97C00DE5EE5 /* CardView.swift */,
 				4E7ACB26229536AB00A8D148 /* Custom */,
+				4E6230B0229EA263002184DF /* MatchView.swift */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -374,6 +377,7 @@
 				4E6A76B9229691AF00BFDDE9 /* SettingVC.swift in Sources */,
 				4EA086AF2293DD1700DE5EE5 /* HomeVC.swift in Sources */,
 				4E77BED722955E5800FD770B /* RegistrationViewModel.swift in Sources */,
+				4E6230B1229EA263002184DF /* MatchView.swift in Sources */,
 				4E7ACB28229536B500A8D148 /* CustomTextField.swift in Sources */,
 				4E7FB5EC2299218C00DE7929 /* SettingAageRangeCell.swift in Sources */,
 				4E4FA03E2296BA8000F7EBC8 /* CustomHeaderLabel.swift in Sources */,

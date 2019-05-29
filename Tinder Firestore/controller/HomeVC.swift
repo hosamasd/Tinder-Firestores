@@ -71,7 +71,7 @@ class HomeVC: UIViewController {
             guard let dict = snapshot?.data() else {return}
             self.user = UserModel(dict: dict)
             self.fetchSwipes()
-            //           self.fetchUsersFromFirestore()
+//                       self.fetchUsersFromFirestore()
         }
     }
     
@@ -112,7 +112,8 @@ class HomeVC: UIViewController {
                 let userDict  = query.data()
                 let user = UserModel(dict: userDict)
                 let isNotCurrentUser = user.uid! != Auth.auth().currentUser?.uid
-                let hasNotSwipedBefore = self.swipes[user.uid!] == nil
+//                let hasNotSwipedBefore = self.swipes[user.uid!] == nil
+                 let hasNotSwipedBefore = true
                 if isNotCurrentUser && hasNotSwipedBefore {
                     let cardView =  self.fetchUserCards(user: user)
                     //linked list as each node contain itis data and linked to other node
@@ -166,6 +167,7 @@ class HomeVC: UIViewController {
     //TODO:-handle methods
     
     @objc   func handleRefresh()  {
+        cardDeskView.subviews.forEach({$0.removeFromSuperview()})
         fetchUsersFromFirestore()
     }
     
@@ -179,7 +181,7 @@ class HomeVC: UIViewController {
     
     @objc func handleDisLike()  {
         //        swipeCardsAnimation(angle: -15, translation: -700)
-        saveSwipeToFirestore(with: 0)
+        saveSwipeToFirestore(value: 0)
         let duration = 0.5
         let translation = CABasicAnimation(keyPath: "position.x")
         translation.duration = duration
@@ -232,10 +234,14 @@ class HomeVC: UIViewController {
         CATransaction.commit()
     }
     
-    func saveSwipeToFirestore(with value:Int)  {
+    func saveSwipeToFirestore( value:Int)  {
         guard let uid = Auth.auth().currentUser?.uid else { return  }
         guard let cardUID = topCarddView?.cardViewModel.uid else { return  }
         let data = [cardUID:value]
+        
+//        if value == 1 {
+//             self.checkIfMatchesSwiping(uid:cardUID)
+//        }
         
         Firestore.firestore().collection("Swipes").document(uid).getDocument { (snapshot, err) in
             if err != nil {
@@ -251,7 +257,9 @@ class HomeVC: UIViewController {
                     }
                     
                     print("saved")
-                    self.checkIfMatchesSwiping(uid:cardUID)
+                    if value == 1 {
+                        self.checkIfMatchesSwiping(uid: cardUID)
+                    }
                 }
             }else {
                 Firestore.firestore().collection("Swipes").document(uid).setData(data) { (err) in
@@ -261,7 +269,9 @@ class HomeVC: UIViewController {
                     }
                     
                     print("saved")
-                    self.checkIfMatchesSwiping(uid:cardUID)
+                    if value == 1 {
+                        self.checkIfMatchesSwiping(uid: cardUID)
+                    }
                 }
             }
         }
@@ -270,27 +280,30 @@ class HomeVC: UIViewController {
     }
     
     func checkIfMatchesSwiping(uid:String)  {
-        Firestore.firestore().collection("Swipes").document(uid).getDocument { (snapshot, err) in
+         guard let uidds = Auth.auth().currentUser?.uid else{return}
+        Firestore.firestore().collection("Swipes").document(uidds).getDocument { (snapshot, err) in
             if err != nil {
                 print(err)
                 return
             }
             guard let data = snapshot?.data() else {return}
-            guard let uidds = Auth.auth().currentUser?.uid else{return}
-            let hasMatched = data[uidds] as? Int == 1
+           
+            let hasMatched = data[uid] as? Int == 1
             
             if hasMatched {
-                let hud = JGProgressHUD(style: .dark)
-                hud.textLabel.text = "Has A mAtch"
-                hud.show(in: self.view)
-                
-                hud.dismiss(afterDelay: 4)
+                self.presentMatchView(uid:uid)
             }
         }
     }
     
+    func presentMatchView(uid:String)  {
+        let redView = MatchView()
+       view.addSubview(redView)
+        redView.fillSuperview()
+    }
+    
     @objc func handleLike(){
-        saveSwipeToFirestore(with: 1)
+        saveSwipeToFirestore(value: 1)
         //        swipeCardsAnimation(angle: 15, translation: 700)
         let duration = 0.5
         
