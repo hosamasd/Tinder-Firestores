@@ -12,6 +12,8 @@
 		4E4FA0402296BC2600F7EBC8 /* SettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E4FA03F2296BC2600F7EBC8 /* SettingCell.swift */; };
 		4E6230B1229EA263002184DF /* MatchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6230B0229EA263002184DF /* MatchView.swift */; };
 		4E62F27122993DA300309753 /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E62F27022993DA300309753 /* LoginVC.swift */; };
+		4E67556F229EADA800913B21 /* KeepSwipingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E67556E229EADA800913B21 /* KeepSwipingButton.swift */; };
+		4E675571229EAE0800913B21 /* SendMessageButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E675570229EAE0800913B21 /* SendMessageButton.swift */; };
 		4E6A76B9229691AF00BFDDE9 /* SettingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6A76B8229691AF00BFDDE9 /* SettingVC.swift */; };
 		4E6A76BB2296978F00BFDDE9 /* CustomImagePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6A76BA2296978F00BFDDE9 /* CustomImagePickerController.swift */; };
 		4E6BB3E222994DBB0099B030 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6BB3E122994DBB0099B030 /* LoginViewModel.swift */; };
@@ -47,6 +49,8 @@
 		4E4FA03F2296BC2600F7EBC8 /* SettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingCell.swift; sourceTree = "<group>"; };
 		4E6230B0229EA263002184DF /* MatchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchView.swift; sourceTree = "<group>"; };
 		4E62F27022993DA300309753 /* LoginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginVC.swift; sourceTree = "<group>"; };
+		4E67556E229EADA800913B21 /* KeepSwipingButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeepSwipingButton.swift; sourceTree = "<group>"; };
+		4E675570229EAE0800913B21 /* SendMessageButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendMessageButton.swift; sourceTree = "<group>"; };
 		4E6A76B8229691AF00BFDDE9 /* SettingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingVC.swift; sourceTree = "<group>"; };
 		4E6A76BA2296978F00BFDDE9 /* CustomImagePickerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomImagePickerController.swift; sourceTree = "<group>"; };
 		4E6BB3E122994DBB0099B030 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
@@ -138,6 +142,8 @@
 				4E7ACB27229536B500A8D148 /* CustomTextField.swift */,
 				4E6A76BA2296978F00BFDDE9 /* CustomImagePickerController.swift */,
 				4E4FA03D2296BA8000F7EBC8 /* CustomHeaderLabel.swift */,
+				4E67556E229EADA800913B21 /* KeepSwipingButton.swift */,
+				4E675570229EAE0800913B21 /* SendMessageButton.swift */,
 			);
 			path = Custom;
 			sourceTree = "<group>";
@@ -380,6 +386,7 @@
 				4E6230B1229EA263002184DF /* MatchView.swift in Sources */,
 				4E7ACB28229536B500A8D148 /* CustomTextField.swift in Sources */,
 				4E7FB5EC2299218C00DE7929 /* SettingAageRangeCell.swift in Sources */,
+				4E675571229EAE0800913B21 /* SendMessageButton.swift in Sources */,
 				4E4FA03E2296BA8000F7EBC8 /* CustomHeaderLabel.swift in Sources */,
 				4E8A1A3F22940A22006FFC45 /* UserModel.swift in Sources */,
 				4E7DD81922941E7500D6DEF0 /* Advertiser.swift in Sources */,
@@ -393,6 +400,7 @@
 				4EA086C92293E97C00DE5EE5 /* CardView.swift in Sources */,
 				4E6A76BB2296978F00BFDDE9 /* CustomImagePickerController.swift in Sources */,
 				4E7D5780229BE29200BA0FB2 /* SwipingPhotoVC.swift in Sources */,
+				4E67556F229EADA800913B21 /* KeepSwipingButton.swift in Sources */,
 				4EA086C22293DE1E00DE5EE5 /* ExtensionUivew.swift in Sources */,
 				4E7ACB2522952FFD00A8D148 /* RegisterVC.swift in Sources */,
 				4E6BB3E222994DBB0099B030 /* LoginViewModel.swift in Sources */,
