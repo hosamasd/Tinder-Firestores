@@ -92,10 +92,42 @@ class MatchView: UIView {
         
         setupBlurEffect()
         setupViews()
+        setupAnimations()
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func setupAnimations()  {
+        let angle = 30 * CGFloat.pi / 180
+        
+    cureentUserImage.transform = CGAffineTransform(rotationAngle: -angle).concatenating(CGAffineTransform(translationX: 200, y: 0))
+        cardUserImage.transform = CGAffineTransform(rotationAngle: angle).concatenating(CGAffineTransform(translationX: -200, y: 0))
+        
+        sendMessageButton.transform = CGAffineTransform(translationX: -400, y: 0)
+        keepSwipingButton.transform = CGAffineTransform(translationX: 400, y: 0)
+        
+        UIView.animateKeyframes(withDuration: 1.3, delay: 0, options: .calculationModeCubic, animations: {
+            //first animation translation
+            UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: 0.5, animations: {
+                self.cureentUserImage.transform = CGAffineTransform(rotationAngle: -angle)
+                self.cardUserImage.transform = CGAffineTransform(rotationAngle: angle)
+            })
+           
+            //second animation rotation
+            UIView.addKeyframe(withRelativeStartTime: 0.55, relativeDuration: 0.3, animations: {
+                self.cureentUserImage.transform = .identity
+                self.cardUserImage.transform = .identity
+
+            })
+        })
+        
+        UIView.animate(withDuration: 0.7, delay: 0.6 * 1.3, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.1, options: .curveEaseInOut, animations: {
+            
+            self.sendMessageButton.transform = .identity
+            self.keepSwipingButton.transform = .identity
+        })
     }
     
     func setupViews()  {
