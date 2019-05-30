@@ -7,8 +7,41 @@
 //
 
 import UIKit
+import Firebase
+import SDWebImage
 
 class MatchView: UIView {
+    
+    var currentUser:UserModel!{
+        didSet{
+           
+        }
+    }
+    
+    var cardID:String!{
+        didSet{
+            let query = Firestore.firestore().collection("Users").document(cardID)
+            query.getDocument { (snapshot, err) in
+                if let err = err{
+                    print(err)
+                    return
+                }
+                guard let data = snapshot?.data() else {return}
+                let user = UserModel(dict: data)
+                
+                self.descriptionLabel.text = "You and \(user.name ?? "") have liked\neach other"
+               guard let url = URL(string: user.imageUrl1 ?? "") else {return}
+                self.cardUserImage.sd_setImage(with: url)
+                
+                guard let currentUserUrl = URL(string: self.currentUser.imageUrl1 ?? "") else {return}
+                self.cureentUserImage.sd_setImage(with: currentUserUrl, completed: { (_, _, _, _) in
+                     self.setupAnimations()
+                })
+               
+            }
+        }
+    }
+    
      let visualEffect = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
     
     fileprivate let itsAMatchImageView: UIImageView = {
@@ -43,39 +76,23 @@ class MatchView: UIView {
         im.layer.cornerRadius = 140 / 2
         im.layer.borderWidth = 2
         im.layer.borderColor = UIColor.white.cgColor
-        
+        im.alpha = 0
         return im
     }()
-//    lazy var sendButton:UIButton = {
-//        let selector = #selector(handleSend)
-//        let im = UIButton(title: "Send Message", titleColor: .white, font: .systemFont(ofSize: 16), backgroundColor: .red, target: self, action: selector)
-//        im.clipsToBounds = true
-//        im.layer.cornerRadius = 24
-//        im.constrainHeight(constant: 60)
-//
-//        return im
-//    }()
-//    lazy var keepSwipeButton:UIButton = {
-//        let selector = #selector(handleKeepSwipe)
-//        let im = UIButton(title: "keep Swiping", titleColor: .white, font: .systemFont(ofSize: 16), backgroundColor: .red, target: self, action: selector)
-//        im.clipsToBounds = true
-//        im.layer.cornerRadius = 24
-//        im.constrainHeight(constant: 60)
-//
-//        return im
-//    }()
     
-    fileprivate let sendMessageButton: UIButton = {
+    lazy var sendMessageButton: UIButton = {
         let button = SendMessageButton(type: .system)
         button.setTitle("SEND MESSAGE", for: .normal)
         button.setTitleColor(.white, for: .normal)
+         button.addTarget(self, action: #selector(handleSend), for: .touchUpInside)
         return button
     }()
     
-    fileprivate let keepSwipingButton: UIButton = {
+    lazy var  keepSwipingButton: UIButton = {
         let button = KeepSwipingButton(type: .system)
         button.setTitle("Keep Swiping", for: .normal)
         button.setTitleColor(.white, for: .normal)
+        button.addTarget(self, action: #selector(handleKeepSwipe), for: .touchUpInside)
         return button
     }()
     
@@ -92,7 +109,7 @@ class MatchView: UIView {
         
         setupBlurEffect()
         setupViews()
-        setupAnimations()
+//        setupAnimations()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -100,6 +117,7 @@ class MatchView: UIView {
     }
     
     func setupAnimations()  {
+        views.forEach({$0.alpha = 1})
         let angle = 30 * CGFloat.pi / 180
         
     cureentUserImage.transform = CGAffineTransform(rotationAngle: -angle).concatenating(CGAffineTransform(translationX: 200, y: 0))
@@ -130,14 +148,26 @@ class MatchView: UIView {
         })
     }
     
+   lazy var views = [
+    itsAMatchImageView,
+    descriptionLabel,
+    cureentUserImage,
+    cardUserImage,
+    sendMessageButton,
+    keepSwipingButton
+    ]
+    
     func setupViews()  {
-      
-        addSubview(itsAMatchImageView)
-        addSubview(descriptionLabel)
-    addSubview(cureentUserImage)
-        addSubview(cardUserImage)
-        addSubview(sendMessageButton)
-        addSubview(keepSwipingButton)
+        views.forEach { (v) in
+            addSubview(v)
+            v.alpha = 0
+        }
+//        addSubview(itsAMatchImageView)
+//        addSubview(descriptionLabel)
+//    addSubview(cureentUserImage)
+//        addSubview(cardUserImage)
+//        addSubview(sendMessageButton)
+//        addSubview(keepSwipingButton)
         
         let imageWidth: CGFloat = 140
         

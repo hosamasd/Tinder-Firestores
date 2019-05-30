@@ -297,9 +297,11 @@ class HomeVC: UIViewController {
     }
     
     func presentMatchView(uid:String)  {
-        let redView = MatchView()
-       view.addSubview(redView)
-        redView.fillSuperview()
+        let matchView = MatchView()
+        matchView.cardID = uid
+        matchView.currentUser = self.user
+       view.addSubview(matchView)
+        matchView.fillSuperview()
     }
     
     @objc func handleLike(){
