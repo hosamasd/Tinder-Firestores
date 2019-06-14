@@ -11,4 +11,5 @@ pod 'Firebase/Auth’
 pod 'Firebase/Core’
 pod 'SDWebImage'
 pod 'JGProgressHUD'
+pod 'LBTATools'
 end
