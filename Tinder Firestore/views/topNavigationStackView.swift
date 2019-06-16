@@ -6,7 +6,7 @@
 //  Copyright © 2019 hosam. All rights reserved.
 //
 
-import UIKit
+import LBTATools
 
 class topNavigationStackView: UIStackView {
 
@@ -27,7 +27,7 @@ class topNavigationStackView: UIStackView {
         
         
         distribution = .equalCentering
-        constrainHeight(constant: 80)
+        constrainHeight(80)
         isLayoutMarginsRelativeArrangement = true
         layoutMargins = .init(top: 0, left: 16, bottom: 0, right: 16)
     }

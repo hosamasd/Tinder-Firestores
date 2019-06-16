@@ -6,7 +6,7 @@
 //  Copyright © 2019 hosam. All rights reserved.
 //
 
-import UIKit
+import LBTATools
 import Firebase
 import JGProgressHUD
 
@@ -43,13 +43,13 @@ class LoginVC: UIViewController {
         bt.setTitleColor(.gray, for: .disabled)
         bt.isEnabled = false
         bt.layer.cornerRadius = 22
-        bt.constrainHeight(constant: 44)
+        bt.constrainHeight(44)
         return bt
     }()
     lazy var registerButton:UIButton = {
         let bt = UIButton(title: "Back To Register", titleColor: .white, font: .systemFont(ofSize: 20, weight: .heavy), backgroundColor: #colorLiteral(red: 0.8902122974, green: 0.1073872522, blue: 0.4597495198, alpha: 1)
             , target: self, action: #selector(handleRegister))
-        bt.constrainHeight(constant: 44)
+        bt.constrainHeight(44)
         return bt
     }()
     
@@ -124,7 +124,7 @@ class LoginVC: UIViewController {
         view.addSubview(registerButton)
         
         verticalStackView.anchor(top: nil, leading: view.leadingAnchor, bottom: nil, trailing: view.trailingAnchor,padding: .init(top: 0, left: 50, bottom: 0, right: 50))
-        verticalStackView.centerYInSuperview()
+        verticalStackView.centerYToSuperview()
         registerButton.anchor(top: nil, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor,padding: .init(top: 0, left: 50, bottom: 50, right: 50))
         registerButton.centerYAnchor
     }

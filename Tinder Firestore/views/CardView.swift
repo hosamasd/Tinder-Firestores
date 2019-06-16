@@ -89,7 +89,8 @@ class CardView: UIView {
     
     
     fileprivate let userInfo:UILabel = {
-        let la = UILabel(string: "hosam", font: .boldSystemFont(ofSize: 30), numberOfLines: 0)
+       
+        let la = UILabel(text: "hosam", font: .boldSystemFont(ofSize: 30))
         la.textColor = .white
         return la
     }()

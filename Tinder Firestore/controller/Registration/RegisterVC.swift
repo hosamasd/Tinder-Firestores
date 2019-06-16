@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import LBTATools
 import Firebase
 import JGProgressHUD
 class RegisterVC: UIViewController {
@@ -56,7 +57,7 @@ class RegisterVC: UIViewController {
         bt.setTitleColor(.gray, for: .disabled)
         bt.isEnabled = false
         bt.layer.cornerRadius = 22
-        bt.constrainHeight(constant: 44)
+        bt.constrainHeight(44)
         return bt
     }()
     lazy var verticalStackView:UIStackView = {
@@ -78,7 +79,7 @@ class RegisterVC: UIViewController {
     lazy var loginButton:UIButton = {
         let bt = UIButton(title: "Go To Login", titleColor: .white, font: .systemFont(ofSize: 20, weight: .heavy), backgroundColor: #colorLiteral(red: 0.8902122974, green: 0.1073872522, blue: 0.4597495198, alpha: 1)
             , target: self, action: #selector(handleLogin))
-        bt.constrainHeight(constant: 44)
+        bt.constrainHeight(44)
         return bt
     }()
    
@@ -169,7 +170,8 @@ class RegisterVC: UIViewController {
         view.addSubview(mainStack)
         view.addSubview(loginButton)
         mainStack.anchor(top: nil, leading: view.leadingAnchor, bottom: nil, trailing: view.trailingAnchor,padding: .init(top: 0, left: 50, bottom: 0, right: 50))
-        mainStack.centerYInSuperview()
+        
+        mainStack.centerYToSuperview()
         loginButton.anchor(top: nil, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor,padding: .init(top: 0, left: 50, bottom: 50, right: 50))
         loginButton.centerYAnchor
     }

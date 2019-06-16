@@ -30,9 +30,11 @@ class HomeVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        navigationController?.navigationBar.isHidden = true
+//        navigationController?.isNavigationBarHidden = true
         setupGestures()
         setupViews()
-        fetchCurrentUser()
+//        fetchCurrentUser()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -42,7 +44,7 @@ class HomeVC: UIViewController {
             reg.delgate = self
             let nav = UINavigationController(rootViewController: reg)
             present(nav, animated: true, completion: nil)
-            
+
         }
     }
     
@@ -54,6 +56,7 @@ class HomeVC: UIViewController {
         guard let uid = Auth.auth().currentUser?.uid else { return  }
         Firestore.firestore().collection("Users").document(uid).getDocument { (snapshot, err) in
             if let err = err {
+                print(123)
                 self.hud.dismiss()
                 return
             }
@@ -66,10 +69,13 @@ class HomeVC: UIViewController {
     
     fileprivate func setupGestures() {
         topStackView.settingButton.addTarget(self, action: #selector(handleNextVC), for: .touchUpInside)
+        topStackView.messageButton.addTarget(self, action: #selector(handleMessages), for: .touchUpInside)
         bottomStackView.refreshButton.addTarget(self, action: #selector(handleRefresh), for: .touchUpInside)
         bottomStackView.likeButton.addTarget(self, action: #selector(handleLike), for: .touchUpInside)
         bottomStackView.dislikeButton.addTarget(self, action: #selector(handleDisLike), for: .touchUpInside)
     }
+    
+ 
     
     fileprivate func setupTopCardView()  {
         self.topCarddView?.removeFromSuperview()
@@ -78,13 +84,15 @@ class HomeVC: UIViewController {
     
     fileprivate  func fetchSwipes()  {
         guard let uidds = Auth.auth().currentUser?.uid else{return}
+        guard let currentUid = self.user?.uid else { return  }
         Firestore.firestore().collection("Swipes").document(uidds).getDocument { (snapshot, err) in
             if err != nil {
                 print(err)
                 return
             }
-            guard let data = snapshot?.data() else {return}
-            self.swipes = data
+//            print(self.user?.uid)
+//            guard let data = snapshot?.data() else {return}
+//            self.swipes = data
             self.fetchUsersFromFirestore()
         }
         
@@ -97,7 +105,7 @@ class HomeVC: UIViewController {
         
         //paginate here for limit users apppear
         
-        let query =  Firestore.firestore().collection("Users").whereField("age", isGreaterThanOrEqualTo: minAge).whereField("age", isLessThanOrEqualTo: maxAge)
+        let query =  Firestore.firestore().collection("Users").whereField("age", isGreaterThanOrEqualTo: minAge).whereField("age", isLessThanOrEqualTo: maxAge).limit(to: 10)
         topCarddView = nil
         query.getDocuments { (snapshot, err) in
             self.hud.dismiss()
@@ -110,6 +118,8 @@ class HomeVC: UIViewController {
             snapshot?.documents.forEach({ (query) in
                 let userDict  = query.data()
                 let user = UserModel(dict: userDict)
+                
+                self.users[user.uid ?? ""] = user
                 let isNotCurrentUser = user.uid! != Auth.auth().currentUser?.uid
                 //                let hasNotSwipedBefore = self.swipes[user.uid!] == nil
                 let hasNotSwipedBefore = true
@@ -129,6 +139,8 @@ class HomeVC: UIViewController {
             })
         }
     }
+    
+    var users  = [String:UserModel]()
     
     fileprivate func fetchUserCards(user:UserModel) ->CardView  {
         let cardView = CardView(frame: .zero)
@@ -164,6 +176,12 @@ class HomeVC: UIViewController {
     }
     
     //TODO:-handle methods
+    
+    @objc  func handleMessages()  {
+        let newMewss = MtachMessagesVC()
+        navigationController?.pushViewController(newMewss, animated: true)
+        
+    }
     
     @objc   func handleRefresh()  {
         cardDeskView.subviews.forEach({$0.removeFromSuperview()})
@@ -279,11 +297,28 @@ class HomeVC: UIViewController {
                 return
             }
             guard let data = snapshot?.data() else {return}
-            
             let hasMatched = data[uid] as? Int == 1
             
             if hasMatched {
                 self.presentMatchView(uid:uid)
+                guard let cardUser = self.users[uid] else {return}
+                let data = ["name":cardUser.name ?? "","uid":uid,"imageProfileUrl":cardUser.imageUrl1 ?? "","timestamp":Timestamp(date: Date())] as [String : Any]
+                
+                Firestore.firestore().collection("Matches-Messages").document(uidds).collection("Matches").document(uid).setData(data, completion: { (err) in
+                    if let err = err {
+                        print("failed to save ",err)
+                    }
+                })
+                
+                //same for current user
+                guard let currentUser = self.user else {return}
+                let otherData = ["name":currentUser.name ?? "","uid":uid,"imageProfileUrl":currentUser.imageUrl1 ?? "","timestamp":Timestamp(date: Date())] as [String : Any]
+                
+                Firestore.firestore().collection("Matches-Messages").document(uid).collection("Matches").document(uidds).setData(otherData, completion: { (err) in
+                    if let err = err {
+                        print("failed to save ",err)
+                    }
+                })
             }
         }
     }

@@ -25,7 +25,7 @@ class HomeBottomControlsStackView: UIStackView {
             addArrangedSubview(v)
         }
         distribution = .fillEqually
-        constrainHeight(constant: 80)
+        constrainHeight(80)
     }
     
     func createButton(image:UIImage) -> UIButton {
