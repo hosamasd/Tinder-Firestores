@@ -8,11 +8,8 @@
 
 import LBTATools
 
-struct Message {
-    let name:String
-}
 
-class ChatLogMessageVC: LBTAListController<ChatMessageCell,Message>, UICollectionViewDelegateFlowLayout {
+class ChatLogMessageVC: LBTAListController<ChatMessageCell,MessageModel>, UICollectionViewDelegateFlowLayout {
     
     fileprivate let navBarHeight:CGFloat = 120
      lazy var customMessageNavBar = MessagesNavBar(match: match)
@@ -29,13 +26,14 @@ class ChatLogMessageVC: LBTAListController<ChatMessageCell,Message>, UICollectio
         super.viewDidLoad()
         
         customMessageNavBar.backButton.addTarget(self, action: #selector(handleBack), for: .touchUpInside)
-        
+        setupCollectionView()
         setupViews()
-        items = [
-        .init(name: "hosam"),
-        .init(name: "zaki"),
-        .init(name: "ziead")
-        
+       items = [
+        .init(text:"dsfdsf dsfsdfsd fsdfsdfsdf dsgdfgfds dfgfdsgdfsg dfgfdsgdfsgdfsfgdsfgsaddfsadfasdfsdaacsddcsdaafcxzzvxc czbdfvxzc \ndfgdf dfgdfgdgvdsfdssadfasdfsadfsa", isFromCurrentUser: true),
+        .init(text: "dfdsafdsafdsa", isFromCurrentUser: false),
+        .init(text: "sdfsaadasDA", isFromCurrentUser: true),
+        .init(text: "DSFDSFDSF DGDFGDFS DFGDFGDFGDF DFGDFGDFSGDASFGSDAFSDFDSF\n DFGNKLDNGKDJNGKJDNGK", isFromCurrentUser: false),
+         .init(text:"dsfdsf dsfsdfsd fsdfsdfsdf dsgdfgfds dfgfdsgdfsg dfgfdsgdfsgdfsfgdsfgsaddfsadfasdfsdaacsddcsdaafcxzzvxc czbdfvxzc \ndfgdf dfgdfgdgvdsfdssadfasdfsadfsa", isFromCurrentUser: true),
         ]
         
         
@@ -43,20 +41,38 @@ class ChatLogMessageVC: LBTAListController<ChatMessageCell,Message>, UICollectio
     
   
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return .init(width: view.frame.width, height: 100)
+        let estimatedCellSize = ChatMessageCell(frame: .init(x: 0, y: 0, width: view.frame.width, height: 10000))
+        estimatedCellSize.item = items[indexPath.item]
+        estimatedCellSize.layoutIfNeeded()
+        
+        let estimatedHeight = estimatedCellSize.systemLayoutSizeFitting(.init(width: view.frame.width, height: 1000))
+        
+        
+        return .init(width: view.frame.width, height: estimatedHeight.height)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return .init(top: 16, left: 0, bottom: 0, right: 0 )
     }
-    func setupViews()  {
+    
+    func setupCollectionView()  {
         collectionView.backgroundColor = .white
+        collectionView.alwaysBounceVertical = true
+        collectionView.contentInset.top = navBarHeight
+        collectionView.scrollIndicatorInsets.top = navBarHeight
+    }
+    
+    func setupViews()  {
+        
         
         view.addSubview(customMessageNavBar)
         customMessageNavBar.anchor(top: view.safeAreaLayoutGuide.topAnchor, leading: view.leadingAnchor, bottom: nil, trailing: view.trailingAnchor,padding: .init(),size: .init(width: 0, height: navBarHeight))
         
-        collectionView.contentInset.top = navBarHeight
         
+        
+        let statusBarCover = UIView(backgroundColor: .white)
+        view.addSubview(statusBarCover)
+        statusBarCover.anchor(top: view.topAnchor, leading: view.leadingAnchor, bottom: view.safeAreaLayoutGuide.topAnchor, trailing: view.trailingAnchor)
     }
     
  @objc   func handleBack()  {

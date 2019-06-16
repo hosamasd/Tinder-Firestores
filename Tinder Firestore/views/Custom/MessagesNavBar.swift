@@ -13,9 +13,9 @@ class MessagesNavBar: UIView {
     
     let backButton:UIButton = {
         let bt = UIButton(image: #imageLiteral(resourceName: "back"), tintColor: .red)
-        bt.constrainWidth(44)
-        bt.constrainHeight(44)
-        return bt
+        bt.constrainWidth(50)
+        bt.constrainHeight(50)
+       return bt
     } ()
     let flagButton:UIButton = {
         let bt = UIButton(image: #imageLiteral(resourceName: "flag"), tintColor: .red)
@@ -40,7 +40,7 @@ class MessagesNavBar: UIView {
         setupShadow(opacity: 0.2, radius: 9, offset: .init(width: 0, height: 10), color: .init(white: 0, alpha: 0.3))
         let middleStack = hstack(stack(profileImageView,userNameLabel, spacing: 8, alignment: .center), alignment: .center)
         
-        hstack(backButton,middleStack,flagButton, alignment: .center).withMargins(.init(top: 0, left: 16, bottom: 0, right: 16))
+        hstack(backButton,middleStack,flagButton, alignment: .center).withMargins(.init(top: 0, left: 4, bottom: 0, right: 16))
     }
     
     required init?(coder aDecoder: NSCoder) {

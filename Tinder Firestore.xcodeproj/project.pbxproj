@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		4E07FCAA22B4D21300FBFC00 /* MatchesNavBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E07FCA922B4D21300FBFC00 /* MatchesNavBar.swift */; };
 		4E123EEB229BC5370003AF66 /* UserDdetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E123EEA229BC5370003AF66 /* UserDdetailVC.swift */; };
+		4E21CE8C22B63AAD00D70453 /* MessageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E21CE8B22B63AAD00D70453 /* MessageModel.swift */; };
 		4E4FA03E2296BA8000F7EBC8 /* CustomHeaderLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E4FA03D2296BA8000F7EBC8 /* CustomHeaderLabel.swift */; };
 		4E4FA0402296BC2600F7EBC8 /* SettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E4FA03F2296BC2600F7EBC8 /* SettingCell.swift */; };
 		4E6230B1229EA263002184DF /* MatchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6230B0229EA263002184DF /* MatchView.swift */; };
@@ -52,6 +53,7 @@
 		0CAEBB04C8F985485DFC3B5B /* Pods-Tinder Firestore.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tinder Firestore.debug.xcconfig"; path = "Target Support Files/Pods-Tinder Firestore/Pods-Tinder Firestore.debug.xcconfig"; sourceTree = "<group>"; };
 		4E07FCA922B4D21300FBFC00 /* MatchesNavBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchesNavBar.swift; sourceTree = "<group>"; };
 		4E123EEA229BC5370003AF66 /* UserDdetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDdetailVC.swift; sourceTree = "<group>"; };
+		4E21CE8B22B63AAD00D70453 /* MessageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageModel.swift; sourceTree = "<group>"; };
 		4E4FA03D2296BA8000F7EBC8 /* CustomHeaderLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomHeaderLabel.swift; sourceTree = "<group>"; };
 		4E4FA03F2296BC2600F7EBC8 /* SettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingCell.swift; sourceTree = "<group>"; };
 		4E6230B0229EA263002184DF /* MatchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchView.swift; sourceTree = "<group>"; };
@@ -235,6 +237,7 @@
 				4E8A1A3E22940A22006FFC45 /* UserModel.swift */,
 				4E7DD81822941E7500D6DEF0 /* Advertiser.swift */,
 				4E947E5222B4EAFE0080A9AC /* MatchesModel.swift */,
+				4E21CE8B22B63AAD00D70453 /* MessageModel.swift */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -415,6 +418,7 @@
 				4E62F27122993DA300309753 /* LoginVC.swift in Sources */,
 				4EA086AD2293DD1700DE5EE5 /* AppDelegate.swift in Sources */,
 				4EA086C92293E97C00DE5EE5 /* CardView.swift in Sources */,
+				4E21CE8C22B63AAD00D70453 /* MessageModel.swift in Sources */,
 				4E6A76BB2296978F00BFDDE9 /* CustomImagePickerController.swift in Sources */,
 				4EAB0FE322B4C2C600A3E2C3 /* MtachMessagesVC.swift in Sources */,
 				4E7D5780229BE29200BA0FB2 /* SwipingPhotoVC.swift in Sources */,
