@@ -22,6 +22,19 @@ class ChatLogMessageVC: LBTAListController<ChatMessageCell,MessageModel>, UIColl
     
     
     
+    lazy var commentView:UIView = {
+      return CustominputAccessoryView(frame: .init(x: 0, y: 0, width: view.frame.width, height: 50))
+    }()
+    //input accessory view
+    
+    override var inputAccessoryView: UIView!{
+        get {
+            return commentView
+        }
+    }
+    override var canBecomeFirstResponder: Bool{
+        return true
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -56,6 +69,7 @@ class ChatLogMessageVC: LBTAListController<ChatMessageCell,MessageModel>, UIColl
     }
     
     func setupCollectionView()  {
+        collectionView.keyboardDismissMode = .interactive
         collectionView.backgroundColor = .white
         collectionView.alwaysBounceVertical = true
         collectionView.contentInset.top = navBarHeight
