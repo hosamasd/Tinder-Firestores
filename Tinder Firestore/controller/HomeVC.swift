@@ -34,7 +34,7 @@ class HomeVC: UIViewController {
 //        navigationController?.isNavigationBarHidden = true
         setupGestures()
         setupViews()
-//        fetchCurrentUser()
+        fetchCurrentUser()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -312,7 +312,7 @@ class HomeVC: UIViewController {
                 
                 //same for current user
                 guard let currentUser = self.user else {return}
-                let otherData = ["name":currentUser.name ?? "","uid":uid,"imageProfileUrl":currentUser.imageUrl1 ?? "","timestamp":Timestamp(date: Date())] as [String : Any]
+                let otherData = ["name":currentUser.name ?? "","uid":currentUser.uid ?? "","imageProfileUrl":currentUser.imageUrl1 ?? "","timestamp":Timestamp(date: Date())] as [String : Any]
                 
                 Firestore.firestore().collection("Matches-Messages").document(uid).collection("Matches").document(uidds).setData(otherData, completion: { (err) in
                     if let err = err {

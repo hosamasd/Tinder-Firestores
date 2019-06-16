@@ -9,9 +9,10 @@
 import UIKit
 
 struct MatchesModel {
-    let name,imageProfileUrl:String 
+    let name,imageProfileUrl,uid:String
     
     init(dict: [String:Any]) {
+        self.uid = dict["uid"] as? String ?? ""
         self.name = dict["name"] as? String ?? ""
         self.imageProfileUrl = dict["imageProfileUrl"] as? String ?? ""
     }

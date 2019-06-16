@@ -7,7 +7,7 @@
 //
 
 import LBTATools
-
+import Firebase
 
 class ChatLogMessageVC: LBTAListController<ChatMessageCell,MessageModel>, UICollectionViewDelegateFlowLayout {
     
@@ -20,11 +20,79 @@ class ChatLogMessageVC: LBTAListController<ChatMessageCell,MessageModel>, UIColl
         super.init()
     }
     
-    
-    
-    lazy var commentView:UIView = {
-      return CustominputAccessoryView(frame: .init(x: 0, y: 0, width: view.frame.width, height: 50))
+    lazy var commentView:CustominputAccessoryView = {
+        let cv = CustominputAccessoryView(frame: .init(x: 0, y: 0, width: view.frame.width, height: 50))
+        cv.sendButton.addTarget(self, action: #selector(handleSendMessage), for: .touchUpInside)
+      return cv
     }()
+    
+   @objc func handleSendMessage()  {
+    let comment = commentView.textView.text ?? ""
+    
+    guard let currentUserUid = Auth.auth().currentUser?.uid else { return  }
+     let collection = Firestore.firestore().collection("Matches-Messages").document(currentUserUid).collection(match.uid)
+    let data:[String:Any] = ["text":comment,"fromId":currentUserUid,"toId":match.uid,"timestamp":Timestamp(date: Date())]
+    
+    collection.addDocument(data: data) { (err) in
+        if let err = err {
+            print("failed to save ",err)
+            return
+        }
+        print("data saved")
+        self.commentView.textView.text = nil
+        self.commentView.placeHolderLabel.isHidden = false
+    }
+        
+        let toCollection = Firestore.firestore().collection("Matches-Messages").document(match.uid).collection(currentUserUid)
+    
+        toCollection.addDocument(data: data) { (err) in
+            if let err = err {
+                print("failed to save ",err)
+                return
+            }
+        
+        print("data saved")
+        self.commentView.textView.text = nil
+        self.commentView.placeHolderLabel.isHidden = false
+    
+    }
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        customMessageNavBar.backButton.addTarget(self, action: #selector(handleBack), for: .touchUpInside)
+        setupCollectionView()
+        setupGestures()
+        setupViews()
+        fetchMessages()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardShow), name: UIResponder.keyboardDidShowNotification, object: nil)
+    }
+    
+   @objc func handleKeyboardShow()  {
+        collectionView.scrollToItem(at: [0,items.count - 1], at: .bottom, animated: true)
+    }
+    
+    func fetchMessages()  {
+        guard let currentUserUid = Auth.auth().currentUser?.uid else { return  }
+         let query = Firestore.firestore().collection("Matches-Messages").document(currentUserUid).collection(match.uid).order(by: "timestamp")
+       
+        query.addSnapshotListener { (querySnap, err) in
+            if let err = err {
+                print("failed to reterive messages ",err)
+                return
+            }
+            querySnap?.documentChanges.forEach({ (changes) in
+                let dict = changes.document.data()
+                self.items.append(.init(dict: dict))
+            })
+            self.collectionView.reloadData()
+            self.collectionView.scrollToItem(at: [0,self.items.count - 1], at: .bottom, animated: true)
+        }
+        
+        
+    }
     //input accessory view
     
     override var inputAccessoryView: UIView!{
@@ -35,23 +103,6 @@ class ChatLogMessageVC: LBTAListController<ChatMessageCell,MessageModel>, UIColl
     override var canBecomeFirstResponder: Bool{
         return true
     }
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        customMessageNavBar.backButton.addTarget(self, action: #selector(handleBack), for: .touchUpInside)
-        setupCollectionView()
-        setupViews()
-       items = [
-        .init(text:"dsfdsf dsfsdfsd fsdfsdfsdf dsgdfgfds dfgfdsgdfsg dfgfdsgdfsgdfsfgdsfgsaddfsadfasdfsdaacsddcsdaafcxzzvxc czbdfvxzc \ndfgdf dfgdfgdgvdsfdssadfasdfsadfsa", isFromCurrentUser: true),
-        .init(text: "dfdsafdsafdsa", isFromCurrentUser: false),
-        .init(text: "sdfsaadasDA", isFromCurrentUser: true),
-        .init(text: "DSFDSFDSF DGDFGDFS DFGDFGDFGDF DFGDFGDFSGDASFGSDAFSDFDSF\n DFGNKLDNGKDJNGKJDNGK", isFromCurrentUser: false),
-         .init(text:"dsfdsf dsfsdfsd fsdfsdfsdf dsgdfgfds dfgfdsgdfsg dfgfdsgdfsgdfsfgdsfgsaddfsadfasdfsdaacsddcsdaafcxzzvxc czbdfvxzc \ndfgdf dfgdfgdgvdsfdssadfasdfsadfsa", isFromCurrentUser: true),
-        ]
-        
-        
-    }
-    
   
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let estimatedCellSize = ChatMessageCell(frame: .init(x: 0, y: 0, width: view.frame.width, height: 10000))
@@ -68,12 +119,17 @@ class ChatLogMessageVC: LBTAListController<ChatMessageCell,MessageModel>, UIColl
         return .init(top: 16, left: 0, bottom: 0, right: 0 )
     }
     
+    func setupGestures()  {
+        collectionView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleDismissKeyboard)))
+    }
+    
     func setupCollectionView()  {
         collectionView.keyboardDismissMode = .interactive
         collectionView.backgroundColor = .white
         collectionView.alwaysBounceVertical = true
         collectionView.contentInset.top = navBarHeight
         collectionView.scrollIndicatorInsets.top = navBarHeight
+        
     }
     
     func setupViews()  {
@@ -89,10 +145,15 @@ class ChatLogMessageVC: LBTAListController<ChatMessageCell,MessageModel>, UIColl
         statusBarCover.anchor(top: view.topAnchor, leading: view.leadingAnchor, bottom: view.safeAreaLayoutGuide.topAnchor, trailing: view.trailingAnchor)
     }
     
+  @objc  func handleDismissKeyboard()  {
+        view.endEditing(true)
+    }
+    
  @objc   func handleBack()  {
         navigationController?.popViewController(animated: true)
     }
     
+   
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
