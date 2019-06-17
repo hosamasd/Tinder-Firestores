@@ -9,6 +9,8 @@
 import LBTATools
 import Firebase
 
+
+
 class ChatLogMessageVC: LBTAListController<ChatMessageCell,MessageModel>, UICollectionViewDelegateFlowLayout {
     
     fileprivate let navBarHeight:CGFloat = 120
@@ -26,37 +28,8 @@ class ChatLogMessageVC: LBTAListController<ChatMessageCell,MessageModel>, UIColl
       return cv
     }()
     
-   @objc func handleSendMessage()  {
-    let comment = commentView.textView.text ?? ""
+   
     
-    guard let currentUserUid = Auth.auth().currentUser?.uid else { return  }
-     let collection = Firestore.firestore().collection("Matches-Messages").document(currentUserUid).collection(match.uid)
-    let data:[String:Any] = ["text":comment,"fromId":currentUserUid,"toId":match.uid,"timestamp":Timestamp(date: Date())]
-    
-    collection.addDocument(data: data) { (err) in
-        if let err = err {
-            print("failed to save ",err)
-            return
-        }
-        print("data saved")
-        self.commentView.textView.text = nil
-        self.commentView.placeHolderLabel.isHidden = false
-    }
-        
-        let toCollection = Firestore.firestore().collection("Matches-Messages").document(match.uid).collection(currentUserUid)
-    
-        toCollection.addDocument(data: data) { (err) in
-            if let err = err {
-                print("failed to save ",err)
-                return
-            }
-        
-        print("data saved")
-        self.commentView.textView.text = nil
-        self.commentView.placeHolderLabel.isHidden = false
-    
-    }
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -70,29 +43,9 @@ class ChatLogMessageVC: LBTAListController<ChatMessageCell,MessageModel>, UIColl
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardShow), name: UIResponder.keyboardDidShowNotification, object: nil)
     }
     
-   @objc func handleKeyboardShow()  {
-        collectionView.scrollToItem(at: [0,items.count - 1], at: .bottom, animated: true)
-    }
+ 
     
-    func fetchMessages()  {
-        guard let currentUserUid = Auth.auth().currentUser?.uid else { return  }
-         let query = Firestore.firestore().collection("Matches-Messages").document(currentUserUid).collection(match.uid).order(by: "timestamp")
-       
-        query.addSnapshotListener { (querySnap, err) in
-            if let err = err {
-                print("failed to reterive messages ",err)
-                return
-            }
-            querySnap?.documentChanges.forEach({ (changes) in
-                let dict = changes.document.data()
-                self.items.append(.init(dict: dict))
-            })
-            self.collectionView.reloadData()
-            self.collectionView.scrollToItem(at: [0,self.items.count - 1], at: .bottom, animated: true)
-        }
-        
-        
-    }
+   
     //input accessory view
     
     override var inputAccessoryView: UIView!{
@@ -123,6 +76,8 @@ class ChatLogMessageVC: LBTAListController<ChatMessageCell,MessageModel>, UIColl
         collectionView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleDismissKeyboard)))
     }
     
+   
+    
     func setupCollectionView()  {
         collectionView.keyboardDismissMode = .interactive
         collectionView.backgroundColor = .white
@@ -145,6 +100,26 @@ class ChatLogMessageVC: LBTAListController<ChatMessageCell,MessageModel>, UIColl
         statusBarCover.anchor(top: view.topAnchor, leading: view.leadingAnchor, bottom: view.safeAreaLayoutGuide.topAnchor, trailing: view.trailingAnchor)
     }
     
+    func fetchMessages()  {
+        guard let currentUserUid = Auth.auth().currentUser?.uid else { return  }
+        let query = Firestore.firestore().collection("Matches-Messages").document(currentUserUid).collection(match.uid).order(by: "timestamp")
+        
+        query.addSnapshotListener { (querySnap, err) in
+            if let err = err {
+                print("failed to reterive messages ",err)
+                return
+            }
+            querySnap?.documentChanges.forEach({ (changes) in
+                let dict = changes.document.data()
+                self.items.append(.init(dict: dict))
+            })
+            self.collectionView.reloadData()
+            self.collectionView.scrollToItem(at: [0,self.items.count - 1], at: .bottom, animated: true)
+        }
+        
+        
+    }
+    
   @objc  func handleDismissKeyboard()  {
         view.endEditing(true)
     }
@@ -152,7 +127,42 @@ class ChatLogMessageVC: LBTAListController<ChatMessageCell,MessageModel>, UIColl
  @objc   func handleBack()  {
         navigationController?.popViewController(animated: true)
     }
+
+    @objc func handleKeyboardShow()  {
+        collectionView.scrollToItem(at: [0,items.count - 1], at: .bottom, animated: true)
+    }
     
+@objc func handleSendMessage()  {
+    let comment = commentView.textView.text ?? ""
+    
+    guard let currentUserUid = Auth.auth().currentUser?.uid else { return  }
+    let collection = Firestore.firestore().collection("Matches-Messages").document(currentUserUid).collection(match.uid)
+    let data:[String:Any] = ["text":comment,"fromId":currentUserUid,"toId":match.uid,"timestamp":Timestamp(date: Date())]
+    
+    collection.addDocument(data: data) { (err) in
+        if let err = err {
+            print("failed to save ",err)
+            return
+        }
+        print("data saved")
+        self.commentView.textView.text = nil
+        self.commentView.placeHolderLabel.isHidden = false
+    }
+    
+    let toCollection = Firestore.firestore().collection("Matches-Messages").document(match.uid).collection(currentUserUid)
+    
+    toCollection.addDocument(data: data) { (err) in
+        if let err = err {
+            print("failed to save ",err)
+            return
+        }
+        
+        print("data saved")
+        self.commentView.textView.text = nil
+        self.commentView.placeHolderLabel.isHidden = false
+        
+    }
+    }
    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
