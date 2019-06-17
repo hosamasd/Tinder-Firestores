@@ -29,6 +29,7 @@
 		4E7ACB28229536B500A8D148 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7ACB27229536B500A8D148 /* CustomTextField.swift */; };
 		4E7D5780229BE29200BA0FB2 /* SwipingPhotoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7D577F229BE29200BA0FB2 /* SwipingPhotoVC.swift */; };
 		4E7DD81922941E7500D6DEF0 /* Advertiser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7DD81822941E7500D6DEF0 /* Advertiser.swift */; };
+		4E7F58B722B7A34E00AFB535 /* RecentMessageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7F58B622B7A34E00AFB535 /* RecentMessageModel.swift */; };
 		4E7FB5EC2299218C00DE7929 /* SettingAageRangeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7FB5EB2299218C00DE7929 /* SettingAageRangeCell.swift */; };
 		4E7FB5EF229921B800DE7929 /* BaseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7FB5EE229921B800DE7929 /* BaseCell.swift */; };
 		4E82203622B6669E0082176C /* CustominputAccessoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E82203522B6669E0082176C /* CustominputAccessoryView.swift */; };
@@ -43,8 +44,11 @@
 		4EA086C52293E12300DE5EE5 /* HomeBottomControlsStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA086C42293E12300DE5EE5 /* HomeBottomControlsStackView.swift */; };
 		4EA086C72293E39300DE5EE5 /* topNavigationStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA086C62293E39300DE5EE5 /* topNavigationStackView.swift */; };
 		4EA086C92293E97C00DE5EE5 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA086C82293E97C00DE5EE5 /* CardView.swift */; };
-		4EAB0FE322B4C2C600A3E2C3 /* MtachMessagesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EAB0FE222B4C2C600A3E2C3 /* MtachMessagesVC.swift */; };
+		4EAB0FE322B4C2C600A3E2C3 /* MtachHeaderMessagesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EAB0FE222B4C2C600A3E2C3 /* MtachHeaderMessagesVC.swift */; };
 		4EAFF7CE229D15A200C8E099 /* PhotoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EAFF7CD229D15A200C8E099 /* PhotoVC.swift */; };
+		4EB37C2422B77F93007EC672 /* HorizentalMatchMessageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB37C2322B77F93007EC672 /* HorizentalMatchMessageVC.swift */; };
+		4EB37C2722B77FEA007EC672 /* MatchHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB37C2622B77FEA007EC672 /* MatchHeaderCell.swift */; };
+		4EB37C2922B780AB007EC672 /* RecentMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB37C2822B780AB007EC672 /* RecentMessageCell.swift */; };
 		4EC15D4322B5337000212270 /* MatchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC15D4222B5337000212270 /* MatchCell.swift */; };
 		5986718AD755CAF573B8DA21 /* Pods_Tinder_Firestore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89D830909AABC8CC613BE337 /* Pods_Tinder_Firestore.framework */; };
 /* End PBXBuildFile section */
@@ -74,6 +78,7 @@
 		4E7ACB27229536B500A8D148 /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
 		4E7D577F229BE29200BA0FB2 /* SwipingPhotoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipingPhotoVC.swift; sourceTree = "<group>"; };
 		4E7DD81822941E7500D6DEF0 /* Advertiser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Advertiser.swift; sourceTree = "<group>"; };
+		4E7F58B622B7A34E00AFB535 /* RecentMessageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentMessageModel.swift; sourceTree = "<group>"; };
 		4E7FB5EB2299218C00DE7929 /* SettingAageRangeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingAageRangeCell.swift; sourceTree = "<group>"; };
 		4E7FB5EE229921B800DE7929 /* BaseCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCell.swift; sourceTree = "<group>"; };
 		4E82203522B6669E0082176C /* CustominputAccessoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustominputAccessoryView.swift; sourceTree = "<group>"; };
@@ -90,8 +95,11 @@
 		4EA086C42293E12300DE5EE5 /* HomeBottomControlsStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeBottomControlsStackView.swift; sourceTree = "<group>"; };
 		4EA086C62293E39300DE5EE5 /* topNavigationStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = topNavigationStackView.swift; sourceTree = "<group>"; };
 		4EA086C82293E97C00DE5EE5 /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
-		4EAB0FE222B4C2C600A3E2C3 /* MtachMessagesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MtachMessagesVC.swift; sourceTree = "<group>"; };
+		4EAB0FE222B4C2C600A3E2C3 /* MtachHeaderMessagesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MtachHeaderMessagesVC.swift; sourceTree = "<group>"; };
 		4EAFF7CD229D15A200C8E099 /* PhotoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoVC.swift; sourceTree = "<group>"; };
+		4EB37C2322B77F93007EC672 /* HorizentalMatchMessageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizentalMatchMessageVC.swift; sourceTree = "<group>"; };
+		4EB37C2622B77FEA007EC672 /* MatchHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchHeaderCell.swift; sourceTree = "<group>"; };
+		4EB37C2822B780AB007EC672 /* RecentMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentMessageCell.swift; sourceTree = "<group>"; };
 		4EC15D4222B5337000212270 /* MatchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchCell.swift; sourceTree = "<group>"; };
 		89D830909AABC8CC613BE337 /* Pods_Tinder_Firestore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Tinder_Firestore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -241,6 +249,7 @@
 				4E7DD81822941E7500D6DEF0 /* Advertiser.swift */,
 				4E947E5222B4EAFE0080A9AC /* MatchesModel.swift */,
 				4E21CE8B22B63AAD00D70453 /* MessageModel.swift */,
+				4E7F58B622B7A34E00AFB535 /* RecentMessageModel.swift */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -263,17 +272,36 @@
 		4EAB0FE122B4C2A800A3E2C3 /* Matches Messages */ = {
 			isa = PBXGroup;
 			children = (
-				4EAB0FE222B4C2C600A3E2C3 /* MtachMessagesVC.swift */,
+				4EB37C2222B77F4B007EC672 /* Matches Header */,
 				4E72517F22B6259E00F4EBBF /* ChatLogMessageVC.swift */,
 			);
 			path = "Matches Messages";
 			sourceTree = "<group>";
 		};
+		4EB37C2222B77F4B007EC672 /* Matches Header */ = {
+			isa = PBXGroup;
+			children = (
+				4EAB0FE222B4C2C600A3E2C3 /* MtachHeaderMessagesVC.swift */,
+				4EB37C2322B77F93007EC672 /* HorizentalMatchMessageVC.swift */,
+			);
+			path = "Matches Header";
+			sourceTree = "<group>";
+		};
+		4EB37C2522B77FD5007EC672 /* Matches Header Cell */ = {
+			isa = PBXGroup;
+			children = (
+				4EB37C2622B77FEA007EC672 /* MatchHeaderCell.swift */,
+			);
+			path = "Matches Header Cell";
+			sourceTree = "<group>";
+		};
 		4EC15D4122B5335400212270 /* Matches Messages Cells */ = {
 			isa = PBXGroup;
 			children = (
+				4EB37C2522B77FD5007EC672 /* Matches Header Cell */,
 				4EC15D4222B5337000212270 /* MatchCell.swift */,
 				4E72518122B625E200F4EBBF /* ChatMessageCell.swift */,
+				4EB37C2822B780AB007EC672 /* RecentMessageCell.swift */,
 			);
 			path = "Matches Messages Cells";
 			sourceTree = "<group>";
@@ -394,6 +422,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4EB37C2922B780AB007EC672 /* RecentMessageCell.swift in Sources */,
 				4E7FB5EF229921B800DE7929 /* BaseCell.swift in Sources */,
 				4E4FA0402296BC2600F7EBC8 /* SettingCell.swift in Sources */,
 				4E72518022B6259E00F4EBBF /* ChatLogMessageVC.swift in Sources */,
@@ -410,6 +439,7 @@
 				4E8A1A3F22940A22006FFC45 /* UserModel.swift in Sources */,
 				4E7DD81922941E7500D6DEF0 /* Advertiser.swift in Sources */,
 				4EAFF7CE229D15A200C8E099 /* PhotoVC.swift in Sources */,
+				4EB37C2722B77FEA007EC672 /* MatchHeaderCell.swift in Sources */,
 				4EC15D4322B5337000212270 /* MatchCell.swift in Sources */,
 				4E72518422B6269E00F4EBBF /* MessagesNavBar.swift in Sources */,
 				4E82203622B6669E0082176C /* CustominputAccessoryView.swift in Sources */,
@@ -422,10 +452,12 @@
 				4E62F27122993DA300309753 /* LoginVC.swift in Sources */,
 				4EA086AD2293DD1700DE5EE5 /* AppDelegate.swift in Sources */,
 				4EA086C92293E97C00DE5EE5 /* CardView.swift in Sources */,
+				4E7F58B722B7A34E00AFB535 /* RecentMessageModel.swift in Sources */,
 				4E21CE8C22B63AAD00D70453 /* MessageModel.swift in Sources */,
 				4E6A76BB2296978F00BFDDE9 /* CustomImagePickerController.swift in Sources */,
-				4EAB0FE322B4C2C600A3E2C3 /* MtachMessagesVC.swift in Sources */,
+				4EAB0FE322B4C2C600A3E2C3 /* MtachHeaderMessagesVC.swift in Sources */,
 				4E7D5780229BE29200BA0FB2 /* SwipingPhotoVC.swift in Sources */,
+				4EB37C2422B77F93007EC672 /* HorizentalMatchMessageVC.swift in Sources */,
 				4E67556F229EADA800913B21 /* KeepSwipingButton.swift in Sources */,
 				4E7ACB2522952FFD00A8D148 /* RegisterVC.swift in Sources */,
 				4E6BB3E222994DBB0099B030 /* LoginViewModel.swift in Sources */,
