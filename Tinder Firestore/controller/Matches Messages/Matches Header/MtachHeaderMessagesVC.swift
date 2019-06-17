@@ -46,13 +46,16 @@ class MtachHeaderMessagesVC: LBTAListHeaderController<RecentMessageCell,RecentMe
         return .init(width: view.frame.width, height: 250)
     }
     
-//    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        let match = items[indexPath.item]
-//
-//        let chatLog = ChatLogMessageVC(match: match)
-//        navigationController?.pushViewController(chatLog, animated: true)
-//
-//    }
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+       
+
+        let recentMess = self.items[indexPath.item]
+        let dict = ["name":recentMess.name,"imageProfileUrl":recentMess.imageProfileUrl,"uid":recentMess.uid]
+        let match = MatchesModel(dict: dict)
+        let chatLog = ChatLogMessageVC(match: match)
+        navigationController?.pushViewController(chatLog, animated: true)
+
+    }
     
     override func setupHeader(_ header: MatchHeaderCell) {
         header.horzientalViewController.rootViewController = self
@@ -81,7 +84,7 @@ class MtachHeaderMessagesVC: LBTAListHeaderController<RecentMessageCell,RecentMe
     var recentdDictionaryMessages = [String:RecentMessageModel]()
     
     func fetchRecentMessages()  {
-        var matchesArray = [RecentMessageModel]()
+     
         guard let uids = Auth.auth().currentUser?.uid else { return  }
         let collection = Firestore.firestore().collection("Matches-Messages").document(uids).collection("Recent-Messages").addSnapshotListener { (queryListen, err) in
             if let err=err{

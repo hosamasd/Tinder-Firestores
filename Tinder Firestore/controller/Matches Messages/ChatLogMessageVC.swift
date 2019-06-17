@@ -29,6 +29,7 @@ class ChatLogMessageVC: LBTAListController<ChatMessageCell,MessageModel>, UIColl
     }()
     
    
+    var currentUser:UserModel?
     
     
     override func viewDidLoad() {
@@ -39,11 +40,23 @@ class ChatLogMessageVC: LBTAListController<ChatMessageCell,MessageModel>, UIColl
         setupGestures()
         setupViews()
         fetchMessages()
-        
+        fetchCurrentUser()
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardShow), name: UIResponder.keyboardDidShowNotification, object: nil)
     }
     
- 
+    func fetchCurrentUser()  {
+         guard let uids = Auth.auth().currentUser?.uid else { return  }
+        Firestore.firestore().collection("Users").document(uids).getDocument { (snapshot, err) in
+            if let err = err {
+                print("failed to reterive messages ",err)
+                return
+            }
+              let dict = snapshot?.data() ?? [:]
+            self.currentUser = UserModel(dict: dict )
+            
+        }
+       
+    }
     
    
     //input accessory view
@@ -135,35 +148,54 @@ class ChatLogMessageVC: LBTAListController<ChatMessageCell,MessageModel>, UIColl
 @objc func handleSendMessage()  {
     let comment = commentView.textView.text ?? ""
     
+    saveToFromMessages(comment: comment)
+    saveToRecentMessages(comment: comment)
+    }
+   
+    func saveToRecentMessages(comment:String)  {
+        guard let uids = Auth.auth().currentUser?.uid else { return  }
+        let data:[String:Any] = ["text":comment,"uid":match.uid,"imageProfileUrl":match.imageProfileUrl,"timestamp":Timestamp(date: Date()),"name":match.name]
+        
+        Firestore.firestore().collection("Matches-Messages").document(uids).collection("Recent-Messages").document(match.uid).setData(data) { (err) in
+            if let err = err {
+                print("failed to save", err)
+                return
+            }
+            print("hosammmmmmm")
+        }
+        
+        //save to other hand
+         guard let currentUsers = self.currentUser else { return  }
+         let toData:[String:Any] = ["text":comment,"uid":uids,"imageProfileUrl":currentUsers.imageUrl1 ?? "","timestamp":Timestamp(date: Date()),"name":currentUsers.name ?? ""]
+        Firestore.firestore().collection("Matches-Messages").document(match.uid).collection("Recent-Messages").document(uids).setData(toData) 
+    }
+    
+    func saveToFromMessages (comment:String)  {
     guard let currentUserUid = Auth.auth().currentUser?.uid else { return  }
     let collection = Firestore.firestore().collection("Matches-Messages").document(currentUserUid).collection(match.uid)
     let data:[String:Any] = ["text":comment,"fromId":currentUserUid,"toId":match.uid,"timestamp":Timestamp(date: Date())]
     
     collection.addDocument(data: data) { (err) in
-        if let err = err {
-            print("failed to save ",err)
-            return
-        }
-        print("data saved")
-        self.commentView.textView.text = nil
-        self.commentView.placeHolderLabel.isHidden = false
+    if let err = err {
+    print("failed to save ",err)
+    return
+    }
+    self.commentView.textView.text = nil
+    self.commentView.placeHolderLabel.isHidden = false
     }
     
     let toCollection = Firestore.firestore().collection("Matches-Messages").document(match.uid).collection(currentUserUid)
     
     toCollection.addDocument(data: data) { (err) in
-        if let err = err {
-            print("failed to save ",err)
-            return
-        }
-        
-        print("data saved")
-        self.commentView.textView.text = nil
-        self.commentView.placeHolderLabel.isHidden = false
-        
+    if let err = err {
+    print("failed to save ",err)
+    return
+    }
+    self.commentView.textView.text = nil
+    self.commentView.placeHolderLabel.isHidden = false
+    
     }
     }
-   
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
