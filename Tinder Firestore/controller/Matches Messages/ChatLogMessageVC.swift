@@ -13,6 +13,8 @@ import Firebase
 
 class ChatLogMessageVC: LBTAListController<ChatMessageCell,MessageModel>, UICollectionViewDelegateFlowLayout {
     
+   
+    
     fileprivate let navBarHeight:CGFloat = 120
      lazy var customMessageNavBar = MessagesNavBar(match: match)
     fileprivate let match:MatchesModel
@@ -69,7 +71,17 @@ class ChatLogMessageVC: LBTAListController<ChatMessageCell,MessageModel>, UIColl
     override var canBecomeFirstResponder: Bool{
         return true
     }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        //check that popped up from nav stack
+        if isMovingFromParent {
+            listener?.remove()
+        }
+    }
   
+    //MARK:-collectionView methods
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let estimatedCellSize = ChatMessageCell(frame: .init(x: 0, y: 0, width: view.frame.width, height: 10000))
         estimatedCellSize.item = items[indexPath.item]
@@ -112,12 +124,13 @@ class ChatLogMessageVC: LBTAListController<ChatMessageCell,MessageModel>, UIColl
         view.addSubview(statusBarCover)
         statusBarCover.anchor(top: view.topAnchor, leading: view.leadingAnchor, bottom: view.safeAreaLayoutGuide.topAnchor, trailing: view.trailingAnchor)
     }
+    var listener:ListenerRegistration?
     
     func fetchMessages()  {
         guard let currentUserUid = Auth.auth().currentUser?.uid else { return  }
         let query = Firestore.firestore().collection("Matches-Messages").document(currentUserUid).collection(match.uid).order(by: "timestamp")
         
-        query.addSnapshotListener { (querySnap, err) in
+      listener =  query.addSnapshotListener { (querySnap, err) in
             if let err = err {
                 print("failed to reterive messages ",err)
                 return
@@ -196,6 +209,11 @@ class ChatLogMessageVC: LBTAListController<ChatMessageCell,MessageModel>, UIColl
     
     }
     }
+    
+    deinit {
+        print("no retain cycles here")
+    }
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

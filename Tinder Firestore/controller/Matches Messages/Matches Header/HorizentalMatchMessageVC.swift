@@ -11,7 +11,7 @@ import Firebase
 
 class HorizentalMatchMessageVC: LBTAListController<MatchCell,MatchesModel>,UICollectionViewDelegateFlowLayout {
     
-    var rootViewController:MtachHeaderMessagesVC?
+    weak var rootViewController:MtachHeaderMessagesVC?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,6 +21,8 @@ class HorizentalMatchMessageVC: LBTAListController<MatchCell,MatchesModel>,UICol
         }
         fetchMatches()
     }
+    
+    //MARK:-collectionView methods
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return .init(width: 110, height: view.frame.height)
@@ -34,7 +36,9 @@ class HorizentalMatchMessageVC: LBTAListController<MatchCell,MatchesModel>,UICol
         rootViewController?.didSelectMatchFromHeader(match: match)
     }
     
-    func fetchMatches()  {
+    //MARK:-user methods
+    
+   fileprivate func fetchMatches()  {
         var matchesArray = [MatchesModel]()
         guard let uids = Auth.auth().currentUser?.uid else { return  }
         Firestore.firestore().collection("Matches-Messages").document(uids).collection("Matches").getDocuments { (querySnap, err) in

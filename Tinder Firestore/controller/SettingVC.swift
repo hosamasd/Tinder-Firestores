@@ -17,6 +17,10 @@ protocol SettingVCDelgate {
 
 class SettingVC: UITableViewController {
     
+    deinit {
+        print("no retain cycles here")
+    }
+    
     static let defaultMinAgeSeeking = 18
     static let defaultMaxAgeSeeking = 50
     

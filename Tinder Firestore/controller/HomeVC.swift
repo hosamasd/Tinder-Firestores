@@ -24,14 +24,13 @@ class HomeVC: UIViewController {
     }()
     var user:UserModel?
     var lastFetchUser:UserModel?
-    
+     var users  = [String:UserModel]()
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         navigationController?.navigationBar.isHidden = true
-//        navigationController?.isNavigationBarHidden = true
         setupGestures()
         setupViews()
         fetchCurrentUser()
@@ -90,9 +89,6 @@ class HomeVC: UIViewController {
                 print(err)
                 return
             }
-//            print(self.user?.uid)
-//            guard let data = snapshot?.data() else {return}
-//            self.swipes = data
             self.fetchUsersFromFirestore()
         }
         
@@ -133,14 +129,9 @@ class HomeVC: UIViewController {
                         self.topCarddView = cardView
                     }
                 }
-                
-                
-                
-            })
+             })
         }
     }
-    
-    var users  = [String:UserModel]()
     
     fileprivate func fetchUserCards(user:UserModel) ->CardView  {
         let cardView = CardView(frame: .zero)
@@ -172,56 +163,6 @@ class HomeVC: UIViewController {
         
         view.addSubview(mainStack)
         mainStack.anchor(top: view.safeAreaLayoutGuide.topAnchor, leading: view.leadingAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor, trailing: view.trailingAnchor)
-        
-    }
-    
-    //TODO:-handle methods
-    
-    @objc  func handleMessages()  {
-        let newMewss = MtachHeaderMessagesVC()
-        navigationController?.pushViewController(newMewss, animated: true)
-        
-    }
-    
-    @objc   func handleRefresh()  {
-        cardDeskView.subviews.forEach({$0.removeFromSuperview()})
-        fetchUsersFromFirestore()
-    }
-    
-    @objc func handleNextVC()  {
-        let setting = SettingVC()
-        setting.delgate = self
-        let nav =   UINavigationController(rootViewController: setting)
-        
-        present(nav, animated: true, completion: nil)
-    }
-    
-    @objc func handleDisLike()  {
-        
-        saveSwipeToFirestore(value: 0)
-        let duration = 0.5
-        let translation = CABasicAnimation(keyPath: "position.x")
-        translation.duration = duration
-        translation.toValue = -700
-        translation.timingFunction = CAMediaTimingFunction(name: .easeOut)
-        translation.isRemovedOnCompletion = false //for removing from view
-        translation.fillMode = .forwards //for removing from view
-        
-        let transform = CABasicAnimation(keyPath: "transform.rotation.z")
-        transform.toValue = -15 * CGFloat.pi / 180
-        transform.duration = duration
-        
-        let card = topCarddView
-        topCarddView = card?.nextCardView
-        
-        CATransaction.setCompletionBlock {
-            card?.removeFromSuperview()
-        }
-        
-        
-        card?.layer.add(translation, forKey: "traslation")
-        card?.layer.add(transform, forKey: "transform")
-        CATransaction.commit()
     }
     
     fileprivate func swipeCardsAnimation(angle:CGFloat,translation:CGFloat) {
@@ -245,13 +186,13 @@ class HomeVC: UIViewController {
             card?.removeFromSuperview()
         }
         
-        
         card?.layer.add(translation, forKey: "traslation")
         card?.layer.add(transform, forKey: "transform")
         CATransaction.commit()
     }
     
-    func saveSwipeToFirestore( value:Int)  {
+   fileprivate func saveSwipeToFirestore( value:Int)  {
+        
         guard let uid = Auth.auth().currentUser?.uid else { return  }
         guard let cardUID = topCarddView?.cardViewModel.uid else { return  }
         let data = [cardUID:value]
@@ -285,11 +226,9 @@ class HomeVC: UIViewController {
                 }
             }
         }
-        
-        
-    }
+   }
     
-    func checkIfMatchesSwiping(uid:String)  {
+  fileprivate  func checkIfMatchesSwiping(uid:String)  {
         guard let uidds = Auth.auth().currentUser?.uid else{return}
         Firestore.firestore().collection("Swipes").document(uidds).getDocument { (snapshot, err) in
             if err != nil {
@@ -323,7 +262,7 @@ class HomeVC: UIViewController {
         }
     }
     
-    func presentMatchView(uid:String)  {
+   fileprivate func presentMatchView(uid:String)  {
         let matchView = MatchView()
         matchView.cardID = uid
         matchView.currentUser = self.user
@@ -331,7 +270,57 @@ class HomeVC: UIViewController {
         matchView.fillSuperview()
     }
     
-    @objc func handleLike(){
+    
+    
+    //TODO:-handle methods
+    
+    @objc fileprivate func handleMessages()  {
+        let newMewss = MtachHeaderMessagesVC()
+        navigationController?.pushViewController(newMewss, animated: true)
+        
+    }
+    
+    @objc  fileprivate func handleRefresh()  {
+        cardDeskView.subviews.forEach({$0.removeFromSuperview()})
+        fetchUsersFromFirestore()
+    }
+    
+    @objc fileprivate func handleNextVC()  {
+        let setting = SettingVC()
+        setting.delgate = self
+        let nav =   UINavigationController(rootViewController: setting)
+        
+        present(nav, animated: true, completion: nil)
+    }
+    
+    @objc  func handleDisLike()  {
+        
+        saveSwipeToFirestore(value: 0)
+        let duration = 0.5
+        let translation = CABasicAnimation(keyPath: "position.x")
+        translation.duration = duration
+        translation.toValue = -700
+        translation.timingFunction = CAMediaTimingFunction(name: .easeOut)
+        translation.isRemovedOnCompletion = false //for removing from view
+        translation.fillMode = .forwards //for removing from view
+        
+        let transform = CABasicAnimation(keyPath: "transform.rotation.z")
+        transform.toValue = -15 * CGFloat.pi / 180
+        transform.duration = duration
+        
+        let card = topCarddView
+        topCarddView = card?.nextCardView
+        
+        CATransaction.setCompletionBlock {
+            card?.removeFromSuperview()
+        }
+        
+        
+        card?.layer.add(translation, forKey: "traslation")
+        card?.layer.add(transform, forKey: "transform")
+        CATransaction.commit()
+    }
+    @objc  func handleLike(){
         saveSwipeToFirestore(value: 1)
         let duration = 0.5
         
