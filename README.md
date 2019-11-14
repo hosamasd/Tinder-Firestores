@@ -1,7 +1,7 @@
 # Tinder-Firestores
 simple app that we can see other user cards and like them and we use firebase firestore to save data and you can easily chat with yoour friends,Enjoy!.
 
-demo video. 
+# short demo video. 
 
 ![Alt Text](https://j.gifs.com/r877KE.gif)
 
